@@ -71,7 +71,7 @@ const Cards = ({ value }) => {
       }
     });
   } else {
-    return <div className="">ПОДОЖДИТЕ</div>;
+    return <div className="">ПОДОЖДИТЕ.....</div>;
   }
 };
 

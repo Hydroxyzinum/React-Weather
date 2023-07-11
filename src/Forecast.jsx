@@ -58,8 +58,6 @@ const ForecastList = ({ value }) => {
 
     const { all } = clouds;
 
-    // const { deg, gust, speed } = wind;
-
     const { temp_max, temp_min, humidity } = main;
 
     const averageTempAtNoon = new Date(dt_txt);

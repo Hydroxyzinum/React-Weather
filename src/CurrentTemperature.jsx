@@ -2,35 +2,48 @@ import React, { useContext } from "react";
 import { Context } from "./context";
 
 const Temperature = ({ children, value }) => {
+  const { name } = value;
+
   const { temp, temp_max, temp_min, feels_like } = value.main;
+
   const { description } = value.weather[0];
+
   const normalizeDesc = `${description[0].toUpperCase()}${description.slice(
     1
   )}`;
 
-  const { name } = value;
+  const normalizeData = {
+    temperature: Math.floor(temp),
+    temperatureMax: Math.ceil(temp_max),
+    temperatureMin: Math.floor(temp_min),
+    feelsLike: Math.floor(feels_like),
+  };
+
+  const { temperature, temperatureMax, temperatureMin, feelsLike } =
+    normalizeData;
+
   return (
     <div className="weather-image_container">
       <div className="image-container">{children}</div>
       <h1 className="choose_city">{name ? name : null}</h1>
       <h2 className="temperature">
-        {temp ? Math.floor(temp) : null}
+        {temp ? temperature : null}
         <span className="gradus">°</span>
       </h2>
       <p className="description">{normalizeDesc}</p>
       <div className="min-max_temperature">
         <p className="max-temp">
-          Макс.: {temp_max ? Math.ceil(temp_max) : null}
+          Макс.: {temp_max ? temperatureMax : null}
           <span className="gradus">°</span>
         </p>
         <p className="min-temp">
-          Мин.: {temp_min ? Math.floor(temp_min) : null}
+          Мин.: {temp_min ? temperatureMin : null}
           <span className="gradus">°</span>
         </p>
       </div>
       <div className="feels-like_container">
         <p className="feels-like">
-          Ощущается как: {feels_like ? Math.floor(feels_like) : null}
+          Ощущается как: {feels_like ? feelsLike : null}
           <span className="gradus">°</span>
         </p>
       </div>
@@ -52,6 +65,7 @@ const IconGenerator = ({ value }) => {
     "Squall",
     "Tornado",
   ];
+
   if (nightIcon.includes(icon)) {
     return (
       <div icon="supermoon">
