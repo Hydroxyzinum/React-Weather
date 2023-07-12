@@ -50,11 +50,11 @@ const ForecastContainer = ({ children, value }) => {
 
 const ForecastList = ({ value }) => {
   const { list } = value.futureData;
-  const { unit, forecastTime } = value;
-  return list.map((item) => {
-    const { dt_txt } = item;
 
-    const { clouds, main } = item;
+  const { unit, forecastTime } = value;
+
+  return list.map((item) => {
+    const { dt_txt, clouds, main } = item;
 
     const { all } = clouds;
 
@@ -109,7 +109,7 @@ const ForecastList = ({ value }) => {
         <div key={_.uniqueId("forecast-")} className="forecast-card">
           <div className="front-inner">
             <div className="front">
-              <p className="forecast-data">{currentDay}</p>
+              <p className="forecast-data">{currentDay ? currentDay : null}</p>
               <img
                 className="forecast-data_img"
                 src={`${"weather/"}${icon}.png`}
@@ -125,22 +125,30 @@ const ForecastList = ({ value }) => {
                   aria-valuemax="40"
                 ></div>
               </div>
-              <p className="forecast-temp">{normalizeTempMax}°</p>
+              <p className="forecast-temp">
+                {normalizeTempMax ? normalizeTempMax : null}°
+              </p>
             </div>
             <div className="back">
-              <h6 className="back-time">{normalizeDesc}</h6>
+              <h6 className="back-time">
+                {normalizeDesc ? normalizeDesc : null}
+              </h6>
               <div className="back-weather_info">
                 <div className="back-temp">
                   <span className="back-temp_min">
-                    Макс.:{normalizeTempMax}°
+                    Макс.:{normalizeTempMax ? normalizeTempMax : null}°
                   </span>
                   <span className="back-temp_max">
-                    Мин.:{normalizeTempMin}°
+                    Мин.:{normalizeTempMin ? normalizeTempMin : null}°
                   </span>
                 </div>
                 <div className="back-info">
-                  <span className="back-clouds">Облачность.: {all}%</span>
-                  <span className="back-humidity">Влажность.: {humidity}%</span>
+                  <span className="back-clouds">
+                    Облачность.: {all ? all : null}%
+                  </span>
+                  <span className="back-humidity">
+                    Влажность.: {humidity ? humidity : null}%
+                  </span>
                 </div>
               </div>
             </div>
@@ -154,18 +162,10 @@ const ForecastList = ({ value }) => {
 };
 
 const Forecast = () => {
-  const { unit, futureData, forecastTime, setForecastTime } =
-    useContext(Context);
+  const contextData = useContext(Context);
   return (
-    <ForecastContainer value={{ forecastTime, setForecastTime }}>
-      <ForecastList
-        value={{
-          unit,
-          futureData,
-          forecastTime,
-          setForecastTime,
-        }}
-      ></ForecastList>
+    <ForecastContainer value={contextData}>
+      <ForecastList value={contextData}></ForecastList>
     </ForecastContainer>
   );
 };

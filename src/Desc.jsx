@@ -1,15 +1,19 @@
 import React, { useContext } from "react";
 import { Context } from "./context";
-import _, { uniqueId } from "lodash";
+import _ from "lodash";
 
 const DescContainer = ({ children }) => {
   return <div className="decription-container">{children}</div>;
 };
 
 const DescData = ({ value }) => {
-  const { pressure } = value.main;
-  const { visibility, rain, snow } = value;
-  const { deg, gust } = value.wind;
+  const { data } = value;
+
+  const { pressure } = data.main;
+
+  const { visibility, rain, snow } = data;
+
+  const { deg, gust } = data.wind;
 
   const normalizePressure = pressure
     ? `${Math.ceil(pressure / 1.333)} мм рт. ст.`
@@ -17,7 +21,7 @@ const DescData = ({ value }) => {
 
   const normalizeVisibility =
     visibility > 9999
-      ? "> 10км"
+      ? ">10 км."
       : `${String(value.visibility).slice(0, 2).split("").join(",")} км.`;
 
   const normalizeDeg = deg ? `${Math.round(deg)}°` : "0°";
@@ -28,38 +32,39 @@ const DescData = ({ value }) => {
 
   const normalizeSnow = snow ? `${snow["1h"]} мм.` : "0 мм.";
 
-  const infoArr = [
-    normalizePressure,
-    normalizeVisibility,
-    normalizeDeg,
-    normalizeGust,
-    normalizeRain,
-    normalizeSnow,
-  ];
+  const mapObj = {
+    infoArr: [
+      normalizePressure,
+      normalizeVisibility,
+      normalizeDeg,
+      normalizeGust,
+      normalizeRain,
+      normalizeSnow,
+    ],
+    namesArr: [
+      "Атм. давление",
+      "Видимость",
+      "Напр. ветра",
+      "Порывы ветра",
+      "Осадки",
+      "Cнег",
+    ],
+    photoUrls: [
+      "cards/barometr.png",
+      "cards/visibility.png",
+      "cards/wind-deg.png",
+      "cards/wind.png",
+      "cards/rain.png",
+      "cards/snow.png",
+    ],
+  };
 
-  const namesArr = [
-    "Атм. давление",
-    "Видимость",
-    "Напр. ветра",
-    "Порывы ветра",
-    "Осадки",
-    "Cнег",
-  ];
-
-  const photoUrls = [
-    "cards/barometr.png",
-    "cards/visibility.png",
-    "cards/wind-deg.png",
-    "cards/wind.png",
-    "cards/rain.png",
-    "cards/snow.png",
-  ];
+  const { infoArr, namesArr, photoUrls } = mapObj;
 
   return infoArr.map((info, index) => {
     return (
       <div
         key={_.uniqueId("card-")}
-        id={uniqueId("card-")}
         className="desc-card"
       >
         <p className="card-head">{namesArr[index]}</p>
@@ -75,10 +80,10 @@ const DescData = ({ value }) => {
 };
 
 const Desc = () => {
-  const { data } = useContext(Context);
+  const context = useContext(Context);
   return (
     <DescContainer>
-      <DescData value={data}></DescData>
+      <DescData value={context}></DescData>
     </DescContainer>
   );
 };

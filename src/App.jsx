@@ -2,10 +2,13 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { apiKeys, currentWeatherUrl, currentTimeUrl } from "./url";
 import { Context } from "./context";
+import { setBackground } from "./theme";
+
 import Menu from "./Menu";
 import Parent from "./Parent";
 import Header from "./Header";
 import CurrentTemperature from "./CurrentTemperature";
+import Sunrise from "./Sunrise";
 import Main from "./Main";
 import TodayTemp from "./TodayTemp";
 import Forecast from "./Forecast";
@@ -20,6 +23,8 @@ function App() {
 
   const [location, setLocation] = useState("");
 
+  const [theme, setTheme] = useState({});
+
   const [fullLocation, setFullLocation] = useState("");
 
   const [searchEngine, setSearchEngine] = useState([]);
@@ -27,8 +32,6 @@ function App() {
   const [rightMenu, setRightMenu] = useState("");
 
   const [forecastTime, setForecastTime] = useState(9);
-
-  const [activeCard, setActiveCard] = useState(false);
 
   const [time, setTime] = useState({});
 
@@ -62,6 +65,8 @@ function App() {
           );
           setData(requestReserve.data);
           setFutureData(futureReserve.data);
+        } else {
+          console.error(e);
         }
       }
       const timeout = setTimeout(async () => {
@@ -69,22 +74,26 @@ function App() {
         try {
           const getTime = await axios.get(currentTimeUrl(timeApiKey, lat, lon));
           setTime(getTime.data);
+          setBackground(getTime.data, setTheme);
         } catch (e) {
           if (e) {
             const getTime = await axios.get(
               currentTimeUrl(reserveTimeApiKey, lat, lon)
             );
             setTime(getTime.data);
+            setBackground(getTime.data, setTheme);
+          } else {
+            console.error(e);
           }
         }
-      }, 400);
+      }, 150);
       return () => clearTimeout(timeout);
     };
     getRequest("Казань", fullLocation);
     const intervalFunc = setInterval(() => {
       getRequest("Казань", fullLocation);
       setStateInterval((prevState) => prevState + 1);
-    }, 20000000);
+    }, 20000);
     return () => clearInterval(intervalFunc);
   }, [unit, fullLocation, forecastTime, stateInterval]);
 
@@ -96,17 +105,17 @@ function App() {
         setTime,
         setSearchEngine,
         setLocation,
+        setTheme,
         setFullLocation,
         setRightMenu,
         setForecastTime,
-        setActiveCard,
         setUnit,
         data,
         futureData,
         location,
+        theme,
         fullLocation,
         forecastTime,
-        activeCard,
         searchEngine,
         rightMenu,
         time,
@@ -117,7 +126,9 @@ function App() {
         <Menu />
         <Header />
         <CurrentTemperature />
+        
         <Main />
+        <Sunrise />
         <TodayTemp />
         <Forecast />
         <Desc />

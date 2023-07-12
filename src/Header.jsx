@@ -25,11 +25,15 @@ const HeadFunc = ({ value }) => {
 
   const showPosition = async (position) => {
     const latitude = position.coords.latitude;
+
     const longitude = position.coords.longitude;
+
     const { apiKey, reserveApiKey, timeApiKey, reserveTimeApiKey } = apiKeys;
 
     const geoCod = await axios.get(geo(apiKey, latitude, longitude));
+
     const { local_names } = geoCod.data[0];
+
     const { en } = local_names;
 
     if (fullLocation !== en && en.length !== 0) {

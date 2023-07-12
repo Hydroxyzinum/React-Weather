@@ -40,7 +40,7 @@ const MenuContainer = ({ value, children }) => {
         const { lat, lon } = current.data.coord;
         const getTime = await axios.get(currentTimeUrl(timeApiKey, lat, lon));
         setTime(getTime.data);
-      }, 400);
+      }, 150);
       setData(current.data);
       setFutureData(future.data);
       setFullLocation(location);
@@ -68,7 +68,7 @@ const MenuContainer = ({ value, children }) => {
           );
           setTime(getTime.data);
           setRightMenu(false);
-        }, 400);
+        }, 150);
 
         setData(currentReserve.data);
         setFutureData(futureReserve.data);
@@ -84,6 +84,7 @@ const MenuContainer = ({ value, children }) => {
 
   const inputChange = async (e) => {
     e.preventDefault();
+
     const { value } = e.target;
 
     if (!value) {
@@ -97,10 +98,6 @@ const MenuContainer = ({ value, children }) => {
       );
       setSearchEngine(result);
     }
-  };
-
-  const unitState = (e) => {
-    return e.target.checked ? setUnit("imperial") : setUnit("metric");
   };
 
   const classesblock = cn({
@@ -122,7 +119,12 @@ const MenuContainer = ({ value, children }) => {
             <span className="exit-line exit-second_line"></span>
           </button>
           <label className="switch">
-            <input onClick={unitState} type="checkbox" />
+            <input
+              onClick={(e) =>
+                e.target.checked ? setUnit("imperial") : setUnit("metric")
+              }
+              type="checkbox"
+            />
             <span className="slider round"></span>
             <span className="celsium">C°</span>
             <span className="farenheit">F°</span>
@@ -165,7 +167,8 @@ const RenderSearchItem = ({ value }) => {
           key={_.uniqueId("city-")}
           className="searchedItem"
         >
-          {city} <span className="region-name">({region})</span>
+          {city ? city : null}{" "}
+          <span className="region-name">({region ? region : null})</span>
         </button>
       );
     });

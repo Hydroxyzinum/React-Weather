@@ -2,11 +2,13 @@ import React, { useContext } from "react";
 import { Context } from "./context";
 
 const Temperature = ({ children, value }) => {
-  const { name } = value;
+  const { data } = value;
 
-  const { temp, temp_max, temp_min, feels_like } = value.main;
+  const { name } = data;
 
-  const { description } = value.weather[0];
+  const { temp, temp_max, temp_min, feels_like } = data.main;
+
+  const { description } = data.weather[0];
 
   const normalizeDesc = `${description[0].toUpperCase()}${description.slice(
     1
@@ -30,7 +32,7 @@ const Temperature = ({ children, value }) => {
         {temp ? temperature : null}
         <span className="gradus">°</span>
       </h2>
-      <p className="description">{normalizeDesc}</p>
+      <p className="description">{normalizeDesc ? normalizeDesc : null}</p>
       <div className="min-max_temperature">
         <p className="max-temp">
           Макс.: {temp_max ? temperatureMax : null}
@@ -52,8 +54,12 @@ const Temperature = ({ children, value }) => {
 };
 
 const IconGenerator = ({ value }) => {
-  const { main, icon } = value.weather[0];
+  const { data } = value;
+
+  const { main, icon } = data.weather[0];
+
   const nightIcon = ["01n", "02n", "03n", "04n"];
+
   const atmosphereMain = [
     "Mist",
     "Smoke",
@@ -73,8 +79,7 @@ const IconGenerator = ({ value }) => {
         <span className="meteor"></span>
       </div>
     );
-  }
-  if (atmosphereMain.includes(main)) {
+  } else if (atmosphereMain.includes(main)) {
     return (
       <div icon="mists">
         <div className="mist-block">
@@ -172,10 +177,9 @@ const IconGenerator = ({ value }) => {
 
 const CurrentTemperature = () => {
   const contextData = useContext(Context);
-  const { data } = contextData;
   return (
-    <Temperature value={data}>
-      <IconGenerator value={data}></IconGenerator>
+    <Temperature value={contextData}>
+      <IconGenerator value={contextData}></IconGenerator>
     </Temperature>
   );
 };

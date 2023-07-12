@@ -1,13 +1,13 @@
 import React, { useContext } from "react";
 import { Context } from "./context";
-import cn from "classnames";
+import _ from "lodash";
 
 const CardContainer = ({ children }) => {
   return <div className="main-container">{children}</div>;
 };
 
 const FutureHours = ({ value }) => {
-  const { dt } = value;
+  const { dt } = value.data;
   const todayDate = new Date(dt * 1000);
   const day = todayDate.getDate();
   const monthRu = [
@@ -30,7 +30,7 @@ const FutureHours = ({ value }) => {
   return (
     <div className="today-header">
       <h4 className="today-weather_head">3 часа</h4>
-      <p className="today-weather_date">{resultDate}</p>
+      <p className="today-weather_date">{resultDate ? resultDate : null}</p>
     </div>
   );
 };
@@ -40,29 +40,41 @@ const HourContainer = ({ children }) => {
 };
 
 const Cards = ({ value }) => {
-  const future = value.list;
+  const { futureData } = value;
+  const future = futureData.list;
   if (future.length !== 0) {
     return future.map((item, index) => {
-      const imgClasses = cn(["card-image", `weather-${item.weather[0].icon}`]);
+      const iconUrl = `${"weather/"}${item.weather[0].icon}.png`;
+
       const dateToStr = new Date(item.dt_txt);
+
+      const normalizeTemp = Math.ceil(item.main.temp);
+
+      const normalizeTime = `${dateToStr.getHours()}:00`;
+
       if (index < 4) {
         return (
-          <div key={index} className="first-hours time-container">
+          <div
+            key={_.uniqueId("time-container-")}
+            className="first-hours time-container"
+          >
             <div className="hour-temp_block">
               <p className="hours-temp">
-                {Math.round(item.main.temp)}
+                {normalizeTemp ? normalizeTemp : null}
                 <span className="gradus">°</span>
               </p>
             </div>
             <div className="card-image_block">
               <img
-                className={imgClasses}
-                src={`${"weather/"}${item.weather[0].icon}.png`}
+                className="card-image"
+                src={iconUrl}
                 alt={`${item.weather[0].icon}`}
               />
             </div>
             <div className="hours-time_block">
-              <p className="hours-time">{`${dateToStr.getHours()}:00`}</p>
+              <p className="hours-time">
+                {normalizeTime ? normalizeTime : null}
+              </p>
             </div>
           </div>
         );
@@ -71,17 +83,22 @@ const Cards = ({ value }) => {
       }
     });
   } else {
-    return <div className="">ПОДОЖДИТЕ.....</div>;
+    return (
+      <div icon="cloudy" data-label="Секундочку...">
+        <span className="cloud"></span>
+        <span className="cloud"></span>
+      </div>
+    );
   }
 };
 
 const TodayTemp = () => {
-  const { data, futureData } = useContext(Context);
+  const contextData = useContext(Context);
   return (
     <CardContainer>
-      <FutureHours value={data}></FutureHours>
+      <FutureHours value={contextData}></FutureHours>
       <HourContainer>
-        <Cards value={futureData}></Cards>
+        <Cards value={contextData}></Cards>
       </HourContainer>
     </CardContainer>
   );

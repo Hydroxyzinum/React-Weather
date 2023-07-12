@@ -2,9 +2,16 @@ import React, { useContext } from "react";
 import { Context } from "./context";
 
 const MainData = ({ value }) => {
-  const { humidity } = value.main;
-  const { all } = value.clouds;
-  const { speed } = value.wind;
+  const { data } = value;
+
+  const { main, clouds, wind } = data;
+
+  const { humidity } = main;
+
+  const { all } = clouds;
+
+  const { speed } = wind;
+
   return (
     <div className="weather-main_data">
       <div className="main-data">
@@ -26,8 +33,8 @@ const MainData = ({ value }) => {
 };
 
 const Main = () => {
-  const { data } = useContext(Context);
-  return <MainData value={data}></MainData>;
+  const contextData = useContext(Context);
+  return <MainData value={contextData}></MainData>;
 };
 
 export default Main;
