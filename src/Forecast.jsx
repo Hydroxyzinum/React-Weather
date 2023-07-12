@@ -23,7 +23,6 @@ const ForecastContainer = ({ children, value }) => {
             value={forecastTime}
             onChange={submitForm}
             name="time"
-            id=""
           >
             <option className="option-style" value={9}>
               09:00
@@ -51,9 +50,9 @@ const ForecastContainer = ({ children, value }) => {
 const ForecastList = ({ value }) => {
   const { list } = value.futureData;
 
-  const { unit, forecastTime } = value;
+  const { unit, forecastTime, theme } = value;
 
-  return list.map((item) => {
+  return list.map((item, index) => {
     const { dt_txt, clouds, main } = item;
 
     const { all } = clouds;
@@ -106,7 +105,7 @@ const ForecastList = ({ value }) => {
         unit === "metric" ? normalizeTempMax * 3 : fahrenheitToCelsius * 3;
 
       return (
-        <div key={_.uniqueId("forecast-")} className="forecast-card">
+        <div key={_.uniqueId("forecast-")} id={index} className="forecast-card">
           <div className="front-inner">
             <div className="front">
               <p className="forecast-data">{currentDay ? currentDay : null}</p>
@@ -129,10 +128,12 @@ const ForecastList = ({ value }) => {
                 {normalizeTempMax ? normalizeTempMax : null}°
               </p>
             </div>
-            <div className="back">
-              <h6 className="back-time">
-                {normalizeDesc ? normalizeDesc : null}
-              </h6>
+            <div style={theme} className="back">
+              <div className="back-time_container">
+              <p className="back-time">{normalizeDesc ? normalizeDesc : null}</p>
+                <img className="back-img" src={`${"weather/"}${icon}.png`} alt="" />
+              </div>
+       
               <div className="back-weather_info">
                 <div className="back-temp">
                   <span className="back-temp_min">

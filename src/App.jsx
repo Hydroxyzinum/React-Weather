@@ -37,9 +37,8 @@ function App() {
   const [unit, setUnit] = useState("metric");
 
   useEffect(() => {
-
     const { apiKey, reserveApiKey, timeApiKey, reserveTimeApiKey } = apiKeys;
-    
+
     const getRequest = async (defaultCity, currentLocation) => {
       const requestLocation =
         currentLocation.length === 0 ? defaultCity : currentLocation;
@@ -93,7 +92,7 @@ function App() {
     const intervalFunc = setInterval(() => {
       getRequest("Казань", fullLocation);
       setStateInterval((prevState) => prevState + 1);
-    }, 20000);
+    }, 35000);
     return () => clearInterval(intervalFunc);
   }, [unit, fullLocation, forecastTime, stateInterval]);
 
