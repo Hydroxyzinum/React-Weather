@@ -3,7 +3,6 @@ import axios from "axios";
 import { apiKeys, currentWeatherUrl, currentTimeUrl } from "./url";
 import { Context } from "./context";
 import { setBackground } from "./theme";
-
 import Menu from "./Menu";
 import Parent from "./Parent";
 import Header from "./Header";
@@ -13,6 +12,7 @@ import Main from "./Main";
 import TodayTemp from "./TodayTemp";
 import Forecast from "./Forecast";
 import Desc from "./Desc";
+import CryptoJS from 'crypto-js';
 
 function App() {
   const [stateInterval, setStateInterval] = useState(0);
@@ -38,6 +38,10 @@ function App() {
   const [unit, setUnit] = useState("metric");
 
   useEffect(() => {
+    const crypt = CryptoJS.AES.encrypt('Привет как дела', "123").toString();
+    const decrypt = CryptoJS.AES.decrypt(crypt, '123');
+    const der = decrypt.toString(CryptoJS.enc.Utf8);
+
     const { apiKey, reserveApiKey, timeApiKey, reserveTimeApiKey } = apiKeys;
 
     const getRequest = async (defaultCity, currentLocation) => {
@@ -126,7 +130,7 @@ function App() {
         <Menu />
         <Header />
         <CurrentTemperature />
-        
+
         <Main />
         <Sunrise />
         <TodayTemp />
