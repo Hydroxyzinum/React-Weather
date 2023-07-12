@@ -10,9 +10,10 @@ const RisingSun = ({ value }) => {
 
   const sunsetTime = new Date(sunset * 1000);
 
+
   const { normalizeSunrise, normalizeSunset } = {
-    normalizeSunrise: `${sunriseTime.getHours()}:${sunriseTime.getMinutes()}`,
-    normalizeSunset: `${sunsetTime.getHours()}:${sunsetTime.getMinutes()}`,
+    normalizeSunrise: sunriseTime.toString().slice(16, 21),
+    normalizeSunset: sunsetTime.toString().slice(16, 21),
   };
 
   return (
