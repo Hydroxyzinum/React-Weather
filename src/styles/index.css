@@ -1,6 +1,6 @@
 @font-face {
   font-family: "Roboto-light";
-  src: url("/src/assets/fonts/Roboto-Light.ttf");
+  src: url("/src/styles/fonts/Roboto-Light.ttf");
   font-weight: 300;
 }
 
@@ -100,7 +100,7 @@ code {
   width: 30px;
   height: 30px;
   text-align: center;
-  background-image: url("/src/assets/geo.png");
+  background-image: url("/src/styles/geo.png");
   background-size: 30px;
   background-repeat: no-repeat;
   background-color: transparent;

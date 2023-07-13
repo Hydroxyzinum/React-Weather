@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import cn from "classnames";
-import { Context } from "./context";
+import { Context } from "../context";
 
 const ChooseParent = ({ children, value }) => {
   const { data, theme, rightMenu } = value;

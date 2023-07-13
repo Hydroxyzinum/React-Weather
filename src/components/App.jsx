@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { apiKeys, currentWeatherUrl, currentTimeUrl } from "./url";
-import { Context } from "./context";
-import { setBackground } from "./theme";
+import { apiKeys, currentWeatherUrl, currentTimeUrl } from "../url";
+import { Context } from "../context";
+import { setBackground } from "../theme";
 import Menu from "./Menu";
 import Parent from "./Parent";
 import Header from "./Header";

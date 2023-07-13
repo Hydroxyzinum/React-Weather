@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useContext } from "react";
-import { currentTimeUrl, currentWeatherUrl, geo, apiKeys } from "./url";
-import { Context } from "./context";
+import { currentTimeUrl, currentWeatherUrl, geo, apiKeys } from "../url";
+import { Context } from "../context";
 
 const HeadFunc = ({ value }) => {
   const {

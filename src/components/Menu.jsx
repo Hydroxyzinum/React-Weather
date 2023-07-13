@@ -2,9 +2,9 @@ import React, { useContext } from "react";
 import axios from "axios";
 import cn from "classnames";
 import _ from "lodash";
-import { apiKeys, currentWeatherUrl, currentTimeUrl } from "./url";
-import { Context } from "./context";
-import { russia } from "./russia";
+import { apiKeys, currentWeatherUrl, currentTimeUrl } from "../url";
+import { Context } from "../context";
+import { russia } from "../russia";
 
 const MenuContainer = ({ value, children }) => {
   const {
