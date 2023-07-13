@@ -63,10 +63,7 @@ const DescData = ({ value }) => {
 
   return infoArr.map((info, index) => {
     return (
-      <div
-        key={_.uniqueId("card-")}
-        className="desc-card"
-      >
+      <div key={_.uniqueId("card-")} className="desc-card">
         <p className="card-head">{namesArr[index]}</p>
         <img
           className="cards-image"
@@ -80,10 +77,10 @@ const DescData = ({ value }) => {
 };
 
 const Desc = () => {
-  const context = useContext(Context);
+  const contextData = useContext(Context);
   return (
     <DescContainer>
-      <DescData value={context}></DescData>
+      <DescData value={contextData}></DescData>
     </DescContainer>
   );
 };

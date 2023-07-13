@@ -61,6 +61,7 @@ const HeadFunc = ({ value }) => {
           );
 
           const { local_names } = geoCod.data[0];
+
           const { en } = local_names;
 
           const requestReserve = await axios.get(

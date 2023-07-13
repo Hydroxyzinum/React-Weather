@@ -72,6 +72,8 @@ const ForecastList = ({ value }) => {
         1
       )}`;
 
+      const normalizeImgSrc = `${"weather/"}${icon}.png`;
+
       const currDate = new Date(item.dt_txt);
 
       const dayWeek = ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"];
@@ -111,8 +113,8 @@ const ForecastList = ({ value }) => {
               <p className="forecast-data">{currentDay ? currentDay : null}</p>
               <img
                 className="forecast-data_img"
-                src={`${"weather/"}${icon}.png`}
-                alt=""
+                src={normalizeImgSrc}
+                alt={icon}
               />
               <div className="progress">
                 <div
@@ -130,10 +132,12 @@ const ForecastList = ({ value }) => {
             </div>
             <div style={theme} className="back">
               <div className="back-time_container">
-              <p className="back-time">{normalizeDesc ? normalizeDesc : null}</p>
-                <img className="back-img" src={`${"weather/"}${icon}.png`} alt="" />
+                <p className="back-time">
+                  {normalizeDesc ? normalizeDesc : null}
+                </p>
+                <img className="back-img" src={normalizeImgSrc} alt={icon} />
               </div>
-       
+
               <div className="back-weather_info">
                 <div className="back-temp">
                   <span className="back-temp_min">

@@ -1,10 +1,13 @@
 import React, { useContext } from "react";
 import cn from "classnames";
 import { Context } from "../context";
+import animationsBlock from "../animationsBlocks";
 
 const ChooseParent = ({ children, value }) => {
   const { data, theme, rightMenu } = value;
-  
+
+  const { clouds } = animationsBlock;
+
   const display = cn({
     container: true,
     "container-overflow": !rightMenu,
@@ -20,12 +23,7 @@ const ChooseParent = ({ children, value }) => {
       </div>
     );
   } else {
-    return (
-      <div icon="cloudy" data-label="Секундочку...">
-        <span className="cloud"></span>
-        <span className="cloud"></span>
-      </div>
-    );
+    return clouds;
   }
 };
 

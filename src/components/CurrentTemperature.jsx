@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import animationsBlock from "../animationsBlocks";
 import { Context } from "../context";
 
 const Temperature = ({ children, value }) => {
@@ -60,6 +61,9 @@ const IconGenerator = ({ value }) => {
 
   const nightIcon = ["01n", "02n", "03n", "04n"];
 
+  const { moon, sun, clouds, snow, rain, thunderstorm, mists } =
+    animationsBlock;
+
   const atmosphereMain = [
     "Mist",
     "Smoke",
@@ -73,104 +77,25 @@ const IconGenerator = ({ value }) => {
   ];
 
   if (nightIcon.includes(icon)) {
-    return (
-      <div icon="supermoon">
-        <span className="moon"></span>
-        <span className="meteor"></span>
-      </div>
-    );
+    return moon;
   } else if (atmosphereMain.includes(main)) {
-    return (
-      <div icon="mists">
-        <div className="mist-block">
-          <span className="mist"></span>
-          <span className="s-mist"></span>
-          <span className="t-mist"></span>
-        </div>
-      </div>
-    );
+    return mists;
   } else {
     switch (main) {
       case "Clear":
-        return (
-          <div icon="sunny">
-            <span className="sun"></span>
-          </div>
-        );
+        return sun;
       case "Clouds":
-        return (
-          <div icon="cloudy">
-            <span className="cloud"></span>
-            <span className="cloud"></span>
-          </div>
-        );
+        return clouds;
       case "Snow":
-        return (
-          <div icon="snowy">
-            <span className="snowman"></span>
-            <ul>
-              <li></li>
-              <li></li>
-              <li></li>
-              <li></li>
-              <li></li>
-              <li></li>
-              <li></li>
-              <li></li>
-              <li></li>
-              <li></li>
-              <li></li>
-              <li></li>
-              <li></li>
-            </ul>
-          </div>
-        );
+        return snow;
       case "Rain":
-        return (
-          <div icon="stormy">
-            <span className="cloud"></span>
-            <ul>
-              <li></li>
-              <li></li>
-              <li></li>
-              <li></li>
-              <li></li>
-            </ul>
-          </div>
-        );
+        return rain;
       case "Thunderstorm":
-        return (
-          <div icon="thunderstorm">
-            <span className="cloud"></span>
-            <ul>
-              <li></li>
-              <li></li>
-              <li></li>
-              <li></li>
-              <li></li>
-            </ul>
-          </div>
-        );
+        return thunderstorm;
       case "Drizzle":
-        return (
-          <div icon="stormy">
-            <span className="cloud"></span>
-            <ul>
-              <li></li>
-              <li></li>
-              <li></li>
-              <li></li>
-              <li></li>
-            </ul>
-          </div>
-        );
+        return rain;
       default:
-        return (
-          <div icon="cloudy">
-            <span className="cloud"></span>
-            <span className="cloud"></span>
-          </div>
-        );
+        return clouds;
     }
   }
 };

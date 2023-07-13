@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import { Context } from "../context";
+import animationsBlock from "../animationsBlocks";
 import _ from "lodash";
 
 const CardContainer = ({ children }) => {
@@ -8,8 +9,11 @@ const CardContainer = ({ children }) => {
 
 const FutureHours = ({ value }) => {
   const { dt } = value.data;
+
   const todayDate = new Date(dt * 1000);
+
   const day = todayDate.getDate();
+
   const monthRu = [
     "Январь",
     "Февраль",
@@ -26,7 +30,9 @@ const FutureHours = ({ value }) => {
   ];
 
   const month = monthRu[todayDate.getMonth()];
+
   const resultDate = `${month}, ${day}`;
+
   return (
     <div className="today-header">
       <h4 className="today-weather_head">3 часа</h4>
@@ -41,10 +47,16 @@ const HourContainer = ({ children }) => {
 
 const Cards = ({ value }) => {
   const { futureData } = value;
+
+  const { clouds } = animationsBlock;
+
   const future = futureData.list;
+
   if (future.length !== 0) {
     return future.map((item, index) => {
-      const iconUrl = `${"weather/"}${item.weather[0].icon}.png`;
+      const { icon } = item.weather[0];
+
+      const iconUrl = `${"weather/"}${icon}.png`;
 
       const dateToStr = new Date(item.dt_txt);
 
@@ -65,11 +77,7 @@ const Cards = ({ value }) => {
               </p>
             </div>
             <div className="card-image_block">
-              <img
-                className="card-image"
-                src={iconUrl}
-                alt={`${item.weather[0].icon}`}
-              />
+              <img className="card-image" src={iconUrl} alt={icon} />
             </div>
             <div className="hours-time_block">
               <p className="hours-time">
@@ -83,12 +91,7 @@ const Cards = ({ value }) => {
       }
     });
   } else {
-    return (
-      <div icon="cloudy" data-label="Секундочку...">
-        <span className="cloud"></span>
-        <span className="cloud"></span>
-      </div>
-    );
+    return clouds;
   }
 };
 

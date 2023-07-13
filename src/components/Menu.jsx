@@ -63,9 +63,11 @@ const MenuContainer = ({ value, children }) => {
 
         const timeout = setTimeout(async () => {
           const { lat, lon } = currentReserve.data.coord;
+
           const getTime = await axios.get(
             currentTimeUrl(reserveTimeApiKey, lat, lon)
           );
+
           setTime(getTime.data);
           setRightMenu(false);
         }, 150);

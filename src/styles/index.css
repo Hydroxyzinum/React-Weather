@@ -131,15 +131,15 @@ code {
   transition: 1s ease;
 }
 
-.click-field:hover > .burger-first_line {
+.click-field:hover>.burger-first_line {
   transform: translateX(2px);
 }
 
-.click-field:hover > .burger-second_line {
+.click-field:hover>.burger-second_line {
   transform: translateX(5px);
 }
 
-.click-field:focus > .burger-line {
+.click-field:focus>.burger-line {
   background-color: blueviolet;
   transform: scale(0.5);
 }
@@ -593,7 +593,7 @@ code {
   margin-bottom: 10px;
 }
 
-.forecast-card:hover > .front-inner {
+.forecast-card:hover>.front-inner {
   transition: 1.2s ease-in-out;
   transform: rotateY(180deg);
 }
@@ -675,11 +675,11 @@ code {
   transform: rotate(-45deg);
 }
 
-.click-exit:focus > .exit-first_line {
+.click-exit:focus>.exit-first_line {
   transform: rotate(0);
 }
 
-.click-exit:focus > .exit-second_line {
+.click-exit:focus>.exit-second_line {
   transform: rotate(0);
 }
 
@@ -724,15 +724,15 @@ code {
   transition: 0.4s;
 }
 
-input:checked + .slider {
+input:checked+.slider {
   background-color: transparent;
 }
 
-input:focus + .slider {
+input:focus+.slider {
   box-shadow: 0 0 1px transparent;
 }
 
-input:checked + .slider:before {
+input:checked+.slider:before {
   -webkit-transform: translateX(26px);
   -ms-transform: translateX(26px);
   transform: translateX(26px);
@@ -874,11 +874,9 @@ input:checked + .slider:before {
   margin: 0;
   border-radius: 100%;
   box-shadow: 0 0 0 0.05em var(--ring) inset, 0 0 0.3em -0.03em var(--shadow);
-  background: linear-gradient(
-    to var(--blend-dir),
-    var(--blend1) var(--blend-from),
-    var(--blend2) var(--blend-to)
-  );
+  background: linear-gradient(to var(--blend-dir),
+      var(--blend1) var(--blend-from),
+      var(--blend2) var(--blend-to));
   /* filter: saturate(0.05); */
 }
 
@@ -994,7 +992,7 @@ input:checked + .slider:before {
   animation: move 3000ms infinite ease-in-out;
 }
 
-.cloud + .cloud {
+.cloud+.cloud {
   top: 25%;
   left: 40%;
   animation: move 3700ms infinite linear;

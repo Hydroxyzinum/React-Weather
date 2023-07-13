@@ -16,11 +16,15 @@ const MainData = ({ value }) => {
     <div className="weather-main_data">
       <div className="main-data">
         <div className="data-container">
-          <img className="humidity-img" src="weather/humidity.png" alt="#" />
+          <img
+            className="humidity-img"
+            src="weather/humidity.png"
+            alt="humidity"
+          />
           <p className="humidity m-0">{humidity ? humidity : 0}%</p>
         </div>
         <div className="data-container">
-          <img className="data-image" src="weather/03d.png" alt="#" />
+          <img className="data-image" src="weather/03d.png" alt="clouds" />
           <p className="clouds m-0">{all ? all : 0}%</p>
         </div>
         <div className="data-container">
