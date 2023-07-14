@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useMemo } from "react";
 import { Context } from "../context";
 import cn from "classnames";
 import _ from "lodash";
@@ -47,130 +47,145 @@ const ForecastContainer = ({ children, value }) => {
   );
 };
 
+const ForecastListContainer = ({ children }) => {
+  return <div className="forecast-list_container">{children}</div>;
+};
+
 const ForecastList = ({ value }) => {
   const { list } = value.futureData;
 
   const { unit, forecastTime, theme } = value;
 
-  return list.map((item, index) => {
-    const { dt_txt, clouds, main } = item;
+  const memoization = useMemo(() => {
+    return list.map((item, index) => {
+      const { dt_txt, clouds, main } = item;
 
-    const { all } = clouds;
+      const { all } = clouds;
 
-    const { temp_max, temp_min, humidity } = main;
+      const { temp_max, temp_min, humidity } = main;
 
-    const averageTempAtNoon = new Date(dt_txt);
+      const averageTempAtNoon = new Date(dt_txt);
 
-    const normalizeTempMax = Math.ceil(temp_max);
+      const normalizeTempMax = Math.ceil(temp_max);
 
-    const normalizeTempMin = Math.floor(temp_min);
+      const normalizeTempMin = Math.floor(temp_min);
 
-    if (averageTempAtNoon.getHours() === Number(forecastTime)) {
-      const { icon, description } = item.weather[0];
+      if (averageTempAtNoon.getHours() === Number(forecastTime)) {
+        const { icon, description } = item.weather[0];
 
-      const normalizeDesc = `${description[0].toUpperCase()}${description.slice(
-        1
-      )}`;
+        const normalizeDesc = `${description[0].toUpperCase()}${description.slice(
+          1
+        )}`;
 
-      const normalizeImgSrc = `${"weather/"}${icon}.png`;
+        const normalizeImgSrc = `${"weather/"}${icon}.png`;
 
-      const currDate = new Date(item.dt_txt);
+        const currDate = new Date(item.dt_txt);
 
-      const dayWeek = ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"];
+        const dayWeek = ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"];
 
-      const currentDay = dayWeek[currDate.getDay()];
+        const currentDay = dayWeek[currDate.getDay()];
 
-      const progressCn =
-        unit === "metric"
-          ? cn({
-              "progress-bar": true,
-              "progress-bar-striped": true,
-              "progress-bar-animated": true,
-              "bg-info": normalizeTempMax <= 10 ? true : false,
-              "bg-success": normalizeTempMax < 20 ? true : false,
-              "bg-warning": normalizeTempMax >= 20 ? true : false,
-              "bg-danger": normalizeTempMax >= 30 ? true : false,
-            })
-          : cn({
-              "progress-bar": true,
-              "progress-bar-striped": true,
-              "progress-bar-animated": true,
-              "bg-info": normalizeTempMax <= 50 ? true : false,
-              "bg-success": normalizeTempMax <= 59 ? true : false,
-              "bg-warning": normalizeTempMax >= 68 ? true : false,
-              "bg-danger": normalizeTempMax >= 86 ? true : false,
-            });
+        const progressCn =
+          unit === "metric"
+            ? cn({
+                "progress-bar": true,
+                "progress-bar-striped": true,
+                "progress-bar-animated": true,
+                "bg-info": normalizeTempMax <= 10 ? true : false,
+                "bg-success": normalizeTempMax < 20 ? true : false,
+                "bg-warning": normalizeTempMax >= 20 ? true : false,
+                "bg-danger": normalizeTempMax >= 30 ? true : false,
+              })
+            : cn({
+                "progress-bar": true,
+                "progress-bar-striped": true,
+                "progress-bar-animated": true,
+                "bg-info": normalizeTempMax <= 50 ? true : false,
+                "bg-success": normalizeTempMax <= 59 ? true : false,
+                "bg-warning": normalizeTempMax >= 68 ? true : false,
+                "bg-danger": normalizeTempMax >= 86 ? true : false,
+              });
 
-      const fahrenheitToCelsius = ((normalizeTempMax - 32) * 5) / 9;
+        const fahrenheitToCelsius = ((normalizeTempMax - 32) * 5) / 9;
 
-      const progressStyles =
-        unit === "metric" ? normalizeTempMax * 3 : fahrenheitToCelsius * 3;
+        const progressStyles =
+          unit === "metric" ? normalizeTempMax * 3 : fahrenheitToCelsius * 3;
 
-      return (
-        <div key={_.uniqueId("forecast-")} id={index} className="forecast-card">
-          <div className="front-inner">
-            <div className="front">
-              <p className="forecast-data">{currentDay ? currentDay : null}</p>
-              <img
-                className="forecast-data_img"
-                src={normalizeImgSrc}
-                alt={icon}
-              />
-              <div className="progress">
-                <div
-                  className={progressCn}
-                  style={{ width: `${progressStyles}%` }}
-                  role="progressbar"
-                  aria-valuenow={normalizeTempMax}
-                  aria-valuemin="0"
-                  aria-valuemax="40"
-                ></div>
-              </div>
-              <p className="forecast-temp">
-                {normalizeTempMax ? normalizeTempMax : null}°
-              </p>
-            </div>
-            <div style={theme} className="back">
-              <div className="back-time_container">
-                <p className="back-time">
-                  {normalizeDesc ? normalizeDesc : null}
+        return (
+          <div
+            key={_.uniqueId("forecast-")}
+            id={index}
+            className="forecast-card"
+          >
+            <div className="front-inner">
+              <div className="front">
+                <p className="forecast-data">
+                  {currentDay ? currentDay : null}
                 </p>
-                <img className="back-img" src={normalizeImgSrc} alt={icon} />
-              </div>
-
-              <div className="back-weather_info">
-                <div className="back-temp">
-                  <span className="back-temp_min">
-                    Макс.:{normalizeTempMax ? normalizeTempMax : null}°
-                  </span>
-                  <span className="back-temp_max">
-                    Мин.:{normalizeTempMin ? normalizeTempMin : null}°
-                  </span>
+                <img
+                  className="forecast-data_img"
+                  src={normalizeImgSrc}
+                  alt={icon}
+                />
+                <div className="progress">
+                  <div
+                    className={progressCn}
+                    style={{ width: `${progressStyles}%` }}
+                    role="progressbar"
+                    aria-valuenow={normalizeTempMax}
+                    aria-valuemin="0"
+                    aria-valuemax="40"
+                  ></div>
                 </div>
-                <div className="back-info">
-                  <span className="back-clouds">
-                    Облачность.: {all ? all : null}%
-                  </span>
-                  <span className="back-humidity">
-                    Влажность.: {humidity ? humidity : null}%
-                  </span>
+                <p className="forecast-temp">
+                  {normalizeTempMax ? normalizeTempMax : null}°
+                </p>
+              </div>
+              <div style={theme} className="back">
+                <div className="back-time_container">
+                  <p className="back-time">
+                    {normalizeDesc ? normalizeDesc : null}
+                  </p>
+                  <img className="back-img" src={normalizeImgSrc} alt={icon} />
+                </div>
+
+                <div className="back-weather_info">
+                  <div className="back-temp">
+                    <span className="back-temp_min">
+                      Макс.:{normalizeTempMax ? normalizeTempMax : null}°
+                    </span>
+                    <span className="back-temp_max">
+                      Мин.:{normalizeTempMin ? normalizeTempMin : null}°
+                    </span>
+                  </div>
+                  <div className="back-info">
+                    <span className="back-clouds">
+                      Облачность.: {all ? all : null}%
+                    </span>
+                    <span className="back-humidity">
+                      Влажность.: {humidity ? humidity : null}%
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      );
-    } else {
-      return null;
-    }
-  });
+        );
+      } else {
+        return null;
+      }
+    });
+  }, [forecastTime, list, theme, unit]);
+  return memoization;
 };
 
 const Forecast = () => {
   const contextData = useContext(Context);
   return (
     <ForecastContainer value={contextData}>
-      <ForecastList value={contextData}></ForecastList>
+      <ForecastListContainer>
+        <ForecastList value={contextData}></ForecastList>
+      </ForecastListContainer>
     </ForecastContainer>
   );
 };

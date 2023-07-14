@@ -38,7 +38,9 @@ const MenuContainer = ({ value, children }) => {
     try {
       const timeout = setTimeout(async () => {
         const { lat, lon } = current.data.coord;
+
         const getTime = await axios.get(currentTimeUrl(timeApiKey, lat, lon));
+
         setTime(getTime.data);
       }, 150);
       setData(current.data);
@@ -157,26 +159,29 @@ const MenuContainer = ({ value, children }) => {
 
 const RenderSearchItem = ({ value }) => {
   const { searchEngine, setLocation } = value;
-
-  if (searchEngine.length !== 0) {
-    const newArr =
-      searchEngine.length > 11 ? searchEngine.slice(0, 11) : searchEngine;
-    return newArr.map(({ region, city }) => {
-      return (
-        <button
-          onClick={() => setLocation(city)}
-          type="submit"
-          key={_.uniqueId("city-")}
-          className="searchedItem"
-        >
-          {city ? city : null}{" "}
-          <span className="region-name">({region ? region : null})</span>
-        </button>
-      );
-    });
-  } else {
-    return <div className="p-10">Ожидание запроса...</div>;
-  }
+  const memoSearchItem = React.useMemo(() => {
+    if (searchEngine.length !== 0) {
+      const newArr =
+        searchEngine.length > 11 ? searchEngine.slice(0, 11) : searchEngine;
+      return newArr.map(({ region, city }) => {
+        return (
+          <div key={_.uniqueId("city-")} className="buttons">
+            <button
+              onClick={() => setLocation(city)}
+              type="submit"
+              className="searchedItem"
+            >
+              {city ? city : null}{" "}
+              <span className="region-name">({region ? region : null})</span>
+            </button>
+          </div>
+        );
+      });
+    } else {
+      return <div className="p-10">Ожидание запроса...</div>;
+    }
+  }, [searchEngine, setLocation]);
+  return memoSearchItem;
 };
 
 const Menu = () => {

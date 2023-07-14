@@ -3,6 +3,7 @@ import axios from "axios";
 import { apiKeys, currentWeatherUrl, currentTimeUrl } from "../url";
 import { Context } from "../context";
 import { setBackground } from "../theme";
+
 import Menu from "./Menu";
 import Parent from "./Parent";
 import Header from "./Header";
@@ -12,8 +13,12 @@ import Main from "./Main";
 import TodayTemp from "./TodayTemp";
 import Forecast from "./Forecast";
 import Desc from "./Desc";
+import WeatherInfo from "./WeatherInfo";
+// import { INITIAL_STATE, reducer } from "../reducer";
 
 function App() {
+  // const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
+
   const [stateInterval, setStateInterval] = useState(0);
 
   const [data, setData] = useState([]);
@@ -62,6 +67,7 @@ function App() {
           const futureReserve = await axios.get(
             currentWeatherUrl("forecast", requestLocation, reserveApiKey, unit)
           );
+
           setData(requestReserve.data);
           setFutureData(futureReserve.data);
         } else {
@@ -72,6 +78,7 @@ function App() {
         const { lat, lon } = request.data.coord;
         try {
           const getTime = await axios.get(currentTimeUrl(timeApiKey, lat, lon));
+
           setTime(getTime.data);
           setBackground(getTime.data, setTheme);
         } catch (e) {
@@ -79,6 +86,7 @@ function App() {
             const getTime = await axios.get(
               currentTimeUrl(reserveTimeApiKey, lat, lon)
             );
+
             setTime(getTime.data);
             setBackground(getTime.data, setTheme);
           } else {
@@ -91,6 +99,7 @@ function App() {
     getRequest("Казань", fullLocation);
     const intervalFunc = setInterval(() => {
       getRequest("Казань", fullLocation);
+
       setStateInterval((prevState) => prevState + 1);
     }, 35000);
     return () => clearInterval(intervalFunc);
@@ -125,12 +134,12 @@ function App() {
         <Menu />
         <Header />
         <CurrentTemperature />
-
         <Main />
-        <Sunrise />
         <TodayTemp />
         <Forecast />
         <Desc />
+        <Sunrise />
+        <WeatherInfo></WeatherInfo>
       </Parent>
     </Context.Provider>
   );
