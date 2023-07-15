@@ -24,7 +24,7 @@ const MainData = ({ value }) => {
           <p className="humidity m-0">{humidity ? humidity : 0}%</p>
         </div>
         <div className="data-container">
-          <img className="data-image" src="weather/03d.png" alt="clouds" />
+          <img className="cloudicon" src="weather/cloudicon.png" alt="clouds" />
           <p className="clouds m-0">{all ? all : 0}%</p>
         </div>
         <div className="data-container">

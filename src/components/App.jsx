@@ -59,6 +59,7 @@ function App() {
       try {
         setData(request.data);
         setFutureData(future.data);
+        setFullLocation(requestLocation);
       } catch (e) {
         if (e) {
           const requestReserve = await axios.get(
@@ -67,7 +68,7 @@ function App() {
           const futureReserve = await axios.get(
             currentWeatherUrl("forecast", requestLocation, reserveApiKey, unit)
           );
-
+          setFullLocation(requestLocation);
           setData(requestReserve.data);
           setFutureData(futureReserve.data);
         } else {

@@ -152,10 +152,10 @@ const ForecastList = ({ value }) => {
                 <div className="back-weather_info">
                   <div className="back-temp">
                     <span className="back-temp_min">
-                      Макс.:{normalizeTempMax ? normalizeTempMax : null}°
+                      Макс.: {normalizeTempMax ? normalizeTempMax : null}°
                     </span>
                     <span className="back-temp_max">
-                      Мин.:{normalizeTempMin ? normalizeTempMin : null}°
+                      Мин.: {normalizeTempMin ? normalizeTempMin : null}°
                     </span>
                   </div>
                   <div className="back-info">
