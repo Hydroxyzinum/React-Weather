@@ -19,5 +19,5 @@ export const currentTimeUrl = (apiKey, lat, lon) => {
 };
 
 export const geo = (apiKey, lat, lon) => {
-  return `http://api.openweathermap.org/geo/1.0/reverse?lat=${lat}&lon=${lon}&limit=1&appid=${apiKey}`;
+  return `https://api.openweathermap.org/geo/1.0/reverse?lat=${lat}&lon=${lon}&limit=1&appid=${apiKey}`;
 };

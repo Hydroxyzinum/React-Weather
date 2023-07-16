@@ -14,7 +14,6 @@ const HeadFunc = ({ value }) => {
     setRightMenu,
     unit,
   } = value;
-  console.log(time);
   const getLocation = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(showPosition, showError);

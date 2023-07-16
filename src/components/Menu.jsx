@@ -111,6 +111,7 @@ const MenuContainer = ({ value, children }) => {
             <span className="slider round"></span>
             <span className="celsium">C°</span>
             <span className="farenheit">F°</span>
+    
           </label>
         </div>
       </div>
