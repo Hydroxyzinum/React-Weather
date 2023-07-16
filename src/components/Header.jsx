@@ -1,20 +1,20 @@
 import axios from "axios";
 import React, { useContext } from "react";
-import { currentTimeUrl, currentWeatherUrl, geo, apiKeys } from "../url";
+import { currentWeatherUrl, geo, apiKeys } from "../url";
 import { Context } from "../context";
 
 const HeadFunc = ({ value }) => {
   const {
     data,
+    time,
     setData,
     setFutureData,
     fullLocation,
     setFullLocation,
     setRightMenu,
-    setTime,
     unit,
   } = value;
-
+  console.log(time);
   const getLocation = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(showPosition, showError);
@@ -25,15 +25,13 @@ const HeadFunc = ({ value }) => {
 
   const showPosition = async (position) => {
     const latitude = position.coords.latitude;
-
     const longitude = position.coords.longitude;
 
-    const { apiKey, reserveApiKey, timeApiKey, reserveTimeApiKey } = apiKeys;
+    const { apiKey, reserveApiKey } = apiKeys;
 
     const geoCod = await axios.get(geo(apiKey, latitude, longitude));
 
     const { local_names } = geoCod.data[0];
-
     const { en } = local_names;
 
     if (fullLocation !== en && en.length !== 0) {
@@ -45,42 +43,28 @@ const HeadFunc = ({ value }) => {
         currentWeatherUrl("forecast", en, apiKey, unit)
       );
 
-      const getTime = await axios.get(
-        currentTimeUrl(timeApiKey, latitude, longitude)
-      );
-
       try {
         setData(request.data);
         setFutureData(future.data);
         setFullLocation(en);
-        setTime(getTime.data);
       } catch (e) {
-        if (e) {
-          const geoCod = await axios.get(
-            geo(reserveApiKey, latitude, longitude)
-          );
+        const geoCod = await axios.get(geo(reserveApiKey, latitude, longitude));
 
-          const { local_names } = geoCod.data[0];
+        const { local_names } = geoCod.data[0];
 
-          const { en } = local_names;
+        const { en } = local_names;
 
-          const requestReserve = await axios.get(
-            currentWeatherUrl("weather", en, reserveApiKey, unit)
-          );
+        const requestReserve = await axios.get(
+          currentWeatherUrl("weather", en, reserveApiKey, unit)
+        );
 
-          const futureReserve = await axios.get(
-            currentWeatherUrl("weather", en, reserveApiKey, unit)
-          );
+        const futureReserve = await axios.get(
+          currentWeatherUrl("weather", en, reserveApiKey, unit)
+        );
 
-          const getTimeReserve = await axios.get(
-            currentTimeUrl(reserveTimeApiKey, latitude, longitude)
-          );
-
-          setData(requestReserve.data);
-          setFutureData(futureReserve.data);
-          setFullLocation(en);
-          setTime(getTimeReserve.data);
-        }
+        setData(requestReserve.data);
+        setFutureData(futureReserve.data);
+        setFullLocation(en);
       }
     } else {
       return null;
@@ -116,7 +100,13 @@ const HeadFunc = ({ value }) => {
           type="button"
           className="geolocation"
         ></button>
-        <p className="geoInfo">{data.name ? data.name : null}</p>
+        <p className="geoInfo">
+          {data.name ? data.name : null}
+          <br></br>
+          <span className="geoTime">
+            {time.time_24 ? time.time_24.slice(0, 5) : null}
+          </span>
+        </p>
       </div>
       <div className="search-container">
         <button onClick={() => setRightMenu(true)} className="click-field">

@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import axios from "axios";
 import cn from "classnames";
 import _ from "lodash";
-import { apiKeys, currentWeatherUrl, currentTimeUrl } from "../url";
+import { apiKeys, currentWeatherUrl } from "../url";
 import { Context } from "../context";
 import { russia } from "../russia";
 
@@ -10,7 +10,6 @@ const MenuContainer = ({ value, children }) => {
   const {
     setData,
     setFutureData,
-    setTime,
     setSearchEngine,
     setLocation,
     setFullLocation,
@@ -25,7 +24,7 @@ const MenuContainer = ({ value, children }) => {
   const formSubmit = async (e) => {
     e.preventDefault();
 
-    const { apiKey, reserveApiKey, timeApiKey, reserveTimeApiKey } = apiKeys;
+    const { apiKey, reserveApiKey } = apiKeys;
 
     const current = await axios.get(
       currentWeatherUrl("weather", location, apiKey, unit)
@@ -36,13 +35,6 @@ const MenuContainer = ({ value, children }) => {
     );
 
     try {
-      const timeout = setTimeout(async () => {
-        const { lat, lon } = current.data.coord;
-
-        const getTime = await axios.get(currentTimeUrl(timeApiKey, lat, lon));
-
-        setTime(getTime.data);
-      }, 150);
       setData(current.data);
       setFutureData(future.data);
       setFullLocation(location);
@@ -50,7 +42,6 @@ const MenuContainer = ({ value, children }) => {
       setRightMenu(false);
       setSearchEngine([]);
       setLocation("");
-      return () => clearTimeout(timeout);
     } catch (e) {
       if (e.message === "Request failed with status code 404") {
         return setLocation("Не нашли :(");
@@ -63,17 +54,6 @@ const MenuContainer = ({ value, children }) => {
           currentWeatherUrl("forecast", location, reserveApiKey, unit)
         );
 
-        const timeout = setTimeout(async () => {
-          const { lat, lon } = currentReserve.data.coord;
-
-          const getTime = await axios.get(
-            currentTimeUrl(reserveTimeApiKey, lat, lon)
-          );
-
-          setTime(getTime.data);
-          setRightMenu(false);
-        }, 150);
-
         setData(currentReserve.data);
         setFutureData(futureReserve.data);
         setUnit(unit);
@@ -81,7 +61,6 @@ const MenuContainer = ({ value, children }) => {
         setRightMenu(false);
         setSearchEngine([]);
         setLocation("");
-        return () => clearTimeout(timeout);
       }
     }
   };

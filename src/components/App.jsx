@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { apiKeys, currentWeatherUrl, currentTimeUrl } from "../url";
 import { Context } from "../context";
-import { setBackground } from "../theme";
+import { setBackground } from "../bgColors";
 
 import Menu from "./Menu";
 import Parent from "./Parent";
@@ -14,11 +14,8 @@ import TodayTemp from "./TodayTemp";
 import Forecast from "./Forecast";
 import Desc from "./Desc";
 import WeatherInfo from "./WeatherInfo";
-// import { INITIAL_STATE, reducer } from "../reducer";
 
 function App() {
-  // const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
-
   const [stateInterval, setStateInterval] = useState(0);
 
   const [data, setData] = useState([]);
@@ -42,7 +39,7 @@ function App() {
   const [unit, setUnit] = useState("metric");
 
   useEffect(() => {
-    const { apiKey, reserveApiKey, timeApiKey, reserveTimeApiKey } = apiKeys;
+    const { apiKey, reserveApiKey } = apiKeys;
 
     const getRequest = async (defaultCity, currentLocation) => {
       const requestLocation =
@@ -61,50 +58,50 @@ function App() {
         setFutureData(future.data);
         setFullLocation(requestLocation);
       } catch (e) {
-        if (e) {
-          const requestReserve = await axios.get(
-            currentWeatherUrl("weather", requestLocation, reserveApiKey, unit)
-          );
-          const futureReserve = await axios.get(
-            currentWeatherUrl("forecast", requestLocation, reserveApiKey, unit)
-          );
-          setFullLocation(requestLocation);
-          setData(requestReserve.data);
-          setFutureData(futureReserve.data);
-        } else {
-          console.error(e);
-        }
+        const requestReserve = await axios.get(
+          currentWeatherUrl("weather", requestLocation, reserveApiKey, unit)
+        );
+        const futureReserve = await axios.get(
+          currentWeatherUrl("forecast", requestLocation, reserveApiKey, unit)
+        );
+        setFullLocation(requestLocation);
+        setData(requestReserve.data);
+        setFutureData(futureReserve.data);
       }
-      const timeout = setTimeout(async () => {
-        const { lat, lon } = request.data.coord;
-        try {
-          const getTime = await axios.get(currentTimeUrl(timeApiKey, lat, lon));
-
-          setTime(getTime.data);
-          setBackground(getTime.data, setTheme);
-        } catch (e) {
-          if (e) {
-            const getTime = await axios.get(
-              currentTimeUrl(reserveTimeApiKey, lat, lon)
-            );
-
-            setTime(getTime.data);
-            setBackground(getTime.data, setTheme);
-          } else {
-            console.error(e);
-          }
-        }
-      }, 150);
-      return () => clearTimeout(timeout);
     };
     getRequest("Казань", fullLocation);
     const intervalFunc = setInterval(() => {
       getRequest("Казань", fullLocation);
 
       setStateInterval((prevState) => prevState + 1);
-    }, 35000);
+    }, 60000);
     return () => clearInterval(intervalFunc);
   }, [unit, fullLocation, forecastTime, stateInterval]);
+
+  useEffect(() => {
+    const { timeApiKey, reserveTimeApiKey } = apiKeys;
+
+    const timeout = setTimeout(async () => {
+      if (data.length !== 0) {
+        const { lat, lon } = data.coord;
+        try {
+          const getTime = await axios.get(currentTimeUrl(timeApiKey, lat, lon));
+
+          setTime(getTime.data);
+          setBackground(getTime.data, setTheme);
+        } catch (e) {
+          const getTime = await axios.get(
+            currentTimeUrl(reserveTimeApiKey, lat, lon)
+          );
+          setTime(getTime.data);
+          setBackground(getTime.data, setTheme);
+        }
+      } else {
+        return null;
+      }
+    }, 200);
+    return () => clearTimeout(timeout);
+  }, [data.coord, data.length]);
 
   return (
     <Context.Provider

@@ -15,7 +15,7 @@ export const currentWeatherUrl = (type, city, apiKey, units) => {
 };
 
 export const currentTimeUrl = (apiKey, lat, lon) => {
-  return `http://api.timezonedb.com/v2.1/get-time-zone?key=${apiKey}&format=json&by=position&lat=${lat}&lng=${lon}`;
+  return `https://api.ipgeolocation.io/timezone?apiKey=${apiKey}&lat=${lat}8&long=${lon}`;
 };
 
 export const geo = (apiKey, lat, lon) => {

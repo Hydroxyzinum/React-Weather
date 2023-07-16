@@ -15,8 +15,12 @@ const Info = ({ value }) => {
       </p>
       <p className="footer-time_data">
         Данные о времени предоставлены:{" "}
-        <a target="_blank" rel="noreferrer" href="https://timezonedb.com/">
-          Timezonedb
+        <a
+          target="_blank"
+          rel="noreferrer"
+          href="https://app.ipgeolocation.io/"
+        >
+          Ipgeolocation
         </a>
       </p>
       <p className="footer-geo">

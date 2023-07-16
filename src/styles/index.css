@@ -84,6 +84,11 @@ code {
   margin-left: 5px;
 }
 
+.geoTime {
+  font-size: 14px;
+  margin: 0;
+}
+
 ::-webkit-input-placeholder {
   color: black;
 }
@@ -651,8 +656,9 @@ code {
 .forecast-card:hover>.front-inner {
   transition: 1.2s ease;
   transform: scale(1.05) rotateY(180deg);
-  -webkit-backface-visibility: hidden; /* Chrome, Safari, Opera */
-backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  /* Chrome, Safari, Opera */
+  backface-visibility: hidden;
 }
 
 .forecast-data {
