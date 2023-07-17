@@ -1,6 +1,17 @@
-# Getting Started with Create React App
+# React Weather App
 
 # [React Weather Demo](https://project24.space/)
+
+## This project is based on components using the functional programming style, as well as React Hooks
+
+### Libraries used: 
+#### [Axios](https://github.com/axios/axios)
+#### [ClassNames](https://www.npmjs.com/package/classnames)
+#### [Lodash](https://lodash.com/)
+
+### REST API Obtained from open and free sources
+#### [OpenWeather](https://openweathermap.org/api)
+#### [IpGeolocation](https://ipgeolocation.io/)
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
