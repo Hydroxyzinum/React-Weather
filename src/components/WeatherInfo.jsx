@@ -4,7 +4,8 @@ import { Context } from "../context";
 const Info = ({ value }) => {
   const { data } = value;
   const { lon, lat } = data.coord;
-  const hrefGeo = `https://www.google.com/maps/place/55%C2%B047'19.3%22N+49%C2%B007'19.6%22E/@${lat},${lon},12z/data=!4m4!3m3!8m2!3d55.7887!4d49.1221?hl=ru-RU&entry=ttu`;
+  
+  const hrefGeo = `https://www.google.com/maps/@${lat},${lon},12z?hl=ru-RU&entry=ttu`;
   return (
     <div className="footer-info">
       <p className="footer-weather_data">

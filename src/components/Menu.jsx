@@ -109,9 +109,8 @@ const MenuContainer = ({ value, children }) => {
               type="checkbox"
             />
             <span className="slider round"></span>
-            <span className="celsium">C°</span>
             <span className="farenheit">F°</span>
-    
+            <span className="celsium">C°</span>
           </label>
         </div>
       </div>

@@ -160,10 +160,10 @@ const ForecastList = ({ value }) => {
                   </div>
                   <div className="back-info">
                     <span className="back-clouds">
-                      Облачность.: {all ? all : null}%
+                      Облачность.: {all ? all : 0}%
                     </span>
                     <span className="back-humidity">
-                      Влажность.: {humidity ? humidity : null}%
+                      Влажность.: {humidity ? humidity : 0}%
                     </span>
                   </div>
                 </div>
