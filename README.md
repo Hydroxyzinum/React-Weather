@@ -8,6 +8,7 @@
 ### [Axios](https://github.com/axios/axios)
 ### [ClassNames](https://www.npmjs.com/package/classnames)
 ### [Lodash](https://lodash.com/)
+### [Bootstrap 5](https://getbootstrap.com/)
 
 ## REST API Obtained from open and free sources
 ### [OpenWeather](https://openweathermap.org/api)
