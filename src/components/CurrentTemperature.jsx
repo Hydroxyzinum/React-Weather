@@ -1,20 +1,21 @@
 import React, { useContext } from "react";
-import animationsBlock from "../animationsBlocks";
-import { Context } from "../context";
+import animationsBlock from "../styles/animationsBlocks";
+import { Context } from "../Context/context";
 
+// Компонент для отображения текущей температуры и описания погоды
 const Temperature = ({ children, value }) => {
   const { data } = value;
 
+  // Извлекаем данные о названии города, температуре и описании погоды из объекта data
   const { name } = data;
-
   const { temp, temp_max, temp_min, feels_like } = data.main;
-
   const { description } = data.weather[0];
 
-  const normalizeDesc = `${description[0].toUpperCase()}${description.slice(
-    1
-  )}`;
+  // Нормализуем описание погоды, чтобы первая буква была заглавной
+  const normalizeDesc =
+    description.charAt(0).toUpperCase() + description.slice(1);
 
+  // Нормализуем значения температуры, округляя их до ближайшего целого числа
   const normalizeData = {
     temperature: Math.floor(temp),
     temperatureMax: Math.ceil(temp_max),
@@ -22,6 +23,7 @@ const Temperature = ({ children, value }) => {
     feelsLike: Math.floor(feels_like),
   };
 
+  // Извлекаем нормализованные значения температуры из объекта normalizeData
   const { temperature, temperatureMax, temperatureMin, feelsLike } =
     normalizeData;
 
@@ -54,16 +56,20 @@ const Temperature = ({ children, value }) => {
   );
 };
 
+// Компонент для генерации иконки погоды на основе данных о погоде
 const IconGenerator = ({ value }) => {
   const { data } = value;
 
+  // Извлекаем данные о главной погодной категории (main) и иконке погоды (icon) из объекта data
   const { main, icon } = data.weather[0];
 
+  // Массив иконок для ночного времени суток
   const nightIcon = ["01n", "02n", "03n", "04n"];
 
-  const { moon, sun, clouds, snow, rain, thunderstorm, mists } =
-    animationsBlock;
+  // Загрузка соответствующих анимаций из animationsBlock в зависимости от категории погоды
+  const { moon, sun, clouds, snow, rain, thunderstorm, mists } = animationsBlock;
 
+  // Массив категорий атмосферных явлений
   const atmosphereMain = [
     "Mist",
     "Smoke",
@@ -76,6 +82,7 @@ const IconGenerator = ({ value }) => {
     "Tornado",
   ];
 
+  // Возвращаем соответствующую анимацию в зависимости от значений main и icon
   if (nightIcon.includes(icon)) {
     return moon;
   } else if (atmosphereMain.includes(main)) {
@@ -100,9 +107,11 @@ const IconGenerator = ({ value }) => {
   }
 };
 
+// Компонент для отображения текущей температуры и иконки погоды
 const CurrentTemperature = () => {
   const contextData = useContext(Context);
   return (
+    // Оборачиваем компоненты Temperature и IconGenerator в провайдер контекста, чтобы предоставить доступ к данным всему дереву компонентов
     <Temperature value={contextData}>
       <IconGenerator value={contextData}></IconGenerator>
     </Temperature>

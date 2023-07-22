@@ -1,8 +1,9 @@
 import axios from "axios";
 import React, { useContext } from "react";
 import { currentWeatherUrl, geo, apiKeys } from "../url";
-import { Context } from "../context";
+import { Context } from "../Context/context";
 
+// Функциональный компонент для отображения данных в шапке
 const HeadFunc = ({ value }) => {
   const {
     data,
@@ -14,6 +15,8 @@ const HeadFunc = ({ value }) => {
     setRightMenu,
     unit,
   } = value;
+
+  // Функция для получения геолокации пользователя
   const getLocation = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(showPosition, showError);
@@ -22,17 +25,19 @@ const HeadFunc = ({ value }) => {
     }
   };
 
+  // Функция для обработки успешного получения координат пользователя
   const showPosition = async (position) => {
     const latitude = position.coords.latitude;
     const longitude = position.coords.longitude;
 
     const { apiKey, reserveApiKey } = apiKeys;
 
+    // Получаем информацию о местоположении на английском языке
     const geoCod = await axios.get(geo(apiKey, latitude, longitude));
-
     const { local_names } = geoCod.data[0];
     const { en } = local_names;
 
+    // Проверяем, изменилось ли местоположение, и делаем запросы на сервер
     if (fullLocation !== en && en.length !== 0) {
       const request = await axios.get(
         currentWeatherUrl("weather", en, apiKey, unit)
@@ -47,10 +52,9 @@ const HeadFunc = ({ value }) => {
         setFutureData(future.data);
         setFullLocation(en);
       } catch (e) {
+        // В случае ошибки делаем запросы на резервный API ключ
         const geoCod = await axios.get(geo(reserveApiKey, latitude, longitude));
-
         const { local_names } = geoCod.data[0];
-
         const { en } = local_names;
 
         const requestReserve = await axios.get(
@@ -70,9 +74,10 @@ const HeadFunc = ({ value }) => {
     }
   };
 
+  // Функция для обработки ошибок получения геолокации
   const showError = (error) => {
     switch (error.code) {
-      case error.PERMISSION_DRUIED:
+      case error.PERMISSION_DENIED:
         alert("Пользователь отклонил запрос на геолокацию.");
         break;
       case error.POSITION_UNAVAILABLE:
@@ -83,7 +88,7 @@ const HeadFunc = ({ value }) => {
           "Истекло время ожидания запроса на получение местоположения пользователя."
         );
         break;
-      case error.UNKНЕТWN_ERROR:
+      case error.UNKNOWN_ERROR:
         alert("Произошла неизвестная ошибка.");
         break;
       default:
@@ -110,9 +115,7 @@ const HeadFunc = ({ value }) => {
       <div className="search-container">
         <button onClick={() => setRightMenu(true)} className="click-field">
           <span className="burger-line burger-first_line"></span>
-
           <span className="burger-line burger-second_line"></span>
-
           <span className="burger-line burger-third_line"></span>
         </button>
       </div>

@@ -1,32 +1,34 @@
 import React, { useContext } from "react";
-import { Context } from "../context";
+import { Context } from "../Context/context";
 
 const Info = ({ value }) => {
   const { data } = value;
   const { lon, lat } = data.coord;
-  
-  const hrefGeo = `https://www.google.com/maps/@${lat},${lon},12z?hl=ru-RU&entry=ttu`;
+
+  const openWeatherMapUrl = "https://openweathermap.org/";
+  const ipGeoLocationUrl = "https://app.ipgeolocation.io/";
+  const googleMapsUrl = `https://www.google.com/maps/@${lat},${lon},12z?hl=ru-RU&entry=ttu`;
+
   return (
     <div className="footer-info">
+      {/* Ссылка на источник данных о погоде */}
       <p className="footer-weather_data">
         Данные о погоде предоставлены:{" "}
-        <a target="_blank" rel="noreferrer" href="https://openweathermap.org/">
+        <a target="_blank" rel="noreferrer" href={openWeatherMapUrl}>
           Openweathermap
         </a>
       </p>
+      {/* Ссылка на источник данных о времени */}
       <p className="footer-time_data">
         Данные о времени предоставлены:{" "}
-        <a
-          target="_blank"
-          rel="noreferrer"
-          href="https://app.ipgeolocation.io/"
-        >
+        <a target="_blank" rel="noreferrer" href={ipGeoLocationUrl}>
           Ipgeolocation
         </a>
       </p>
+      {/* Ссылка на карту с примерными геоданными */}
       <p className="footer-geo">
-        Ваши геоданные на карте (примерные): <br></br>{" "}
-        <a target="_blank" rel="noreferrer" href={hrefGeo}>
+        Ваши геоданные на карте (примерные): <br />{" "}
+        <a target="_blank" rel="noreferrer" href={googleMapsUrl}>
           {lat}, {lon}
         </a>
       </p>
@@ -36,7 +38,7 @@ const Info = ({ value }) => {
 
 const WeatherInfo = () => {
   const contextData = useContext(Context);
-  return <Info value={contextData}></Info>;
+  return <Info value={contextData} />;
 };
 
 export default WeatherInfo;

@@ -1,20 +1,20 @@
 import React, { useContext } from "react";
-import { Context } from "../context";
+import { Context } from "../Context/context";
 
+// Компонент для отображения основных данных о погоде
 const MainData = ({ value }) => {
   const { data } = value;
 
+  // Извлекаем нужные данные из объекта data
   const { main, clouds, wind } = data;
-
   const { humidity } = main;
-
   const { all } = clouds;
-
   const { speed } = wind;
 
   return (
     <div className="weather-main_data">
       <div className="main-data">
+        {/* Контейнеры для каждого из данных */}
         <div className="data-container">
           <img
             className="humidity-img"
@@ -36,6 +36,7 @@ const MainData = ({ value }) => {
   );
 };
 
+// Компонент Main использует MainData и передает ему контекстные данные
 const Main = () => {
   const contextData = useContext(Context);
   return <MainData value={contextData}></MainData>;

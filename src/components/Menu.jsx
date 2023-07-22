@@ -3,9 +3,10 @@ import axios from "axios";
 import cn from "classnames";
 import _ from "lodash";
 import { apiKeys, currentWeatherUrl } from "../url";
-import { Context } from "../context";
+import { Context } from "../Context/context";
 import { russia } from "../russia";
 
+// Компонент-контейнер для меню с поиском города и переключателем единиц измерения
 const MenuContainer = ({ value, children }) => {
   const {
     setData,
@@ -21,6 +22,7 @@ const MenuContainer = ({ value, children }) => {
     unit,
   } = value;
 
+  // Обработчик для отправки формы поиска города
   const formSubmit = async (e) => {
     e.preventDefault();
 
@@ -43,7 +45,7 @@ const MenuContainer = ({ value, children }) => {
       setSearchEngine([]);
       setLocation("");
     } catch (e) {
-      if (e.message === "Request failed with status code 404") {
+      if (e) {
         return setLocation("Не нашли :(");
       } else {
         const currentReserve = await axios.get(
@@ -65,6 +67,7 @@ const MenuContainer = ({ value, children }) => {
     }
   };
 
+  // Обработчик для изменения значения поля ввода поиска города
   const inputChange = async (e) => {
     e.preventDefault();
 
@@ -83,11 +86,13 @@ const MenuContainer = ({ value, children }) => {
     }
   };
 
+  // Классы для стилизации контейнера поиска в зависимости от состояния меню
   const classesblock = cn({
     "search-field": true,
     show: rightMenu,
   });
 
+  // Классы для стилизации контейнера результатов поиска в зависимости от количества результатов
   const resultCn = cn({
     "search-result_container": true,
     "p-10": searchEngine.length >= 1 ? true : false,
@@ -97,10 +102,12 @@ const MenuContainer = ({ value, children }) => {
     <div className={classesblock}>
       <div className="сontrol-panel_block">
         <div className="panel-block">
+          {/* Кнопка для закрытия меню */}
           <button onClick={() => setRightMenu(false)} className="click-exit">
             <span className="exit-line exit-first_line"></span>
             <span className="exit-line exit-second_line"></span>
           </button>
+          {/* Переключатель между единицами измерения */}
           <label className="switch">
             <input
               onClick={(e) =>
@@ -115,6 +122,7 @@ const MenuContainer = ({ value, children }) => {
         </div>
       </div>
       <div className="form-container">
+        {/* Форма для поиска города */}
         <form onSubmit={formSubmit} className="form-search">
           <label className="sr-only" htmlFor="search"></label>
           <input
@@ -127,6 +135,7 @@ const MenuContainer = ({ value, children }) => {
             placeholder="Поиск"
             autoComplete="off"
           />
+          {/* Контейнер для результатов поиска */}
           <div className={resultCn}>
             <ul className="listSearch">{children}</ul>
           </div>
@@ -136,8 +145,11 @@ const MenuContainer = ({ value, children }) => {
   );
 };
 
+// Компонент, который отображает элементы результата поиска городов
 const RenderSearchItem = ({ value }) => {
   const { searchEngine, setLocation } = value;
+
+  // Создание массива с элементами результата поиска и их отображение
   const memoSearchItem = React.useMemo(() => {
     if (searchEngine.length !== 0) {
       const newArr =
@@ -160,9 +172,11 @@ const RenderSearchItem = ({ value }) => {
       return <div className="p-10">Ожидание запроса...</div>;
     }
   }, [searchEngine, setLocation]);
+
   return memoSearchItem;
 };
 
+// Компонент меню, который использует MenuContainer и RenderSearchItem
 const Menu = () => {
   const contextData = useContext(Context);
   return (
