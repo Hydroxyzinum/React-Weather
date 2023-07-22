@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import axios from "axios";
 import cn from "classnames";
 import _ from "lodash";
-import { apiKeys, currentWeatherUrl } from "../url";
+import { apiKeys, currentWeatherUrl } from "../url/url";
 import { Context } from "../Context/context";
 import { russia } from "../russia";
 

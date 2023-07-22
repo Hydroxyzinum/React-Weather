@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { apiKeys, currentWeatherUrl, currentTimeUrl } from "../url";
+import { apiKeys, currentWeatherUrl, currentTimeUrl } from "../url/url";
 import { Context } from "../Context/context";
 import { setBackground } from '../styles/bgColors';
 

@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useContext } from "react";
-import { currentWeatherUrl, geo, apiKeys } from "../url";
+import { apiKeys, currentWeatherUrl, geo } from "../url/url";
 import { Context } from "../Context/context";
 
 // Функциональный компонент для отображения данных в шапке
