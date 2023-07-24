@@ -1,84 +1,47 @@
-# React Weather App
+# Weather App
 
-# Demo ->  [Click](https://project24.space/)
+![Weather Forecast App](https://example.com/weather-app.png)
 
-## Libraries used: 
-### [Axios](https://github.com/axios/axios)
-### [ClassNames](https://www.npmjs.com/package/classnames)
-### [Lodash](https://lodash.com/)
-### [Bootstrap 5](https://getbootstrap.com/)
+## Описание проекта
 
-## REST API Obtained from open and free sources
-### [OpenWeather](https://openweathermap.org/api)
-### [IpGeolocation](https://ipgeolocation.io/)
+Приложение Weather App представляет собой интерактивный веб-интерфейс, разработанный на основе React.js, который позволяет пользователям получать прогноз погоды для выбранных городов. Приложение использует открытый API [OpenWeatherMap](https://openweathermap.org/) для получения актуальных данных о погоде и геолокации пользователей, чтобы предоставить точную информацию о погоде для различных местоположений.
 
+## Возможности приложения
 
+Приложение Weather App предоставляет следующий функционал:
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+- **Просмотр текущей погоды**: Пользователи могут легко получать текущие данные о температуре, влажности, скорости ветра, облачности и других параметрах для выбранных городов. Прогнозы обновляются в реальном времени, чтобы отображать актуальную информацию.
 
-## Available Scripts
+- **Прогноз на 5 дней**: Приложение предоставляет прогноз погоды на ближайшие 5 дней с детализацией по времени дня. Это позволяет пользователям планировать свои дела и заранее подготавливаться к изменениям погоды.
 
-In the project directory, you can run:
+- **Поиск города**: Пользователи могут использовать удобную поисковую строку, чтобы быстро найти и просмотреть прогноз погоды для различных городов по всему миру. Просто введите название города и получите актуальную информацию.
 
-### `npm start`
+- **Переключение единиц измерения**: Для удобства пользователей, приложение позволяет выбирать между единицами измерения Celsius и Fahrenheit для отображения температуры. Просто переключайте единицы измерения в одно нажатие.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Технические детали
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Приложение Weather App разработано на основе популярной библиотеки React.js, что обеспечивает масштабируемость и переиспользование компонентов. Для управления состоянием используется механизм контекста (Context API) в React, что облегчает передачу данных между компонентами без необходимости прокидывания через пропсы. Стилизация компонентов осуществляется с использованием CSS, а также библиотеки classnames, что позволяет добавлять и удалять классы в зависимости от условий.
 
-### `npm test`
+## Как использовать
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+1. Клонируйте репозиторий на свой компьютер с помощью команды: `git clone https://github.com/Hydroxyzinum/React-Weather.git`
 
-### `npm run build`
+2. Установите зависимости приложения, выполнив команду: `npm install`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+3. Запустите приложение с помощью команды: `npm start`
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+4. Откройте ваш любимый браузер и перейдите по адресу `http://localhost:3000` для использования приложения.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Зависимости
 
-### `npm run eject`
+- React.js: основная библиотека для разработки интерфейса.
+- Axios: для выполнения HTTP-запросов к API OpenWeatherMap.
+- Lodash: для работы с данными и утилитами.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Автор
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Олег. К
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## Лицензия
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Проект лицензирован под MIT License - см. файл `LICENSE`.
