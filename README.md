@@ -2,8 +2,6 @@
 
 # Demo ->  [Click](https://project24.space/)
 
-## This project is based on components using the functional programming style, as well as React Hooks
-
 ## Libraries used: 
 ### [Axios](https://github.com/axios/axios)
 ### [ClassNames](https://www.npmjs.com/package/classnames)
