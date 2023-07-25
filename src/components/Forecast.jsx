@@ -1,5 +1,5 @@
 import React, { useContext, useMemo } from "react";
-import { Context } from "../Context/context";
+import { Context } from "../context/context";
 import cn from "classnames";
 import _ from "lodash";
 
@@ -57,8 +57,11 @@ const ForecastListContainer = ({ children }) => {
 
 // Компонент для отображения списка карточек прогноза погоды
 const ForecastList = ({ value }) => {
-  const { list } = value.futureData;
-  const { unit, forecastTime, theme } = value;
+  const { futureData } = value.state;
+
+  const { list } = futureData;
+
+  const { unit, forecastTime, theme } = value.state;
 
   // Используем useMemo для оптимизации рендеринга списка прогноза погоды
   const memoization = useMemo(() => {

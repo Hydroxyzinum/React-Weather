@@ -700,7 +700,7 @@ code {
   margin-bottom: 10px;
 }
 
-.forecast-card:hover > .front-inner {
+.flipped {
   transition: 1.5s ease-in-out;
   transform: rotateY(180deg);
   -webkit-backface-visibility: hidden;

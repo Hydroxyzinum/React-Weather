@@ -1,9 +1,9 @@
 import React, { useContext } from "react";
-import { Context } from "../Context/context";
+import { Context } from "../context/context";
 
 // Компонент для отображения основных данных о погоде
 const MainData = ({ value }) => {
-  const { data } = value;
+  const { data } = value.state;
 
   // Извлекаем нужные данные из объекта data
   const { main, clouds, wind } = data;

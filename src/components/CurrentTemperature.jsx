@@ -1,12 +1,11 @@
 import React, { useContext } from "react";
-import animationsBlock from "../styles/animationsBlocks";
-import { Context } from "../Context/context";
+import animationsBlock from "../helpers/animationsBlocks";
+import { Context } from "../context/context";
 
 // Компонент для отображения текущей температуры и описания погоды
-const Temperature = ({ children, value }) => {
-  const { data } = value;
-
-  // Извлекаем данные о названии города, температуре и описании погоды из объекта data
+const Temperature = React.memo(({ children, value }) => {
+  // Извлекаем данные о текущей погоде из контекста
+  const { data } = value.state;
   const { name } = data;
   const { temp, temp_max, temp_min, feels_like } = data.main;
   const { description } = data.weather[0];
@@ -54,20 +53,20 @@ const Temperature = ({ children, value }) => {
       </div>
     </div>
   );
-};
+});
 
 // Компонент для генерации иконки погоды на основе данных о погоде
-const IconGenerator = ({ value }) => {
-  const { data } = value;
-
-  // Извлекаем данные о главной погодной категории (main) и иконке погоды (icon) из объекта data
+const IconGenerator = React.memo(({ value }) => {
+  // Извлекаем данные о текущей погоде из контекста
+  const { data } = value.state;
   const { main, icon } = data.weather[0];
 
   // Массив иконок для ночного времени суток
   const nightIcon = ["01n", "02n", "03n", "04n"];
 
   // Загрузка соответствующих анимаций из animationsBlock в зависимости от категории погоды
-  const { moon, sun, clouds, snow, rain, thunderstorm, mists } = animationsBlock;
+  const { moon, sun, clouds, snow, rain, thunderstorm, mists } =
+    animationsBlock;
 
   // Массив категорий атмосферных явлений
   const atmosphereMain = [
@@ -105,10 +104,11 @@ const IconGenerator = ({ value }) => {
         return clouds;
     }
   }
-};
+});
 
 // Компонент для отображения текущей температуры и иконки погоды
 const CurrentTemperature = () => {
+  // Извлекаем данные из контекста
   const contextData = useContext(Context);
   return (
     // Оборачиваем компоненты Temperature и IconGenerator в провайдер контекста, чтобы предоставить доступ к данным всему дереву компонентов

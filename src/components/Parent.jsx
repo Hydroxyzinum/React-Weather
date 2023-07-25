@@ -1,11 +1,12 @@
 import React, { useContext } from "react";
 import cn from "classnames";
-import { Context } from "../Context/context";
-import animationsBlock from "../styles/animationsBlocks";
+import { Context } from "../context/context";
+import animationsBlock from "../helpers/animationsBlocks";
 
 // Компонент-контейнер для выбора отображения содержимого в зависимости от данных о погоде
 const ChooseParent = ({ children, value }) => {
-  const { data, theme, rightMenu } = value;
+  const { state } = value;
+  const { data, theme, rightMenu } = state;
 
   const { clouds } = animationsBlock;
 

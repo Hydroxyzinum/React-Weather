@@ -1,20 +1,14 @@
 import axios from "axios";
 import React, { useContext } from "react";
-import { apiKeys, currentWeatherUrl, geo } from "../url/url";
-import { Context } from "../Context/context";
+import { apiKeys, currentWeatherUrl, geo } from "../helpers/url";
+import { Context } from "../context/context";
 
 // Функциональный компонент для отображения данных в шапке
-const HeadFunc = ({ value }) => {
-  const {
-    data,
-    time,
-    setData,
-    setFutureData,
-    fullLocation,
-    setFullLocation,
-    setRightMenu,
-    unit,
-  } = value;
+const Header = () => {
+  const contextData = useContext(Context);
+  const { state, dispatch } = contextData;
+
+  const { fullLocation, unit, data, time } = state;
 
   // Функция для получения геолокации пользователя
   const getLocation = () => {
@@ -29,30 +23,32 @@ const HeadFunc = ({ value }) => {
   const showPosition = async (position) => {
     const latitude = position.coords.latitude;
     const longitude = position.coords.longitude;
-
     const { apiKey, reserveApiKey } = apiKeys;
 
-    // Получаем информацию о местоположении на английском языке
-    const geoCod = await axios.get(geo(apiKey, latitude, longitude));
-    const { local_names } = geoCod.data[0];
-    const { en } = local_names;
+    try {
+      // Получаем информацию о местоположении на английском языке
+      const geoCod = await axios.get(geo(apiKey, latitude, longitude));
+      const { local_names } = geoCod.data[0];
+      const { en } = local_names;
 
-    // Проверяем, изменилось ли местоположение, и делаем запросы на сервер
-    if (fullLocation !== en && en.length !== 0) {
-      const request = await axios.get(
-        currentWeatherUrl("weather", en, apiKey, unit)
-      );
+      // Проверяем, изменилось ли местоположение, и делаем запросы на сервер
+      if (fullLocation !== en && en.length !== 0) {
+        const request = await axios.get(
+          currentWeatherUrl("weather", en, apiKey, unit)
+        );
 
-      const future = await axios.get(
-        currentWeatherUrl("forecast", en, apiKey, unit)
-      );
+        const future = await axios.get(
+          currentWeatherUrl("forecast", en, apiKey, unit)
+        );
 
-      try {
-        setData(request.data);
-        setFutureData(future.data);
-        setFullLocation(en);
-      } catch (e) {
-        // В случае ошибки делаем запросы на резервный API ключ
+        dispatch({
+          type: "SET_DATA_AND_FUTURE_DATA",
+          payload: { data: request.data, futureData: future.data },
+        });
+        dispatch({ type: "SET_FULL_LOCATION", payload: en });
+      }
+    } catch (e) {
+      if (e.message === "Request failed with status code 429") {
         const geoCod = await axios.get(geo(reserveApiKey, latitude, longitude));
         const { local_names } = geoCod.data[0];
         const { en } = local_names;
@@ -62,15 +58,20 @@ const HeadFunc = ({ value }) => {
         );
 
         const futureReserve = await axios.get(
-          currentWeatherUrl("weather", en, reserveApiKey, unit)
+          currentWeatherUrl("forecast", en, reserveApiKey, unit)
         );
 
-        setData(requestReserve.data);
-        setFutureData(futureReserve.data);
-        setFullLocation(en);
+        dispatch({
+          type: "SET_DATA_AND_FUTURE_DATA",
+          payload: {
+            data: requestReserve.data,
+            futureData: futureReserve.data,
+          },
+        });
+        dispatch({ type: "SET_FULL_LOCATION", payload: en });
+      } else {
+        console.error("Error fetching data:", e);
       }
-    } else {
-      return null;
     }
   };
 
@@ -106,14 +107,17 @@ const HeadFunc = ({ value }) => {
         ></button>
         <p className="geoInfo">
           {data.name ? data.name : null}
-          <br></br>
+          <br />
           <span className="geoTime">
             {time.time_24 ? time.time_24.slice(0, 5) : null}
           </span>
         </p>
       </div>
       <div className="search-container">
-        <button onClick={() => setRightMenu(true)} className="click-field">
+        <button
+          onClick={() => dispatch({ type: "SET_RIGHT_MENU", payload: true })}
+          className="click-field"
+        >
           <span className="burger-line burger-first_line"></span>
           <span className="burger-line burger-second_line"></span>
           <span className="burger-line burger-third_line"></span>
@@ -121,11 +125,6 @@ const HeadFunc = ({ value }) => {
       </div>
     </div>
   );
-};
-
-const Header = () => {
-  const contextData = useContext(Context);
-  return <HeadFunc value={contextData}></HeadFunc>;
 };
 
 export default Header;

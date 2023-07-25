@@ -1,11 +1,14 @@
 import React, { useContext } from "react";
-import { Context } from "../Context/context";
-import animationsBlock from "../styles/animationsBlocks";
+import { Context } from "../context/context";
+import animationsBlock from "../helpers/animationsBlocks";
 import _ from "lodash";
 
 const TodayTemp = () => {
   const contextData = useContext(Context);
-  const { futureData } = contextData;
+  const { state } = contextData;
+
+  const { futureData } = state;
+
   const { clouds } = animationsBlock;
 
   // Отображение информации о погоде на ближайшие 4 часа
@@ -29,13 +32,10 @@ const TodayTemp = () => {
             const { icon } = item.weather[0];
             const iconUrl = `${"weather/"}${icon}.png`;
             const normalizeTemp = Math.ceil(item.main.temp);
-            const normalizeTime = new Date(item.dt_txt).toLocaleTimeString(
-              [],
-              {
-                hour: "2-digit",
-                minute: "2-digit",
-              }
-            );
+            const normalizeTime = new Date(item.dt_txt).toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
+            });
 
             return (
               <div

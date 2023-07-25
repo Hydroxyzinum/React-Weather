@@ -1,6 +1,5 @@
 import React, { useContext } from "react";
-import { Context } from "../Context/context";
-import _ from "lodash";
+import { Context } from "../context/context";
 
 // Компонент для обертки карточек с дополнительной информацией о погоде
 const DescContainer = ({ children }) => {
@@ -9,11 +8,13 @@ const DescContainer = ({ children }) => {
 
 // Компонент для отображения дополнительной информации о погоде
 const DescData = ({ value }) => {
-  const { data } = value;
+  const { data } = value.state;
 
   // Извлекаем данные о давлении, видимости, направлении и порывах ветра, а также о количестве дождя и снега из объекта data
   const { pressure } = data.main;
+
   const { visibility, rain, snow } = data;
+
   const { deg, gust } = data.wind;
 
   // Нормализуем значения для отображения на карточках
@@ -30,45 +31,53 @@ const DescData = ({ value }) => {
   const normalizeSnow = snow ? `${snow["1h"]} мм.` : "0 мм.";
 
   // Массивы для хранения информации, названий и URL изображений для каждой карточки
-  const infoArr = [
-    normalizePressure,
-    normalizeVisibility,
-    normalizeDeg,
-    normalizeGust,
-    normalizeRain,
-    normalizeSnow,
-  ];
-  const namesArr = [
-    "Атм. давление",
-    "Видимость",
-    "Напр. ветра",
-    "Порывы ветра",
-    "Дождь (1ч)",
-    "Cнег (1ч)",
-  ];
-  const photoUrls = [
-    "cards/barometr.png",
-    "cards/visibility.png",
-    "cards/wind-deg.png",
-    "cards/wind.png",
-    "cards/rain.png",
-    "cards/snow.png",
+  const cardsData = [
+    {
+      name: "Атм. давление",
+      info: normalizePressure,
+      photoUrl: "cards/barometr.png",
+      alt: "Атмосферное давление",
+    },
+    {
+      name: "Видимость",
+      info: normalizeVisibility,
+      photoUrl: "cards/visibility.png",
+      alt: "Видимость",
+    },
+    {
+      name: "Напр. ветра",
+      info: normalizeDeg,
+      photoUrl: "cards/wind-deg.png",
+      alt: "Направление ветра",
+    },
+    {
+      name: "Порывы ветра",
+      info: normalizeGust,
+      photoUrl: "cards/wind.png",
+      alt: "Порывы ветра",
+    },
+    {
+      name: "Дождь (1ч)",
+      info: normalizeRain,
+      photoUrl: "cards/rain.png",
+      alt: "Дождь",
+    },
+    {
+      name: "Снег (1ч)",
+      info: normalizeSnow,
+      photoUrl: "cards/snow.png",
+      alt: "Снег",
+    },
   ];
 
-  // Генерируем карточки с информацией о погоде на основе данных из массивов
-  return infoArr.map((info, index) => {
-    return (
-      <div key={_.uniqueId("card-")} className="desc-card">
-        <p className="card-head">{namesArr[index]}</p>
-        <img
-          className="cards-image"
-          src={photoUrls[index]}
-          alt={photoUrls[index]}
-        />
-        <p className="card-text">{info}</p>
-      </div>
-    );
-  });
+  // Генерируем карточки с информацией о погоде на основе данных из массива объектов
+  return cardsData.map(({ name, info, photoUrl, alt }, index) => (
+    <div key={index} className="desc-card">
+      <p className="card-head">{name}</p>
+      <img className="cards-image" src={photoUrl} alt={alt} />
+      <p className="card-text">{info}</p>
+    </div>
+  ));
 };
 
 // Компонент для отображения дополнительной информации о погоде

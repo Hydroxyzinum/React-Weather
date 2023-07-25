@@ -1,8 +1,9 @@
 import React, { useContext } from "react";
-import { Context } from "../Context/context";
+import { Context } from "../context/context";
 
 const Info = ({ value }) => {
-  const { data } = value;
+  const { data } = value.state;
+
   const { lon, lat } = data.coord;
 
   const openWeatherMapUrl = "https://openweathermap.org/";

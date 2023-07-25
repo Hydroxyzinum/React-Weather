@@ -2,25 +2,15 @@ import React, { useContext } from "react";
 import axios from "axios";
 import cn from "classnames";
 import _ from "lodash";
-import { apiKeys, currentWeatherUrl } from "../url/url";
-import { Context } from "../Context/context";
-import { russia } from "../russia";
+import { apiKeys, currentWeatherUrl } from "../helpers/url";
+import { Context } from "../context/context";
+import { russia } from "../helpers/russia";
 
 // Компонент-контейнер для меню с поиском города и переключателем единиц измерения
 const MenuContainer = ({ value, children }) => {
-  const {
-    setData,
-    setFutureData,
-    setSearchEngine,
-    setLocation,
-    setFullLocation,
-    setRightMenu,
-    searchEngine,
-    location,
-    rightMenu,
-    setUnit,
-    unit,
-  } = value;
+  const { state, dispatch } = value;
+
+  const { location, rightMenu, unit, searchEngine } = state;
 
   // Обработчик для отправки формы поиска города
   const formSubmit = async (e) => {
@@ -37,16 +27,21 @@ const MenuContainer = ({ value, children }) => {
     );
 
     try {
-      setData(current.data);
-      setFutureData(future.data);
-      setFullLocation(location);
-      setUnit(unit);
-      setRightMenu(false);
-      setSearchEngine([]);
-      setLocation("");
+      dispatch({
+        type: "SET_DATA_AND_FUTURE_DATA",
+        payload: {
+          data: current.data,
+          futureData: future.data,
+        },
+      });
+      dispatch({ type: "SET_FULL_LOCATION", payload: location });
+      dispatch({ type: "SET_UNIT", payload: unit });
+      dispatch({ type: "SET_RIGHT_MENU", payload: false });
+      dispatch({ type: "SET_SEARCH_ENGINE", payload: [] });
+      dispatch({ type: "SET_LOCATION", payload: "" });
     } catch (e) {
       if (e) {
-        return setLocation("Не нашли :(");
+        return dispatch({ type: "SET_LOCATION", payload: "Не нашли :(" });
       } else {
         const currentReserve = await axios.get(
           currentWeatherUrl("weather", location, reserveApiKey, unit)
@@ -55,14 +50,18 @@ const MenuContainer = ({ value, children }) => {
         const futureReserve = await axios.get(
           currentWeatherUrl("forecast", location, reserveApiKey, unit)
         );
-
-        setData(currentReserve.data);
-        setFutureData(futureReserve.data);
-        setUnit(unit);
-        setFullLocation(location);
-        setRightMenu(false);
-        setSearchEngine([]);
-        setLocation("");
+        dispatch({
+          type: "SET_DATA_AND_FUTURE_DATA",
+          payload: {
+            data: currentReserve.data,
+            futureData: futureReserve.data,
+          },
+        });
+        dispatch({ type: "SET_FULL_LOCATION", payload: location });
+        dispatch({ type: "SET_UNIT", payload: unit });
+        dispatch({ type: "SET_RIGHT_MENU", payload: false });
+        dispatch({ type: "SET_SEARCH_ENGINE", payload: [] });
+        dispatch({ type: "SET_LOCATION", payload: "" });
       }
     }
   };
@@ -74,15 +73,15 @@ const MenuContainer = ({ value, children }) => {
     const { value } = e.target;
 
     if (!value) {
-      setSearchEngine([]);
-      setLocation("");
+      dispatch({ type: "SET_SEARCH_ENGINE", payload: [] });
+      dispatch({ type: "SET_LOCATION", payload: "" });
       return null;
     } else {
-      setLocation(value);
+      dispatch({ type: "SET_LOCATION", payload: value });
       const result = russia.filter(({ city }) =>
         city.toLowerCase().includes(value.toLowerCase())
       );
-      setSearchEngine(result);
+      dispatch({ type: "SET_SEARCH_ENGINE", payload: result });
     }
   };
 
@@ -103,7 +102,10 @@ const MenuContainer = ({ value, children }) => {
       <div className="сontrol-panel_block">
         <div className="panel-block">
           {/* Кнопка для закрытия меню */}
-          <button onClick={() => setRightMenu(false)} className="click-exit">
+          <button
+            onClick={() => dispatch({ type: "SET_RIGHT_MENU", payload: false })}
+            className="click-exit"
+          >
             <span className="exit-line exit-first_line"></span>
             <span className="exit-line exit-second_line"></span>
           </button>
@@ -111,7 +113,9 @@ const MenuContainer = ({ value, children }) => {
           <label className="switch">
             <input
               onClick={(e) =>
-                e.target.checked ? setUnit("imperial") : setUnit("metric")
+                e.target.checked
+                  ? dispatch({ type: "SET_UNIT", payload: "imperial" })
+                  : dispatch({ type: "SET_UNIT", payload: "metric" })
               }
               type="checkbox"
             />
@@ -147,7 +151,8 @@ const MenuContainer = ({ value, children }) => {
 
 // Компонент, который отображает элементы результата поиска городов
 const RenderSearchItem = ({ value }) => {
-  const { searchEngine, setLocation } = value;
+  const { state, dispatch } = value;
+  const { searchEngine } = state;
 
   // Создание массива с элементами результата поиска и их отображение
   const memoSearchItem = React.useMemo(() => {
@@ -158,7 +163,7 @@ const RenderSearchItem = ({ value }) => {
         return (
           <div key={_.uniqueId("city-")} className="buttons">
             <button
-              onClick={() => setLocation(city)}
+              onClick={() => dispatch({ type: "SET_LOCATION", payload: city })}
               type="submit"
               className="searchedItem"
             >
@@ -171,7 +176,7 @@ const RenderSearchItem = ({ value }) => {
     } else {
       return <div className="p-10">Ожидание запроса...</div>;
     }
-  }, [searchEngine, setLocation]);
+  }, [searchEngine, dispatch]);
 
   return memoSearchItem;
 };
@@ -179,6 +184,7 @@ const RenderSearchItem = ({ value }) => {
 // Компонент меню, который использует MenuContainer и RenderSearchItem
 const Menu = () => {
   const contextData = useContext(Context);
+
   return (
     <MenuContainer value={contextData}>
       <RenderSearchItem value={contextData}></RenderSearchItem>

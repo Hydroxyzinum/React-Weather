@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useReducer } from "react";
 import axios from "axios";
-import { apiKeys, currentWeatherUrl, currentTimeUrl } from "../url/url";
-import { Context } from "../Context/context";
-import { setBackground } from '../styles/bgColors';
+import { apiKeys, currentWeatherUrl, currentTimeUrl } from "../helpers/url";
+import { Context } from "../context/context";
+import { setBackground } from "../helpers/bgColors";
+import { initialState, reducer } from "../reducers/reducer";
 
 import Menu from "./Menu";
 import Parent from "./Parent";
@@ -16,45 +17,23 @@ import Desc from "./Desc";
 import WeatherInfo from "./WeatherInfo";
 
 function App() {
-  // State для хранения значения интервала обновления данных
-  const [stateInterval, setStateInterval] = useState(0);
+  // Используем useReducer для управления состоянием
+  const [state, dispatch] = useReducer(reducer, initialState);
 
-  // State для хранения данных о текущей погоде
-  const [data, setData] = useState([]);
+  // Извлекаем необходимые значения из состояния
+  const { data, unit, fullLocation, forecastTime, stateInterval } = state;
 
-  // State для хранения данных о будущей погоде
-  const [futureData, setFutureData] = useState([]);
+  // Функция для установки темы (стилей) компонента
+  const handleSetTheme = (theme) => {
+    dispatch({ type: "SET_THEME", payload: theme });
+  };
 
-  // State для хранения текущего местоположения
-  const [location, setLocation] = useState("");
-
-  // State для хранения темы (стилей) компонента, зависящей от времени суток
-  const [theme, setTheme] = useState({});
-
-  // State для хранения полного названия текущего местоположения
-  const [fullLocation, setFullLocation] = useState("");
-
-  // State для хранения результатов поиска местоположений
-  const [searchEngine, setSearchEngine] = useState([]);
-
-  // State для хранения состояния правого меню
-  const [rightMenu, setRightMenu] = useState("");
-
-  // State для хранения периода прогноза (количество часов в будущем)
-  const [forecastTime, setForecastTime] = useState(9);
-
-  // State для хранения текущего времени
-  const [time, setTime] = useState({});
-
-  // State для хранения единиц измерения температуры (метрические или имперские)
-  const [unit, setUnit] = useState("metric");
-
+  // Эффект для получения данных о погоде при монтировании и обновлениях компонента
   useEffect(() => {
     // Функция для получения данных о погоде по API
     const getRequest = async (defaultCity, currentLocation) => {
       const { apiKey, reserveApiKey } = apiKeys;
 
-      // Если текущее местоположение пустое, используем значение defaultCity (Казань)
       const requestLocation =
         currentLocation.length === 0 ? defaultCity : currentLocation;
 
@@ -67,39 +46,50 @@ function App() {
         );
 
         // Устанавливаем данные о текущей погоде и будущей погоде в состояние
-        setData(request.data);
-        setFutureData(future.data);
-        setFullLocation(requestLocation);
-      } catch (e) {
-        // Если возникла ошибка, используем резервные ключи API для запросов
-        const requestReserve = await axios.get(
-          currentWeatherUrl("weather", requestLocation, reserveApiKey, unit)
-        );
-        const futureReserve = await axios.get(
-          currentWeatherUrl("forecast", requestLocation, reserveApiKey, unit)
-        );
+        dispatch({
+          type: "SET_DATA_AND_FUTURE_DATA",
+          payload: { data: request.data, futureData: future.data },
+        });
 
-        // Устанавливаем данные из резервных запросов в состояние
-        setFullLocation(requestLocation);
-        setData(requestReserve.data);
-        setFutureData(futureReserve.data);
+        dispatch({ type: "SET_FULL_LOCATION", payload: requestLocation });
+      } catch (e) {
+        if (e.message === "Request failed with status code 429") {
+          const requestReserve = await axios.get(
+            currentWeatherUrl("weather", requestLocation, reserveApiKey, unit)
+          );
+          const futureReserve = await axios.get(
+            currentWeatherUrl("forecast", requestLocation, reserveApiKey, unit)
+          );
+
+          // Устанавливаем данные из резервных запросов в состояние
+          dispatch({
+            type: "SET_DATA_AND_FUTURE_DATA",
+            payload: {
+              data: requestReserve.data,
+              futureData: futureReserve.data,
+            },
+          });
+          dispatch({ type: "SET_FULL_LOCATION", payload: requestLocation });
+        } else {
+          console.error("Error fetching data:", e);
+        }
       }
     };
 
     // Вызываем функцию для получения данных о погоде при первой загрузке приложения
     getRequest("Казань", fullLocation);
 
-    // Устанавливаем интервал обновления данных о погоде (каждые 60 секунд)
+    // Устанавливаем интервал обновления данных о погоде (каждые 80 секунд)
     const intervalFunc = setInterval(() => {
       getRequest("Казань", fullLocation);
-      // Обновляем значение stateInterval, чтобы перезапустить интервал при его очередном завершении
-      setStateInterval((prevState) => prevState + 1);
-    }, 60000);
+      dispatch({ type: "INCREMENT_INTERVAL" });
+    }, 80000);
 
     // Очищаем интервал при размонтировании компонента, чтобы предотвратить утечки памяти
     return () => clearInterval(intervalFunc);
-  }, [unit, fullLocation, forecastTime, stateInterval]);
+  }, [unit, forecastTime, fullLocation, stateInterval]);
 
+  // Эффект для получения текущего времени при монтировании и обновлениях компонента
   useEffect(() => {
     // Функция для получения текущего времени по API
     const getTimeData = async () => {
@@ -107,19 +97,22 @@ function App() {
 
       if (data.length !== 0) {
         const { lat, lon } = data.coord;
-
         try {
           const getTime = await axios.get(currentTimeUrl(timeApiKey, lat, lon));
 
           // Устанавливаем данные о текущем времени и фоновой теме в состояние
-          setTime(getTime.data);
-          setBackground(getTime.data, setTheme);
+          dispatch({ type: "SET_TIME", payload: getTime.data });
+          setBackground(getTime.data, handleSetTheme);
         } catch (e) {
-          const getTime = await axios.get(
-            currentTimeUrl(reserveTimeApiKey, lat, lon)
-          );
-          setTime(getTime.data);
-          setBackground(getTime.data, setTheme);
+          if (e.message === "Request failed with status code 429") {
+            const getTime = await axios.get(
+              currentTimeUrl(reserveTimeApiKey, lat, lon)
+            );
+            dispatch({ type: "SET_TIME", payload: getTime.data });
+            setBackground(getTime.data, handleSetTheme);
+          } else {
+            console.error("Error fetching data:", e);
+          }
         }
       } else {
         return null;
@@ -142,26 +135,8 @@ function App() {
     // Оборачиваем компоненты в провайдер контекста, чтобы предоставить доступ к состояниям всему дереву компонентов
     <Context.Provider
       value={{
-        setData,
-        setFutureData,
-        setTime,
-        setSearchEngine,
-        setLocation,
-        setTheme,
-        setFullLocation,
-        setRightMenu,
-        setForecastTime,
-        setUnit,
-        data,
-        futureData,
-        location,
-        theme,
-        fullLocation,
-        forecastTime,
-        searchEngine,
-        rightMenu,
-        time,
-        unit,
+        state,
+        dispatch,
       }}
     >
       {/* Обертка для компонентов, которая использует контекст */}
@@ -174,10 +149,10 @@ function App() {
         <Forecast />
         <Desc />
         <Sunrise />
-        <WeatherInfo></WeatherInfo>
+        <WeatherInfo />
       </Parent>
     </Context.Provider>
   );
 }
 
-export default React.memo(App);
+export default App;

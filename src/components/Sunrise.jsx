@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Context } from "../Context/context";
+import { Context } from "../context/context";
 
 const Sunrise = () => {
   const contextData = useContext(Context);
@@ -8,7 +8,7 @@ const Sunrise = () => {
 
 // Компонент для отображения времени восхода и заката солнца
 const RisingSun = ({ value }) => {
-  const { data } = value;
+  const { data } = value.state;
 
   // Извлекаем время восхода и заката из данных о погоде
   const { sunrise, sunset } = data.sys;
