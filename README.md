@@ -32,11 +32,10 @@
 4. Откройте ваш любимый браузер и перейдите по адресу `http://localhost:3000` для использования приложения.
 
 5. Внимание! Для запуска приложения на локальной машине, в корневой папке проекта необходимо создать файл .env и добавить туда переменные окружения 
-
-REACT_APP_API_KEY = Ваш Api key OpenWeather
-REACT_APP_API_KEY_RESERVE = Ваш Api key OpenWeather
-REACT_APP_API_KEY_TIME = Ваш Api key IpGeolocation
-REACT_APP_API_KEY_TIME_RESERVE = Ваш Api key IpGeolocation
+- REACT_APP_API_KEY = Ваш Api key OpenWeather
+- REACT_APP_API_KEY_RESERVE = Ваш Api key OpenWeather
+- REACT_APP_API_KEY_TIME = Ваш Api key IpGeolocation
+- REACT_APP_API_KEY_TIME_RESERVE = Ваш Api key IpGeolocation
 
 ## Зависимости
 
