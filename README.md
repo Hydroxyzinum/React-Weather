@@ -1,5 +1,5 @@
 # Weather App
-# [DEMO](https://project24.space/)
+# [DEMO](https://hydroxyzinum.github.io/Build-Weather/)
 
 ## Описание проекта
 
