@@ -17,16 +17,6 @@ body {
   font-family: "Roboto-light";
   background: #212125;
   color: white;
-
-  /* animation: gradient 10s ease infinite;
-  background: linear-gradient(-45deg, #2DC8EA, #33AADD, #254659, #08244F);
-    background-size: 400% 400%;
-    animation: gradient 15s ease infinite; */
-}
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
 }
 
 .container {
@@ -175,15 +165,15 @@ code {
   transition: 1s ease;
 }
 
-.click-field:hover > .burger-first_line {
+.click-field:hover>.burger-first_line {
   transform: translateX(2px);
 }
 
-.click-field:hover > .burger-second_line {
+.click-field:hover>.burger-second_line {
   transform: translateX(5px);
 }
 
-.click-field:focus > .burger-line {
+.click-field:focus>.burger-line {
   background-color: blueviolet;
   transform: scale(0.5);
 }
@@ -574,7 +564,6 @@ code {
 .select-container::after {
   position: absolute;
   top: 1px;
-
   left: 55px;
   width: 35px;
   height: 35px;
@@ -590,11 +579,15 @@ code {
 }
 
 .forecast-card {
-  width: 100%;
-  height: 70px;
-  cursor: pointer;
-  perspective: 1000px;
   border-radius: 20px;
+  position: relative;
+  height: 70px;
+  width: 100%;
+  -webkit-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+  -webkit-transition: all 600ms;
+  transition: all 600ms;
+  z-index: 20;
 }
 
 .forecast-data_img {
@@ -604,14 +597,13 @@ code {
   margin-right: 10px;
 }
 
-.front-inner {
-  position: relative;
+.label-card {
   width: 100%;
-  height: 100%;
-  text-align: center;
-  transition: transform 0.8s;
-  transform-style: preserve-3d;
-  z-index: 1;
+  cursor: pointer;
+}
+
+.check_card {
+  display: none;
 }
 
 .front {
@@ -631,7 +623,7 @@ code {
 
 .back {
   width: 100%;
-  height: 110px;
+  height: 120px;
   position: absolute;
   top: -30%;
   bottom: 0;
@@ -639,13 +631,15 @@ code {
   box-sizing: border-box;
   font-size: 16px;
   border-radius: 15px;
-  transform: rotateY(180deg);
+  -webkit-transform: rotateX(180deg);
+  transform: rotateX(180deg);
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
   font-weight: bold;
   -webkit-box-shadow: 0px 0px 2px 1px rgba(53, 167, 255, 1);
   -moz-box-shadow: 0px 0px 2px 1px rgba(53, 167, 255, 1);
   box-shadow: 0px 0px 2px 1px rgba(53, 167, 255, 1);
+  transition: 1s ease-in-out;
 }
 
 .back-time_container {
@@ -700,11 +694,22 @@ code {
   margin-bottom: 10px;
 }
 
-.flipped {
-  transition: 1.5s ease-in-out;
-  transform: rotateY(180deg);
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
+.label-card:hover .forecast-card {
+  -webkit-box-shadow: 0px 0px 2px 1px rgba(53, 167, 255, 1);
+  -moz-box-shadow: 0px 0px 2px 1px rgba(53, 167, 255, 1);
+  box-shadow: 0px 0px 2px 1px rgba(53, 167, 255, 1);
+  background: rgba(0, 0, 0, 0.23);
+}
+
+:checked+.forecast-card {
+  transform: rotateX(180deg);
+  -webkit-transform: rotateX(180deg);
+}
+
+.label-card:hover :checked+.forecast-card {
+  transform: rotateX(180deg);
+  -webkit-transform: rotateX(180deg);
+  box-shadow: 0 20px 20px rgba(255, 255, 255, .2);
 }
 
 .forecast-data {
@@ -728,9 +733,9 @@ code {
 .search-field {
   display: block;
   width: inherit;
-  height: inherit;
+  height: 100vh;
   position: absolute;
-  top: -105%;
+  top: -150%;
   opacity: 0.99;
   border-radius: inherit;
   box-shadow: inherit;
@@ -784,11 +789,11 @@ code {
   transform: rotate(-45deg);
 }
 
-.click-exit:focus > .exit-first_line {
+.click-exit:focus>.exit-first_line {
   transform: rotate(0);
 }
 
-.click-exit:focus > .exit-second_line {
+.click-exit:focus>.exit-second_line {
   transform: rotate(0);
 }
 
@@ -833,15 +838,15 @@ code {
   transition: 0.4s;
 }
 
-input:checked + .slider {
+input:checked+.slider {
   background-color: transparent;
 }
 
-input:focus + .slider {
+input:focus+.slider {
   box-shadow: 0 0 1px transparent;
 }
 
-input:checked + .slider:before {
+input:checked+.slider:before {
   -webkit-transform: translateX(26px);
   -ms-transform: translateX(26px);
   transform: translateX(26px);
@@ -988,6 +993,23 @@ input:checked + .slider:before {
   margin: 0;
 }
 
+.err-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 100%;
+  height: auto;
+  background-color: rgba(0, 0, 0, 0.23);
+  border-radius: 20px;
+  padding: 40px;
+}
+
+.err-head {
+  margin: 20px;
+}
+
 :root {
   --shadow: #fd6f21;
   --ring: currentColor;
@@ -1008,11 +1030,9 @@ input:checked + .slider:before {
   margin: 0;
   border-radius: 100%;
   box-shadow: 0 0 0 0.05em var(--ring) inset, 0 0 0.3em -0.03em var(--shadow);
-  background: linear-gradient(
-    to var(--blend-dir),
-    var(--blend1) var(--blend-from),
-    var(--blend2) var(--blend-to)
-  );
+  background: linear-gradient(to var(--blend-dir),
+      var(--blend1) var(--blend-from),
+      var(--blend2) var(--blend-to));
   /* filter: saturate(0.05); */
 }
 
@@ -1128,7 +1148,7 @@ input:checked + .slider:before {
   animation: move 3000ms infinite ease-in-out;
 }
 
-.cloud + .cloud {
+.cloud+.cloud {
   top: 25%;
   left: 40%;
   animation: move 3700ms infinite linear;

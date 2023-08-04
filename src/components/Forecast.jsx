@@ -3,67 +3,15 @@ import { Context } from "../context/context";
 import cn from "classnames";
 import _ from "lodash";
 
-// Компонент для обертки контейнера прогноза погоды
-const ForecastContainer = ({ children, value }) => {
-  const { forecastTime, setForecastTime } = value;
+const Forecast = () => {
+  const contextData = useContext(Context);
 
-  // Обработчик изменения значения в селекторе прогноза времени
-  const submitForm = (e) => {
-    e.preventDefault();
-    setForecastTime(e.target.value);
-  };
-
-  return (
-    <div className="forecast-container">
-      <div className="forecast-header">
-        <div className="forecast-head-container">
-          <h4 className="forecast-head">5 Дней</h4>
-        </div>
-        <div className="select-container">
-          {/* Селектор для выбора прогноза времени */}
-          <select
-            className="select-time"
-            value={forecastTime}
-            onChange={submitForm}
-            name="time"
-          >
-            <option className="option-style" value={9}>
-              09:00
-            </option>
-            <option className="option-style" value={12}>
-              12:00
-            </option>
-            <option className="option-style" value={15}>
-              15:00
-            </option>
-            <option className="option-style" value={18}>
-              18:00
-            </option>
-            <option className="option-style" value={21}>
-              21:00
-            </option>
-          </select>
-        </div>
-      </div>
-      {children}
-    </div>
-  );
-};
-
-// Компонент для обертки списка карточек прогноза погоды
-const ForecastListContainer = ({ children }) => {
-  return <div className="forecast-list_container">{children}</div>;
-};
-
-// Компонент для отображения списка карточек прогноза погоды
-const ForecastList = ({ value }) => {
-  const { futureData } = value.state;
+  const { futureData } = contextData.state;
 
   const { list } = futureData;
 
-  const { unit, forecastTime, theme } = value.state;
+  const { unit, forecastTime, theme } = contextData.state;
 
-  // Используем useMemo для оптимизации рендеринга списка прогноза погоды
   const memoization = useMemo(() => {
     return list.map((item, index) => {
       const { dt_txt, clouds, main } = item;
@@ -120,12 +68,9 @@ const ForecastList = ({ value }) => {
           unit === "metric" ? normalizeTempMax * 3 : fahrenheitToCelsius * 3;
 
         return (
-          <div
-            key={_.uniqueId("forecast-")}
-            id={index}
-            className="forecast-card"
-          >
-            <div className="front-inner">
+          <label key={_.uniqueId("forecast-")} className="label-card">
+            <input className="check_card" type="checkbox"></input>
+            <div id={index} className="forecast-card">
               <div className="front">
                 <p className="forecast-data">
                   {currentDay ? currentDay : null}
@@ -177,27 +122,14 @@ const ForecastList = ({ value }) => {
                 </div>
               </div>
             </div>
-          </div>
+          </label>
         );
       } else {
         return null;
       }
     });
   }, [forecastTime, list, theme, unit]);
-
   return memoization;
-};
-
-// Компонент для отображения прогноза погоды
-const Forecast = () => {
-  const contextData = useContext(Context);
-  return (
-    <ForecastContainer value={contextData}>
-      <ForecastListContainer>
-        <ForecastList value={contextData} />
-      </ForecastListContainer>
-    </ForecastContainer>
-  );
 };
 
 export default Forecast;

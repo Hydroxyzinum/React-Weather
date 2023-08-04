@@ -1,23 +1,29 @@
-import React, { useEffect, useReducer } from "react";
-import axios from "axios";
-import { apiKeys, currentWeatherUrl, currentTimeUrl } from "../helpers/url";
-import { Context } from "../context/context";
-import { setBackground } from "../helpers/bgColors";
+import React, { useEffect, useReducer, useState } from "react";
 import { initialState, reducer } from "../reducers/reducer";
-
+import { Context } from "../context/context";
+import { apiKeys, currentWeatherUrl, currentTimeUrl } from "../helpers/url";
+import { setBackground } from "../helpers/bgColors";
+import axios from "axios";
 import Menu from "./Menu";
+import RenderSearchItem from "./RenderSearchItem";
 import Parent from "./Parent";
 import Header from "./Header";
 import CurrentTemperature from "./CurrentTemperature";
 import Sunrise from "./Sunrise";
 import Main from "./Main";
 import TodayTemp from "./TodayTemp";
+import ForecastContainer from "./ForecastContainer";
+import ForecastListContainer from "./ForecastListContainer";
 import Forecast from "./Forecast";
+import DescContainer from "./DescContainer";
 import Desc from "./Desc";
-import WeatherInfo from "./WeatherInfo";
+import Info from "./Info";
+import ErrorPopUp from "./PopUps/ErrorPopUp";
 
-function App() {
+const App = () => {
   // Используем useReducer для управления состоянием
+  const [isFirstEffectExecuted, setFirstEffectExecuted] = useState(false);
+
   const [state, dispatch] = useReducer(reducer, initialState);
 
   // Извлекаем необходимые значения из состояния
@@ -27,7 +33,6 @@ function App() {
   const handleSetTheme = (theme) => {
     dispatch({ type: "SET_THEME", payload: theme });
   };
-
   // Эффект для получения данных о погоде при монтировании и обновлениях компонента
   useEffect(() => {
     // Функция для получения данных о погоде по API
@@ -71,7 +76,7 @@ function App() {
           });
           dispatch({ type: "SET_FULL_LOCATION", payload: requestLocation });
         } else {
-          console.error("Error fetching data:", e);
+          return <ErrorPopUp error={e.message} />;
         }
       }
     };
@@ -83,7 +88,7 @@ function App() {
     const intervalFunc = setInterval(() => {
       getRequest("Казань", fullLocation);
       dispatch({ type: "INCREMENT_INTERVAL" });
-    }, 80000);
+    }, 60000);
 
     // Очищаем интервал при размонтировании компонента, чтобы предотвратить утечки памяти
     return () => clearInterval(intervalFunc);
@@ -111,11 +116,11 @@ function App() {
             dispatch({ type: "SET_TIME", payload: getTime.data });
             setBackground(getTime.data, handleSetTheme);
           } else {
-            console.error("Error fetching data:", e);
+            return <ErrorPopUp error={e.message} />;
           }
         }
       } else {
-        return null;
+        return <ErrorPopUp error={"Bad Request :("} />;
       }
     };
 
@@ -131,28 +136,72 @@ function App() {
     return () => clearTimeout(timeout);
   }, [data.coord, data.length]);
 
-  return (
-    // Оборачиваем компоненты в провайдер контекста, чтобы предоставить доступ к состояниям всему дереву компонентов
+  useEffect(() => {
+    if (!isFirstEffectExecuted && state.data.length !== 0) {
+      localStorage.setItem("state", JSON.stringify(state));
+      setFirstEffectExecuted(true);
+    }
+  }, [state, isFirstEffectExecuted]);
+
+  if (state.data.length !== 0) {
+    return (
+      // Оборачиваем компоненты в провайдер контекста, чтобы предоставить доступ к состояниям всему дереву компонентов
+      <Context.Provider
+        value={{
+          state,
+          dispatch,
+        }}
+      >
+        <Parent>
+          <Menu>
+            <RenderSearchItem />
+          </Menu>
+          <Header />
+          <CurrentTemperature />
+          <Main />
+          <TodayTemp />
+          <ForecastContainer>
+            <ForecastListContainer>
+              <Forecast />
+            </ForecastListContainer>
+          </ForecastContainer>
+          <DescContainer>
+            <Desc />
+          </DescContainer>
+          <Sunrise />
+          <Info />
+        </Parent>
+      </Context.Provider>
+    );
+  } else {
+    const localState = JSON.parse(localStorage.getItem("state"));
     <Context.Provider
       value={{
-        state,
+        localState,
         dispatch,
       }}
     >
-      {/* Обертка для компонентов, которая использует контекст */}
       <Parent>
-        <Menu />
+        <Menu>
+          <RenderSearchItem />
+        </Menu>
         <Header />
         <CurrentTemperature />
         <Main />
         <TodayTemp />
-        <Forecast />
-        <Desc />
+        <ForecastContainer>
+          <ForecastListContainer>
+            <Forecast />
+          </ForecastListContainer>
+        </ForecastContainer>
+        <DescContainer>
+          <Desc />
+        </DescContainer>
         <Sunrise />
-        <WeatherInfo />
+        <Info />
       </Parent>
-    </Context.Provider>
-  );
-}
+    </Context.Provider>;
+  }
+};
 
 export default App;

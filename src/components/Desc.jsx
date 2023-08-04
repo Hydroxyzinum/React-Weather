@@ -1,14 +1,12 @@
 import React, { useContext } from "react";
 import { Context } from "../context/context";
 
-// Компонент для обертки карточек с дополнительной информацией о погоде
-const DescContainer = ({ children }) => {
-  return <div className="decription-container">{children}</div>;
-};
+const Desc = () => {
+  const contextData = useContext(Context);
 
-// Компонент для отображения дополнительной информации о погоде
-const DescData = ({ value }) => {
-  const { data } = value.state;
+  const { data } = contextData.state
+    ? contextData.state
+    : contextData.localState;
 
   // Извлекаем данные о давлении, видимости, направлении и порывах ветра, а также о количестве дождя и снега из объекта data
   const { pressure } = data.main;
@@ -24,10 +22,13 @@ const DescData = ({ value }) => {
   const normalizeVisibility =
     visibility > 9999
       ? ">10 км."
-      : `${String(value.visibility).slice(0, 2).split("").join(",")} км.`;
+      : `${String(data.visibility).slice(0, 2).split("").join(",")} км.`;
   const normalizeDeg = deg ? `${Math.round(deg)}°` : "0°";
+
   const normalizeGust = gust ? `${gust} м/с` : "0 м/с.";
+
   const normalizeRain = rain ? `${rain["1h"]} мм.` : "0 мм.";
+
   const normalizeSnow = snow ? `${snow["1h"]} мм.` : "0 мм.";
 
   // Массивы для хранения информации, названий и URL изображений для каждой карточки
@@ -78,17 +79,6 @@ const DescData = ({ value }) => {
       <p className="card-text">{info}</p>
     </div>
   ));
-};
-
-// Компонент для отображения дополнительной информации о погоде
-const Desc = () => {
-  const contextData = useContext(Context);
-  return (
-    // Оборачиваем компонент DescData в контейнер DescContainer
-    <DescContainer>
-      <DescData value={contextData} />
-    </DescContainer>
-  );
 };
 
 export default Desc;

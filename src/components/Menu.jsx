@@ -1,16 +1,18 @@
 import React, { useContext } from "react";
 import axios from "axios";
 import cn from "classnames";
-import _ from "lodash";
-import { apiKeys, currentWeatherUrl } from "../helpers/url";
 import { Context } from "../context/context";
 import { russia } from "../helpers/russia";
+import { apiKeys, currentWeatherUrl } from "../helpers/url";
 
-// Компонент-контейнер для меню с поиском города и переключателем единиц измерения
-const MenuContainer = ({ value, children }) => {
-  const { state, dispatch } = value;
+const Menu = ({ children }) => {
+  const contextData = useContext(Context);
 
-  const { location, rightMenu, unit, searchEngine } = state;
+  const { dispatch } = contextData;
+
+  const { location, rightMenu, unit, searchEngine } = contextData.state
+    ? contextData.state
+    : contextData.localState;
 
   // Обработчик для отправки формы поиска города
   const formSubmit = async (e) => {
@@ -18,15 +20,15 @@ const MenuContainer = ({ value, children }) => {
 
     const { apiKey, reserveApiKey } = apiKeys;
 
-    const current = await axios.get(
-      currentWeatherUrl("weather", location, apiKey, unit)
-    );
-
-    const future = await axios.get(
-      currentWeatherUrl("forecast", location, apiKey, unit)
-    );
-
     try {
+      const current = await axios.get(
+        currentWeatherUrl("weather", location, apiKey, unit)
+      );
+
+      const future = await axios.get(
+        currentWeatherUrl("forecast", location, apiKey, unit)
+      );
+
       dispatch({
         type: "SET_DATA_AND_FUTURE_DATA",
         payload: {
@@ -34,34 +36,51 @@ const MenuContainer = ({ value, children }) => {
           futureData: future.data,
         },
       });
-      dispatch({ type: "SET_FULL_LOCATION", payload: location });
-      dispatch({ type: "SET_UNIT", payload: unit });
-      dispatch({ type: "SET_RIGHT_MENU", payload: false });
-      dispatch({ type: "SET_SEARCH_ENGINE", payload: [] });
-      dispatch({ type: "SET_LOCATION", payload: "" });
+      dispatch({
+        type: "SET_FULL_DATA",
+        payload: {
+          fullLocation: location,
+          unit: unit,
+          rightMenu: false,
+          searchEngine: [],
+          location: "",
+        },
+      });
     } catch (e) {
-      if (e) {
-        return dispatch({ type: "SET_LOCATION", payload: "Не нашли :(" });
-      } else {
-        const currentReserve = await axios.get(
-          currentWeatherUrl("weather", location, reserveApiKey, unit)
-        );
+      switch (e.message) {
+        case "Request failed with status code 404":
+          return dispatch({ type: "SET_LOCATION", payload: "Не нашли :(" });
+        case "Request failed with status code 429":
+          const currentReserve = await axios.get(
+            currentWeatherUrl("weather", location, reserveApiKey, unit)
+          );
 
-        const futureReserve = await axios.get(
-          currentWeatherUrl("forecast", location, reserveApiKey, unit)
-        );
-        dispatch({
-          type: "SET_DATA_AND_FUTURE_DATA",
-          payload: {
-            data: currentReserve.data,
-            futureData: futureReserve.data,
-          },
-        });
-        dispatch({ type: "SET_FULL_LOCATION", payload: location });
-        dispatch({ type: "SET_UNIT", payload: unit });
-        dispatch({ type: "SET_RIGHT_MENU", payload: false });
-        dispatch({ type: "SET_SEARCH_ENGINE", payload: [] });
-        dispatch({ type: "SET_LOCATION", payload: "" });
+          const futureReserve = await axios.get(
+            currentWeatherUrl("forecast", location, reserveApiKey, unit)
+          );
+          dispatch({
+            type: "SET_DATA_AND_FUTURE_DATA",
+            payload: {
+              data: currentReserve.data,
+              futureData: futureReserve.data,
+            },
+          });
+          dispatch({
+            type: "SET_FULL_DATA",
+            payload: {
+              fullLocation: location,
+              unit: unit,
+              rightMenu: false,
+              searchEngine: [],
+              location: "",
+            },
+          });
+          break;
+        default:
+          return dispatch({
+            type: "SET_LOCATION",
+            payload: "Интернет отсутсвует",
+          });
       }
     }
   };
@@ -146,49 +165,6 @@ const MenuContainer = ({ value, children }) => {
         </form>
       </div>
     </div>
-  );
-};
-
-// Компонент, который отображает элементы результата поиска городов
-const RenderSearchItem = ({ value }) => {
-  const { state, dispatch } = value;
-  const { searchEngine } = state;
-
-  // Создание массива с элементами результата поиска и их отображение
-  const memoSearchItem = React.useMemo(() => {
-    if (searchEngine.length !== 0) {
-      const newArr =
-        searchEngine.length > 11 ? searchEngine.slice(0, 11) : searchEngine;
-      return newArr.map(({ region, city }) => {
-        return (
-          <div key={_.uniqueId("city-")} className="buttons">
-            <button
-              onClick={() => dispatch({ type: "SET_LOCATION", payload: city })}
-              type="submit"
-              className="searchedItem"
-            >
-              {city ? city : null}{" "}
-              <span className="region-name">({region ? region : null})</span>
-            </button>
-          </div>
-        );
-      });
-    } else {
-      return <div className="p-10">Ожидание запроса...</div>;
-    }
-  }, [searchEngine, dispatch]);
-
-  return memoSearchItem;
-};
-
-// Компонент меню, который использует MenuContainer и RenderSearchItem
-const Menu = () => {
-  const contextData = useContext(Context);
-
-  return (
-    <MenuContainer value={contextData}>
-      <RenderSearchItem value={contextData}></RenderSearchItem>
-    </MenuContainer>
   );
 };
 

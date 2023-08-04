@@ -1,14 +1,15 @@
 import React, { useContext } from "react";
 import cn from "classnames";
 import { Context } from "../context/context";
-import animationsBlock from "../helpers/animationsBlocks";
+import { Cloudy } from "../helpers/animationsBlocks";
 
 // Компонент-контейнер для выбора отображения содержимого в зависимости от данных о погоде
-const ChooseParent = ({ children, value }) => {
-  const { state } = value;
-  const { data, theme, rightMenu } = state;
+const Parent = ({ children }) => {
+  const contextData = useContext(Context);
 
-  const { clouds } = animationsBlock;
+  const { data, theme, rightMenu } = contextData.state
+    ? contextData.state
+    : contextData.localState;
 
   // Классы для стилизации контейнера в зависимости от состояния меню
   const display = cn({
@@ -27,15 +28,8 @@ const ChooseParent = ({ children, value }) => {
       </div>
     );
   } else {
-    // Если данных о погоде нет, отображаем анимацию облаков
-    return clouds;
+    return <Cloudy />;
   }
-};
-
-// Компонент, который использует ChooseParent и передает ему данные из контекста
-const Parent = ({ children }) => {
-  const contextData = useContext(Context);
-  return <ChooseParent value={contextData}>{children}</ChooseParent>;
 };
 
 export default Parent;

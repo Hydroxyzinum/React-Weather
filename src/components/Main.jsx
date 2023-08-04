@@ -2,13 +2,20 @@ import React, { useContext } from "react";
 import { Context } from "../context/context";
 
 // Компонент для отображения основных данных о погоде
-const MainData = ({ value }) => {
-  const { data } = value.state;
+const Main = () => {
+  const contextData = useContext(Context);
+
+  const { data } = contextData.state
+    ? contextData.state
+    : contextData.localState;
 
   // Извлекаем нужные данные из объекта data
   const { main, clouds, wind } = data;
+
   const { humidity } = main;
+
   const { all } = clouds;
+
   const { speed } = wind;
 
   return (
@@ -37,9 +44,5 @@ const MainData = ({ value }) => {
 };
 
 // Компонент Main использует MainData и передает ему контекстные данные
-const Main = () => {
-  const contextData = useContext(Context);
-  return <MainData value={contextData}></MainData>;
-};
 
 export default Main;

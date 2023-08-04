@@ -1,15 +1,15 @@
 import React, { useContext } from "react";
 import { Context } from "../context/context";
-import animationsBlock from "../helpers/animationsBlocks";
+import { Cloudy } from "../helpers/animationsBlocks";
 import _ from "lodash";
 
 const TodayTemp = () => {
   const contextData = useContext(Context);
-  const { state } = contextData;
+  // const { state } = contextData;
 
-  const { futureData } = state;
-
-  const { clouds } = animationsBlock;
+  const { futureData } = contextData.state
+    ? contextData.state
+    : contextData.localState;
 
   // Отображение информации о погоде на ближайшие 4 часа
   if (futureData.list.length !== 0) {
@@ -64,7 +64,7 @@ const TodayTemp = () => {
     );
   } else {
     // Если данные о погоде на ближайшие 4 часа отсутствуют, отображаем анимацию облаков
-    return clouds;
+    return <Cloudy />;
   }
 };
 

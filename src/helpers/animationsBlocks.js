@@ -1,22 +1,31 @@
-const weatherAnimations = {
-  moon: (
+export const SuperMoon = () => {
+  return (
     <div icon="supermoon">
       <span className="moon"></span>
       <span className="meteor"></span>
     </div>
-  ),
-  sun: (
-    <div icon="sunny">
-      <span className="sun"></span>
-    </div>
-  ),
-  clouds: (
+  );
+};
+
+export const Cloudy = () => {
+  return (
     <div icon="cloudy">
       <span className="cloud"></span>
       <span className="cloud"></span>
     </div>
-  ),
-  snow: (
+  );
+};
+
+export const Sunny = () => {
+  return (
+    <div icon="sunny">
+      <span className="sun"></span>
+    </div>
+  );
+};
+
+export const Snowy = () => {
+  return (
     <div icon="snowy">
       <span className="snowman"></span>
       <ul>
@@ -35,8 +44,11 @@ const weatherAnimations = {
         <li></li>
       </ul>
     </div>
-  ),
-  rain: (
+  );
+};
+
+export const Stormy = () => {
+  return (
     <div icon="stormy">
       <span className="cloud"></span>
       <ul>
@@ -47,8 +59,11 @@ const weatherAnimations = {
         <li></li>
       </ul>
     </div>
-  ),
-  thunderstorm: (
+  );
+};
+
+export const Thunderstorm = () => {
+  return (
     <div icon="thunderstorm">
       <span className="cloud"></span>
       <ul>
@@ -59,8 +74,11 @@ const weatherAnimations = {
         <li></li>
       </ul>
     </div>
-  ),
-  mists: (
+  );
+};
+
+export const Mists = () => {
+  return (
     <div icon="mists">
       <div className="mist-block">
         <span className="mist"></span>
@@ -68,7 +86,5 @@ const weatherAnimations = {
         <span className="t-mist"></span>
       </div>
     </div>
-  ),
+  );
 };
-
-export default weatherAnimations;

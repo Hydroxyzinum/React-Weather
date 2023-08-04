@@ -1,8 +1,12 @@
 import React, { useContext } from "react";
 import { Context } from "../context/context";
 
-const Info = ({ value }) => {
-  const { data } = value.state;
+const Info = () => {
+  const contextData = useContext(Context);
+
+  const { data } = contextData.state
+    ? contextData.state
+    : contextData.localState;
 
   const { lon, lat } = data.coord;
 
@@ -37,9 +41,4 @@ const Info = ({ value }) => {
   );
 };
 
-const WeatherInfo = () => {
-  const contextData = useContext(Context);
-  return <Info value={contextData} />;
-};
-
-export default WeatherInfo;
+export default Info;

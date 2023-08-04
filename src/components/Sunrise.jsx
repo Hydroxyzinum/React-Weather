@@ -8,7 +8,7 @@ const Sunrise = () => {
 
 // Компонент для отображения времени восхода и заката солнца
 const RisingSun = ({ value }) => {
-  const { data } = value.state;
+  const { data } = value.state ? value.state : value.localState;
 
   // Извлекаем время восхода и заката из данных о погоде
   const { sunrise, sunset } = data.sys;

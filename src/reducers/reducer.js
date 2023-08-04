@@ -21,6 +21,15 @@ const reducer = (state, action) => {
         data: action.payload.data,
         futureData: action.payload.futureData,
       };
+    case "SET_FULL_DATA":
+      return {
+        ...state,
+        fullLocation: action.payload.fullLocation,
+        unit: action.payload.unit,
+        rightMenu: action.payload.rightMenu,
+        searchEngine: action.payload.searchEngine,
+        location: action.payload.location
+      }
     case "SET_DATA":
       return { ...state, data: action.payload };
     case "SET_FUTURE_DATA":
