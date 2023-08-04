@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Context } from "../Context/context";
+import { Context } from "../context/context";
 
 const ForecastContainer = ({ children }) => {
   const contextData = useContext(Context);

@@ -1,5 +1,5 @@
 import React, { useContext, useMemo } from "react";
-import { Context } from "../Context/context";
+import { Context } from "../context/context";
 import cn from "classnames";
 import _ from "lodash";
 

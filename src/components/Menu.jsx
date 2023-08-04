@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import axios from "axios";
 import cn from "classnames";
-import { Context } from "../Context/context";
+import { Context } from "../context/context";
 import { russia } from "../helpers/russia";
 import { apiKeys, currentWeatherUrl } from "../helpers/url";
 

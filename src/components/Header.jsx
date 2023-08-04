@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Context } from "../Context/context";
+import { Context } from "../context/context";
 import { getLocation } from "../helpers/showPosition";
 
 // Функциональный компонент для отображения данных в шапке
