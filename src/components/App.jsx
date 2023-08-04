@@ -20,7 +20,6 @@ import Forecast from "./Forecast";
 import DescContainer from "./DescContainer";
 import Desc from "./Desc";
 import Footer from "./Footer";
-import ErrorPopUp from "./PopUps/ErrorPopUp";
 
 const App = () => {
   // Используем useReducer для управления состоянием
