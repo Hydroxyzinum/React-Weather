@@ -1,11 +1,14 @@
 import React, { useContext } from "react";
 import { Context } from "../context/context";
-import Icon from "./IconGenerator";
 
 // Компонент для отображения текущей температуры и описания погоды
-const Temperature = React.memo(({ children, value }) => {
+const Temperature = React.memo(({ children }) => {
   // Извлекаем данные о текущей погоде из контекста
-  const { data } = value.state ? value.state : value.localState;
+  const contextData = useContext(Context);
+
+  const { data } = contextData.state
+    ? contextData.state
+    : contextData.localState;
 
   const { name } = data;
 
@@ -58,15 +61,4 @@ const Temperature = React.memo(({ children, value }) => {
   );
 });
 
-const CurrentTemperature = () => {
-  // Извлекаем данные из контекста
-  const contextData = useContext(Context);
-  return (
-    // Оборачиваем компоненты Temperature и IconGenerator в провайдер контекста, чтобы предоставить доступ к данным всему дереву компонентов
-    <Temperature value={contextData}>
-      <Icon value={contextData} />
-    </Temperature>
-  );
-};
-
-export default CurrentTemperature;
+export default Temperature;

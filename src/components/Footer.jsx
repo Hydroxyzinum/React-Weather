@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { Context } from "../context/context";
 
-const Info = () => {
+const Footer = () => {
   const contextData = useContext(Context);
 
   const { data } = contextData.state
@@ -41,4 +41,4 @@ const Info = () => {
   );
 };
 
-export default Info;
+export default Footer;

@@ -4,11 +4,13 @@ import { Context } from "../context/context";
 import { apiKeys, currentWeatherUrl, currentTimeUrl } from "../helpers/url";
 import { setBackground } from "../helpers/bgColors";
 import axios from "axios";
+
 import Menu from "./Menu";
 import RenderSearchItem from "./RenderSearchItem";
 import Parent from "./Parent";
 import Header from "./Header";
-import CurrentTemperature from "./CurrentTemperature";
+import Temperature from "./Temperature";
+import Icons from "./Icons";
 import Sunrise from "./Sunrise";
 import Main from "./Main";
 import TodayTemp from "./TodayTemp";
@@ -17,7 +19,7 @@ import ForecastListContainer from "./ForecastListContainer";
 import Forecast from "./Forecast";
 import DescContainer from "./DescContainer";
 import Desc from "./Desc";
-import Info from "./Info";
+import Footer from "./Footer";
 import ErrorPopUp from "./PopUps/ErrorPopUp";
 
 const App = () => {
@@ -157,6 +159,9 @@ const App = () => {
             <RenderSearchItem />
           </Menu>
           <Header />
+          <Temperature>
+            <Icons />
+          </Temperature>
           <CurrentTemperature />
           <Main />
           <TodayTemp />
@@ -169,7 +174,7 @@ const App = () => {
             <Desc />
           </DescContainer>
           <Sunrise />
-          <Info />
+          <Footer />
         </Parent>
       </Context.Provider>
     );
@@ -186,6 +191,9 @@ const App = () => {
           <RenderSearchItem />
         </Menu>
         <Header />
+        <Temperature>
+          <Icons />
+        </Temperature>
         <CurrentTemperature />
         <Main />
         <TodayTemp />
@@ -198,7 +206,7 @@ const App = () => {
           <Desc />
         </DescContainer>
         <Sunrise />
-        <Info />
+        <Footer />
       </Parent>
     </Context.Provider>;
   }

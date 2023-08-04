@@ -9,7 +9,7 @@ import {
   Mists,
 } from "../helpers/animationsBlocks";
 
-const IconGenerator = React.memo(({ value }) => {
+const Icons = React.memo(({ value }) => {
   // Извлекаем данные о текущей погоде из контекста
   const { data } = value.state ? value.state : value.localState;
 
@@ -56,4 +56,4 @@ const IconGenerator = React.memo(({ value }) => {
   }
 });
 
-export default IconGenerator;
+export default Icons;
