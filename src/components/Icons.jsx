@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useContext } from "react";
+import { Context } from "../context/context";
 import {
   SuperMoon,
   Cloudy,
@@ -9,9 +10,10 @@ import {
   Mists,
 } from "../helpers/animationsBlocks";
 
-const Icons = React.memo(({ value }) => {
+const Icons = React.memo(() => {
+  const contextData = useContext(Context);
   // Извлекаем данные о текущей погоде из контекста
-  const { data } = value.state ? value.state : value.localState;
+  const { data } = contextData.state ? contextData.state : contextData.localState;
 
   const { main, icon } = data.weather[0];
 
