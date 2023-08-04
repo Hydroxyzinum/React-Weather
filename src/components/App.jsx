@@ -162,7 +162,6 @@ const App = () => {
           <Temperature>
             <Icons />
           </Temperature>
-          <CurrentTemperature />
           <Main />
           <TodayTemp />
           <ForecastContainer>
@@ -194,7 +193,6 @@ const App = () => {
         <Temperature>
           <Icons />
         </Temperature>
-        <CurrentTemperature />
         <Main />
         <TodayTemp />
         <ForecastContainer>
