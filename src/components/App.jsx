@@ -1,6 +1,6 @@
 import React, { useEffect, useReducer, useState } from "react";
 import { initialState, reducer } from "../reducers/reducer";
-import { Context } from "../context/context";
+import { Context } from "../Context/context";
 import { apiKeys, currentWeatherUrl, currentTimeUrl } from "../helpers/url";
 import { setBackground } from "../helpers/bgColors";
 import axios from "axios";

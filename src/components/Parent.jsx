@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import cn from "classnames";
-import { Context } from "../context/context";
+import { Context } from "../Context/context";
 import { Cloudy } from "../helpers/animationsBlocks";
 
 // Компонент-контейнер для выбора отображения содержимого в зависимости от данных о погоде

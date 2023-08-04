@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Context } from "../context/context";
+import { Context } from "../Context/context";
 
 const Sunrise = () => {
   const contextData = useContext(Context);

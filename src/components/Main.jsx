@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Context } from "../context/context";
+import { Context } from "../Context/context";
 
 // Компонент для отображения основных данных о погоде
 const Main = () => {

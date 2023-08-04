@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import _ from "lodash";
-import { Context } from "../context/context";
+import { Context } from "../Context/context";
 
 // Компонент-контейнер для меню с поиском города и переключателем единиц измерения
 
