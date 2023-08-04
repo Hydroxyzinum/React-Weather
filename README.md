@@ -1,5 +1,5 @@
 # Weather App
-# [DEMO](https://project24.space/)
+# [DEMO](https://hydroxyzinum.github.io/Build-Weather/)
 
 ## Описание проекта
 
@@ -31,11 +31,22 @@
 
 4. Откройте ваш любимый браузер и перейдите по адресу `http://localhost:3000` для использования приложения.
 
+5. Внимание! Для запуска приложения на локальной машине, в корневой папке проекта необходимо создать файл .env и добавить туда переменные окружения 
+- REACT_APP_API_KEY = Ваш Api key OpenWeather
+- REACT_APP_API_KEY_RESERVE = Ваш Api key OpenWeather
+- REACT_APP_API_KEY_TIME = Ваш Api key IpGeolocation
+- REACT_APP_API_KEY_TIME_RESERVE = Ваш Api key IpGeolocation
+
 ## Зависимости
 
 - React.js: основная библиотека для разработки интерфейса.
 - Axios: для выполнения HTTP-запросов к API OpenWeatherMap.
 - Lodash: для работы с данными и утилитами.
+- classNames: для работы с классами
+
+## Управление состоянием
+
+- Для управления состоянием был использован встроенный хук useReducer
 
 ## Автор
 
