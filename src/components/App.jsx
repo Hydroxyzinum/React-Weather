@@ -24,7 +24,6 @@ import ErrorPopUp from "./PopUps/ErrorPopUp";
 
 const App = () => {
   // Используем useReducer для управления состоянием
-  const [isFirstEffectExecuted, setFirstEffectExecuted] = useState(false);
 
   const [state, dispatch] = useReducer(reducer, initialState);
 
@@ -77,8 +76,6 @@ const App = () => {
             },
           });
           dispatch({ type: "SET_FULL_LOCATION", payload: requestLocation });
-        } else {
-          return <ErrorPopUp error={e.message} />;
         }
       }
     };
@@ -117,12 +114,8 @@ const App = () => {
             );
             dispatch({ type: "SET_TIME", payload: getTime.data });
             setBackground(getTime.data, handleSetTheme);
-          } else {
-            return <ErrorPopUp error={e.message} />;
           }
         }
-      } else {
-        return <ErrorPopUp error={"Bad Request :("} />;
       }
     };
 
@@ -138,50 +131,11 @@ const App = () => {
     return () => clearTimeout(timeout);
   }, [data.coord, data.length]);
 
-  useEffect(() => {
-    if (!isFirstEffectExecuted && state.data.length !== 0) {
-      localStorage.setItem("state", JSON.stringify(state));
-      setFirstEffectExecuted(true);
-    }
-  }, [state, isFirstEffectExecuted]);
-
-  if (state.data.length !== 0) {
-    return (
-      // Оборачиваем компоненты в провайдер контекста, чтобы предоставить доступ к состояниям всему дереву компонентов
-      <Context.Provider
-        value={{
-          state,
-          dispatch,
-        }}
-      >
-        <Parent>
-          <Menu>
-            <RenderSearchItem />
-          </Menu>
-          <Header />
-          <Temperature>
-            <Icons />
-          </Temperature>
-          <Main />
-          <TodayTemp />
-          <ForecastContainer>
-            <ForecastListContainer>
-              <Forecast />
-            </ForecastListContainer>
-          </ForecastContainer>
-          <DescContainer>
-            <Desc />
-          </DescContainer>
-          <Sunrise />
-          <Footer />
-        </Parent>
-      </Context.Provider>
-    );
-  } else {
-    const localState = JSON.parse(localStorage.getItem("state"));
+  return (
+    // Оборачиваем компоненты в провайдер контекста, чтобы предоставить доступ к состояниям всему дереву компонентов
     <Context.Provider
       value={{
-        localState,
+        state,
         dispatch,
       }}
     >
@@ -206,8 +160,8 @@ const App = () => {
         <Sunrise />
         <Footer />
       </Parent>
-    </Context.Provider>;
-  }
+    </Context.Provider>
+  );
 };
 
 export default App;
