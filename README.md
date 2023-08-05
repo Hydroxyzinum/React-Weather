@@ -40,6 +40,7 @@
 ## Зависимости
 
 - React.js: основная библиотека для разработки интерфейса.
+- Bootstrap 5
 - React-Redux, Redux-Toolkit
 - React-Yandex-Maps
 - Axios: для выполнения HTTP-запросов
