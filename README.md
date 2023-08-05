@@ -40,8 +40,8 @@
 ## Зависимости
 
 - React.js: основная библиотека для разработки интерфейса.
-- Bootstrap 5
-- React-Redux, Redux-Toolkit
+- Bootstrap 5 для стилизации полос погоды
+- React-Redux, Redux-Toolkit для управления состоянием
 - React-Yandex-Maps
 - Axios: для выполнения HTTP-запросов
 - Lodash: для работы с данными и утилитами.
