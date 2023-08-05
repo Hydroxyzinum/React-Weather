@@ -42,7 +42,7 @@
 - React.js: основная библиотека для разработки интерфейса.
 - React-Redux, Redux-Toolkit
 - React-Yandex-Maps
-- Axios: для выполнения HTTP-запросов к API OpenWeatherMap.
+- Axios: для выполнения HTTP-запросов
 - Lodash: для работы с данными и утилитами.
 - classNames: для работы с классами
 
