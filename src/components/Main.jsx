@@ -1,15 +1,9 @@
-import React, { useContext } from "react";
-import { Context } from "../context/context";
+import React from "react";
+import { useSelector } from "react-redux";
 
-// Компонент для отображения основных данных о погоде
 const Main = () => {
-  const contextData = useContext(Context);
+  const { data } = useSelector((state) => state.weatherData);
 
-  const { data } = contextData.state
-    ? contextData.state
-    : contextData.localState;
-
-  // Извлекаем нужные данные из объекта data
   const { main, clouds, wind } = data;
 
   const { humidity } = main;
@@ -21,7 +15,6 @@ const Main = () => {
   return (
     <div className="weather-main_data">
       <div className="main-data">
-        {/* Контейнеры для каждого из данных */}
         <div className="data-container">
           <img
             className="humidity-img"
@@ -42,7 +35,5 @@ const Main = () => {
     </div>
   );
 };
-
-// Компонент Main использует MainData и передает ему контекстные данные
 
 export default Main;

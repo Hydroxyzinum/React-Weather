@@ -1,5 +1,6 @@
-import React, { useContext } from "react";
-import { Context } from "../context/context";
+import React from "react";
+
+import { useSelector } from "react-redux";
 import {
   SuperMoon,
   Cloudy,
@@ -11,16 +12,12 @@ import {
 } from "../helpers/animationsBlocks";
 
 const Icons = React.memo(() => {
-  const contextData = useContext(Context);
-  // Извлекаем данные о текущей погоде из контекста
-  const { data } = contextData.state ? contextData.state : contextData.localState;
+  const { data } = useSelector((state) => state.weatherData);
 
   const { main, icon } = data.weather[0];
 
-  // Массив иконок для ночного времени суток
   const nightIcon = ["01n", "02n", "03n", "04n"];
 
-  // Массив категорий атмосферных явлений
   const atmosphereMain = [
     "Mist",
     "Smoke",
@@ -33,7 +30,6 @@ const Icons = React.memo(() => {
     "Tornado",
   ];
 
-  // Возвращаем соответствующую анимацию в зависимости от значений main и icon
   if (nightIcon.includes(icon)) {
     return <SuperMoon />;
   } else if (atmosphereMain.includes(main)) {

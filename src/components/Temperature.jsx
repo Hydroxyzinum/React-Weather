@@ -1,14 +1,9 @@
-import React, { useContext } from "react";
-import { Context } from "../context/context";
+import React from "react";
+import { useSelector } from "react-redux";
 
 // Компонент для отображения текущей температуры и описания погоды
 const Temperature = React.memo(({ children }) => {
-  // Извлекаем данные о текущей погоде из контекста
-  const contextData = useContext(Context);
-
-  const { data } = contextData.state
-    ? contextData.state
-    : contextData.localState;
+  const { data } = useSelector((state) => state.weatherData);
 
   const { name } = data;
 

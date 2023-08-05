@@ -1,17 +1,15 @@
-import React, { useContext } from "react";
-import { Context } from "../context/context";
+import React from "react";
 import { getLocation } from "../helpers/showPosition";
+import { useSelector, useDispatch } from "react-redux";
+import { setRightMenu } from "../store/uiSlice";
 
-// Функциональный компонент для отображения данных в шапке
 const Header = () => {
-  const contextData = useContext(Context);
+  const dispatch = useDispatch();
 
-  const { dispatch } = contextData;
+  const { data, time } = useSelector((state) => state.weatherData);
 
-  const { fullLocation, unit, data, time } = contextData.state
-    ? contextData.state
-    : contextData.localState;
-
+  const { unit, fullLocation } = useSelector((state) => state.ui);
+  
   return (
     <div className="header">
       <div className="geo-container">
@@ -30,7 +28,7 @@ const Header = () => {
       </div>
       <div className="search-container">
         <button
-          onClick={() => dispatch({ type: "SET_RIGHT_MENU", payload: true })}
+          onClick={() => dispatch(setRightMenu(true))}
           className="click-field"
         >
           <span className="burger-line burger-first_line"></span>

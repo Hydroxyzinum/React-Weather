@@ -1,17 +1,13 @@
-import React, { useContext } from "react";
+import React from "react";
+import { useSelector } from "react-redux";
 import cn from "classnames";
-import { Context } from "../context/context";
 import { Cloudy } from "../helpers/animationsBlocks";
 
-// Компонент-контейнер для выбора отображения содержимого в зависимости от данных о погоде
 const Parent = ({ children }) => {
-  const contextData = useContext(Context);
+  const { data } = useSelector((state) => state.weatherData);
 
-  const { data, theme, rightMenu } = contextData.state
-    ? contextData.state
-    : contextData.localState;
+  const { theme, rightMenu } = useSelector((state) => state.ui);
 
-  // Классы для стилизации контейнера в зависимости от состояния меню
   const display = cn({
     container: true,
     "container-overflow": !rightMenu,
@@ -19,7 +15,6 @@ const Parent = ({ children }) => {
   });
 
   if (data.length !== 0) {
-    // Если есть данные о погоде, отображаем содержимое компонента
     return (
       <div className="App">
         <div style={theme} className={display}>

@@ -1,18 +1,15 @@
-import React, { useContext } from "react";
-import { Context } from "../context/context";
+import React from "react";
+import { setForecastTime } from "../store/uiSlice";
+import { useSelector, useDispatch } from "react-redux";
 
 const ForecastContainer = ({ children }) => {
-  const contextData = useContext(Context);
-  const { forecastTime } = contextData.state
-    ? contextData.state
-    : contextData.localState;
+  const dispatch = useDispatch();
 
-  const { dispatch } = contextData;
+  const { forecastTime } = useSelector((state) => state.ui);
 
-  // Обработчик изменения значения в селекторе прогноза времени
   const submitForm = (e) => {
     e.preventDefault();
-    dispatch({ type: "SET_FORECAST_TIME", payload: e.target.value });
+    dispatch(setForecastTime(e.target.value));
   };
 
   return (
@@ -22,7 +19,6 @@ const ForecastContainer = ({ children }) => {
           <h4 className="forecast-head">5 Дней</h4>
         </div>
         <div className="select-container">
-          {/* Селектор для выбора прогноза времени */}
           <select
             className="select-time"
             value={forecastTime}

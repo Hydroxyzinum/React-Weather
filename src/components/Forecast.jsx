@@ -1,16 +1,14 @@
-import React, { useContext, useMemo } from "react";
-import { Context } from "../context/context";
+import React, { useMemo } from "react";
+import { useSelector } from "react-redux";
 import cn from "classnames";
 import _ from "lodash";
 
 const Forecast = () => {
-  const contextData = useContext(Context);
+  const { futureData } = useSelector((state) => state.weatherData);
 
-  const { futureData } = contextData.state;
+  const { unit, forecastTime, theme } = useSelector((state) => state.ui);
 
   const { list } = futureData;
-
-  const { unit, forecastTime, theme } = contextData.state;
 
   const memoization = useMemo(() => {
     return list.map((item, index) => {

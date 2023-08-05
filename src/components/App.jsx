@@ -1,10 +1,13 @@
-import React, { useEffect, useReducer, useState } from "react";
-import { initialState, reducer } from "../reducers/reducer";
-import { Context } from "../context/context";
+import React, { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { batch } from "react-redux";
+import axios from "axios";
+import { setTheme, setStateInterval } from "../store/uiSlice";
+import { setData, setFutureData, setTime } from "../store/weatherDataSlice";
 import { apiKeys, currentWeatherUrl, currentTimeUrl } from "../helpers/url";
 import { setBackground } from "../helpers/bgColors";
-import axios from "axios";
-
+import { YMaps } from "@pbe/react-yandex-maps";
+// Импорт компонентов
 import Menu from "./Menu";
 import RenderSearchItem from "./RenderSearchItem";
 import Parent from "./Parent";
@@ -20,31 +23,39 @@ import Forecast from "./Forecast";
 import DescContainer from "./DescContainer";
 import Desc from "./Desc";
 import Footer from "./Footer";
-import ErrorPopUp from "./PopUps/ErrorPopUp";
+import YandexMap from "./YandexMap";
+
+// Импорт необходимых action creators для обновления состояния
+import { setFullLocation } from "../store/locationSlice";
 
 const App = () => {
-  // Используем useReducer для управления состоянием
-  const [isFirstEffectExecuted, setFirstEffectExecuted] = useState(false);
+  // Инициализация useDispatch для дальнейшего диспатча экшенов
+  const dispatch = useDispatch();
 
-  const [state, dispatch] = useReducer(reducer, initialState);
+  // Получение данных из состояния Redux с помощью useSelector
+  const { data } = useSelector((state) => state.weatherData);
 
-  // Извлекаем необходимые значения из состояния
-  const { data, unit, fullLocation, forecastTime, stateInterval } = state;
+  const { unit, forecastTime, stateInterval } = useSelector(
+    (state) => state.ui
+  );
+  const { fullLocation } = useSelector((state) => state.location);
 
-  // Функция для установки темы (стилей) компонента
+  // Обработчик изменения темы
   const handleSetTheme = (theme) => {
-    dispatch({ type: "SET_THEME", payload: theme });
+    dispatch(setTheme(theme));
   };
-  // Эффект для получения данных о погоде при монтировании и обновлениях компонента
+
+  // useEffect для обработки запросов при загрузке компонента
   useEffect(() => {
-    // Функция для получения данных о погоде по API
+    // Функция для отправки запросов на получение данных о погоде и времени
     const getRequest = async (defaultCity, currentLocation) => {
       const { apiKey, reserveApiKey } = apiKeys;
-
+      // Определение местоположения запроса (текущее или по умолчанию)
       const requestLocation =
         currentLocation.length === 0 ? defaultCity : currentLocation;
 
       try {
+        // Запрос данных о текущей погоде и прогнозе на будущее
         const request = await axios.get(
           currentWeatherUrl("weather", requestLocation, apiKey, unit)
         );
@@ -52,15 +63,15 @@ const App = () => {
           currentWeatherUrl("forecast", requestLocation, apiKey, unit)
         );
 
-        // Устанавливаем данные о текущей погоде и будущей погоде в состояние
-        dispatch({
-          type: "SET_DATA_AND_FUTURE_DATA",
-          payload: { data: request.data, futureData: future.data },
+        // Используем batch для оптимизации диспатча нескольких экшенов
+        batch(() => {
+          dispatch(setData(request.data)); // Обновление текущих данных о погоде
+          dispatch(setFutureData(future.data)); // Обновление данных прогноза
+          dispatch(setFullLocation(requestLocation)); // Обновление местоположения
         });
-
-        dispatch({ type: "SET_FULL_LOCATION", payload: requestLocation });
       } catch (e) {
         if (e.message === "Request failed with status code 429") {
+          // Обработка ошибки 429 (слишком много запросов)
           const requestReserve = await axios.get(
             currentWeatherUrl("weather", requestLocation, reserveApiKey, unit)
           );
@@ -68,146 +79,101 @@ const App = () => {
             currentWeatherUrl("forecast", requestLocation, reserveApiKey, unit)
           );
 
-          // Устанавливаем данные из резервных запросов в состояние
-          dispatch({
-            type: "SET_DATA_AND_FUTURE_DATA",
-            payload: {
-              data: requestReserve.data,
-              futureData: futureReserve.data,
-            },
+          // Используем batch для оптимизации диспатча нескольких экшенов
+          batch(() => {
+            dispatch(setData(requestReserve.data)); // Обновление текущих данных о погоде (резервные данные)
+            dispatch(setFutureData(futureReserve.data)); // Обновление данных прогноза (резервные данные)
+            dispatch(setFullLocation(requestLocation)); // Обновление местоположения
           });
-          dispatch({ type: "SET_FULL_LOCATION", payload: requestLocation });
-        } else {
-          return <ErrorPopUp error={e.message} />;
         }
       }
     };
 
-    // Вызываем функцию для получения данных о погоде при первой загрузке приложения
+    // Вызов функции для получения данных о погоде при монтировании компонента
     getRequest("Казань", fullLocation);
 
-    // Устанавливаем интервал обновления данных о погоде (каждые 80 секунд)
+    // Установка интервала для периодического обновления данных о погоде
     const intervalFunc = setInterval(() => {
       getRequest("Казань", fullLocation);
-      dispatch({ type: "INCREMENT_INTERVAL" });
-    }, 60000);
+      dispatch(setStateInterval()); // Увеличение значения stateInterval
+    }, 60000); // Интервал обновления - каждую минуту
 
-    // Очищаем интервал при размонтировании компонента, чтобы предотвратить утечки памяти
+    // Очистка интервала при размонтировании компонента
     return () => clearInterval(intervalFunc);
   }, [unit, forecastTime, fullLocation, stateInterval]);
 
-  // Эффект для получения текущего времени при монтировании и обновлениях компонента
+  // useEffect для получения данных о времени
   useEffect(() => {
-    // Функция для получения текущего времени по API
     const getTimeData = async () => {
       const { timeApiKey, reserveTimeApiKey } = apiKeys;
 
       if (data.length !== 0) {
         const { lat, lon } = data.coord;
         try {
+          // Запрос данных о текущем времени
           const getTime = await axios.get(currentTimeUrl(timeApiKey, lat, lon));
 
-          // Устанавливаем данные о текущем времени и фоновой теме в состояние
-          dispatch({ type: "SET_TIME", payload: getTime.data });
-          setBackground(getTime.data, handleSetTheme);
+          // Используем batch для оптимизации диспатча нескольких экшенов
+          batch(() => {
+            dispatch(setTime(getTime.data)); // Обновление данных о текущем времени
+            setBackground(getTime.data, handleSetTheme); // Установка фона в зависимости от времени
+          });
         } catch (e) {
           if (e.message === "Request failed with status code 429") {
+            // Обработка ошибки 429 (слишком много запросов) для резервного API
             const getTime = await axios.get(
               currentTimeUrl(reserveTimeApiKey, lat, lon)
             );
-            dispatch({ type: "SET_TIME", payload: getTime.data });
-            setBackground(getTime.data, handleSetTheme);
-          } else {
-            return <ErrorPopUp error={e.message} />;
+
+            // Используем batch для оптимизации диспатча нескольких экшенов
+            batch(() => {
+              dispatch(setTime(getTime.data)); // Обновление данных о текущем времени (резервные данные)
+              setBackground(getTime.data, handleSetTheme); // Установка фона в зависимости от времени (резервные данные)
+            });
           }
         }
-      } else {
-        return <ErrorPopUp error={"Bad Request :("} />;
       }
     };
 
-    // Вызываем функцию для получения данных о текущем времени
+    // Вызов функции для получения данных о времени
     getTimeData();
 
-    // Устанавливаем таймаут, чтобы обновлять фоновую тему каждые 200 миллисекунд
+    // Установка таймаута для периодического обновления данных о времени
     const timeout = setTimeout(() => {
       getTimeData();
-    }, 200);
+    }, 60000); // Задержка обновления - 400 мс
 
-    // Очищаем таймаут при размонтировании компонента, чтобы предотвратить утечки памяти
+    // Очистка таймаута при размонтировании компонента
     return () => clearTimeout(timeout);
   }, [data.coord, data.length]);
 
-  useEffect(() => {
-    if (!isFirstEffectExecuted && state.data.length !== 0) {
-      localStorage.setItem("state", JSON.stringify(state));
-      setFirstEffectExecuted(true);
-    }
-  }, [state, isFirstEffectExecuted]);
-
-  if (state.data.length !== 0) {
-    return (
-      // Оборачиваем компоненты в провайдер контекста, чтобы предоставить доступ к состояниям всему дереву компонентов
-      <Context.Provider
-        value={{
-          state,
-          dispatch,
-        }}
-      >
-        <Parent>
-          <Menu>
-            <RenderSearchItem />
-          </Menu>
-          <Header />
-          <Temperature>
-            <Icons />
-          </Temperature>
-          <Main />
-          <TodayTemp />
-          <ForecastContainer>
-            <ForecastListContainer>
-              <Forecast />
-            </ForecastListContainer>
-          </ForecastContainer>
-          <DescContainer>
-            <Desc />
-          </DescContainer>
-          <Sunrise />
-          <Footer />
-        </Parent>
-      </Context.Provider>
-    );
-  } else {
-    const localState = JSON.parse(localStorage.getItem("state"));
-    <Context.Provider
-      value={{
-        localState,
-        dispatch,
-      }}
-    >
-      <Parent>
-        <Menu>
-          <RenderSearchItem />
-        </Menu>
-        <Header />
-        <Temperature>
-          <Icons />
-        </Temperature>
-        <Main />
-        <TodayTemp />
-        <ForecastContainer>
-          <ForecastListContainer>
-            <Forecast />
-          </ForecastListContainer>
-        </ForecastContainer>
-        <DescContainer>
-          <Desc />
-        </DescContainer>
-        <Sunrise />
-        <Footer />
-      </Parent>
-    </Context.Provider>;
-  }
+  return (
+    <Parent>
+      <Menu>
+        <RenderSearchItem />
+      </Menu>
+      <Header />
+      <Temperature>
+        <Icons />
+      </Temperature>
+      <Main />
+      <TodayTemp />
+      <ForecastContainer>
+        <ForecastListContainer>
+          <Forecast />
+        </ForecastListContainer>
+      </ForecastContainer>
+      <DescContainer>
+        <Desc />
+      </DescContainer>
+      <Sunrise />
+      <Footer>
+        <YMaps>
+          <YandexMap />
+        </YMaps>
+      </Footer>
+    </Parent>
+  );
 };
 
 export default App;

@@ -1,18 +1,13 @@
-import React, { useContext } from "react";
+import React from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { setLocation } from "../store/locationSlice";
 import _ from "lodash";
-import { Context } from "../context/context";
 
-// Компонент-контейнер для меню с поиском города и переключателем единиц измерения
-
-// Компонент, который отображает элементы результата поиска городов
 const RenderSearchItem = () => {
-  const contextData = useContext(Context);
+  const dispatch = useDispatch();
 
-  const { state, dispatch } = contextData;
+  const { searchEngine } = useSelector((state) => state.searchEngine);
 
-  const { searchEngine } = state;
-
-  // Создание массива с элементами результата поиска и их отображение
   const memoSearchItem = React.useMemo(() => {
     if (searchEngine.length !== 0) {
       const newArr =
@@ -21,11 +16,11 @@ const RenderSearchItem = () => {
         return (
           <div key={_.uniqueId("city-")} className="buttons">
             <button
-              onClick={() => dispatch({ type: "SET_LOCATION", payload: city })}
+              onClick={() => dispatch(setLocation(city))}
               type="submit"
               className="searchedItem"
             >
-              {city ? city : null}{" "}
+              {city ? city : null}
               <span className="region-name">({region ? region : null})</span>
             </button>
           </div>
@@ -38,7 +33,5 @@ const RenderSearchItem = () => {
 
   return memoSearchItem;
 };
-
-// Компонент меню, который использует MenuContainer и RenderSearchItem
 
 export default RenderSearchItem;

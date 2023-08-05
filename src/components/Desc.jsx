@@ -1,21 +1,16 @@
-import React, { useContext } from "react";
-import { Context } from "../context/context";
+import React from "react";
+import { useSelector } from "react-redux";
 
 const Desc = () => {
-  const contextData = useContext(Context);
+  // Получение данных о погоде из состояния Redux
+  const { data } = useSelector((state) => state.weatherData);
 
-  const { data } = contextData.state
-    ? contextData.state
-    : contextData.localState;
-
-  // Извлекаем данные о давлении, видимости, направлении и порывах ветра, а также о количестве дождя и снега из объекта data
+  // Извлечение необходимых данных из объекта data для отображения в карточках
   const { pressure } = data.main;
-
   const { visibility, rain, snow } = data;
-
   const { deg, gust } = data.wind;
 
-  // Нормализуем значения для отображения на карточках
+  // Нормализация данных для отображения в карточках
   const normalizePressure = pressure
     ? `${Math.ceil(pressure / 1.333)} мм рт. ст.`
     : "0 мм рт. ст.";
@@ -24,14 +19,11 @@ const Desc = () => {
       ? ">10 км."
       : `${String(data.visibility).slice(0, 2).split("").join(",")} км.`;
   const normalizeDeg = deg ? `${Math.round(deg)}°` : "0°";
-
   const normalizeGust = gust ? `${gust} м/с` : "0 м/с.";
-
   const normalizeRain = rain ? `${rain["1h"]} мм.` : "0 мм.";
-
   const normalizeSnow = snow ? `${snow["1h"]} мм.` : "0 мм.";
 
-  // Массивы для хранения информации, названий и URL изображений для каждой карточки
+  // Массив с данными для карточек
   const cardsData = [
     {
       name: "Атм. давление",
@@ -71,7 +63,7 @@ const Desc = () => {
     },
   ];
 
-  // Генерируем карточки с информацией о погоде на основе данных из массива объектов
+  // Отображение карточек с информацией о погоде
   return cardsData.map(({ name, info, photoUrl, alt }, index) => (
     <div key={index} className="desc-card">
       <p className="card-head">{name}</p>

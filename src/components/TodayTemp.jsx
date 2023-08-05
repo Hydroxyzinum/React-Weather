@@ -1,24 +1,16 @@
-import React, { useContext } from "react";
-import { Context } from "../context/context";
+import React from "react";
+import { useSelector } from "react-redux";
 import { Cloudy } from "../helpers/animationsBlocks";
 import _ from "lodash";
 
 const TodayTemp = () => {
-  const contextData = useContext(Context);
-  // const { state } = contextData;
+  const { futureData } = useSelector((state) => state.weatherData);
 
-  const { futureData } = contextData.state
-    ? contextData.state
-    : contextData.localState;
-
-  // Отображение информации о погоде на ближайшие 4 часа
   if (futureData.list.length !== 0) {
     return (
       <div className="main-container">
-        {/* Заголовок с текущей датой */}
         <div className="today-header">
           <h4 className="today-weather_head">3 часа</h4>
-          {/* Вывод текущей даты в формате "Месяц, День" */}
           <p className="today-weather_date">
             {new Date(futureData.list[0].dt * 1000).toLocaleString("ru", {
               month: "long",
@@ -26,7 +18,6 @@ const TodayTemp = () => {
             })}
           </p>
         </div>
-        {/* Контейнер с карточками для каждого часа */}
         <div className="hours-container">
           {futureData.list.slice(0, 4).map((item) => {
             const { icon } = item.weather[0];
@@ -63,7 +54,6 @@ const TodayTemp = () => {
       </div>
     );
   } else {
-    // Если данные о погоде на ближайшие 4 часа отсутствуют, отображаем анимацию облаков
     return <Cloudy />;
   }
 };

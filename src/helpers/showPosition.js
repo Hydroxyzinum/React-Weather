@@ -1,9 +1,15 @@
 import axios from "axios";
+import { setData, setFutureData } from "../store/weatherDataSlice";
+import { setFullLocation } from "../store/locationSlice";
 import { apiKeys, currentWeatherUrl, geo } from "../helpers/url";
+import { batch } from "react-redux";
 
 export const getLocation = (fullLocation, unit, dispatch) => {
   if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(showPosition(fullLocation, unit, dispatch), showError);
+    navigator.geolocation.getCurrentPosition(
+      showPosition(fullLocation, unit, dispatch),
+      showError
+    );
   } else {
     alert("Геолокация не поддерживается этим браузером.");
   }
@@ -34,19 +40,18 @@ const showPosition = (fullLocation, unit, dispatch) => async (position) => {
       const future = await axios.get(
         currentWeatherUrl("forecast", en, apiKey, unit)
       );
-
-      dispatch({
-        type: "SET_DATA_AND_FUTURE_DATA",
-        payload: { data: request.data, futureData: future.data },
+      batch(() => {
+        dispatch(setData(request.data));
+        dispatch(setFutureData(future.data));
+        dispatch(setFullLocation(en));
       });
-      dispatch({ type: "SET_FULL_LOCATION", payload: en });
     }
   } catch (e) {
     if (e.message === "Request failed with status code 429") {
       const geoCod = await axios.get(geo(reserveApiKey, latitude, longitude));
 
       const { local_names } = geoCod.data[0];
-      
+
       const { en } = local_names;
 
       const requestReserve = await axios.get(
@@ -56,15 +61,11 @@ const showPosition = (fullLocation, unit, dispatch) => async (position) => {
       const futureReserve = await axios.get(
         currentWeatherUrl("forecast", en, reserveApiKey, unit)
       );
-
-      dispatch({
-        type: "SET_DATA_AND_FUTURE_DATA",
-        payload: {
-          data: requestReserve.data,
-          futureData: futureReserve.data,
-        },
+      batch(() => {
+        dispatch(setData(requestReserve.data));
+        dispatch(setFutureData(futureReserve.data));
+        dispatch(setFullLocation(en));
       });
-      dispatch({ type: "SET_FULL_LOCATION", payload: en });
     } else {
       console.error("Error fetching data:", e);
     }
@@ -92,4 +93,3 @@ const showError = (error) => {
       break;
   }
 };
-

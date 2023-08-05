@@ -1,20 +1,24 @@
-import React, { useContext } from "react";
+import React from "react";
+import { batch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { setData, setFutureData } from "../store/weatherDataSlice";
+import { setRightMenu, setUnit } from "../store/uiSlice";
+import { setSearchEngine } from "../store/searchEngineSlice";
+import { setFullLocation, setLocation } from "../store/locationSlice";
 import axios from "axios";
 import cn from "classnames";
-import { Context } from "../context/context";
 import { russia } from "../helpers/russia";
 import { apiKeys, currentWeatherUrl } from "../helpers/url";
 
 const Menu = ({ children }) => {
-  const contextData = useContext(Context);
+  const dispatch = useDispatch();
 
-  const { dispatch } = contextData;
+  const { unit, rightMenu } = useSelector((state) => state.ui);
 
-  const { location, rightMenu, unit, searchEngine } = contextData.state
-    ? contextData.state
-    : contextData.localState;
+  const { location } = useSelector((state) => state.location);
 
-  // Обработчик для отправки формы поиска города
+  const { searchEngine } = useSelector((state) => state.searchEngine);
+
   const formSubmit = async (e) => {
     e.preventDefault();
 
@@ -28,23 +32,14 @@ const Menu = ({ children }) => {
       const future = await axios.get(
         currentWeatherUrl("forecast", location, apiKey, unit)
       );
-
-      dispatch({
-        type: "SET_DATA_AND_FUTURE_DATA",
-        payload: {
-          data: current.data,
-          futureData: future.data,
-        },
-      });
-      dispatch({
-        type: "SET_FULL_DATA",
-        payload: {
-          fullLocation: location,
-          unit: unit,
-          rightMenu: false,
-          searchEngine: [],
-          location: "",
-        },
+      batch(() => {
+        dispatch(setData(current.data));
+        dispatch(setFutureData(future.data));
+        dispatch(setFullLocation(location));
+        dispatch(setUnit(unit));
+        dispatch(setRightMenu(false));
+        dispatch(setSearchEngine([]));
+        dispatch(setLocation(""));
       });
     } catch (e) {
       switch (e.message) {
@@ -58,59 +53,47 @@ const Menu = ({ children }) => {
           const futureReserve = await axios.get(
             currentWeatherUrl("forecast", location, reserveApiKey, unit)
           );
-          dispatch({
-            type: "SET_DATA_AND_FUTURE_DATA",
-            payload: {
-              data: currentReserve.data,
-              futureData: futureReserve.data,
-            },
-          });
-          dispatch({
-            type: "SET_FULL_DATA",
-            payload: {
-              fullLocation: location,
-              unit: unit,
-              rightMenu: false,
-              searchEngine: [],
-              location: "",
-            },
+          batch(() => {
+            dispatch(setData(currentReserve.data));
+            dispatch(setFutureData(futureReserve.data));
+            dispatch(setFullLocation(location));
+            dispatch(setUnit(unit));
+            dispatch(setRightMenu(false));
+            dispatch(setSearchEngine([]));
+            dispatch(setLocation(""));
           });
           break;
         default:
-          return dispatch({
-            type: "SET_LOCATION",
-            payload: "Интернет отсутсвует",
-          });
+          return dispatch(setLocation("Интернет отсутсвует"));
       }
     }
   };
 
-  // Обработчик для изменения значения поля ввода поиска города
   const inputChange = async (e) => {
     e.preventDefault();
 
     const { value } = e.target;
 
     if (!value) {
-      dispatch({ type: "SET_SEARCH_ENGINE", payload: [] });
-      dispatch({ type: "SET_LOCATION", payload: "" });
+      batch(() => {
+        dispatch(setSearchEngine([]));
+        dispatch(setLocation(""));
+      });
       return null;
     } else {
-      dispatch({ type: "SET_LOCATION", payload: value });
+      dispatch(setLocation(value));
       const result = russia.filter(({ city }) =>
         city.toLowerCase().includes(value.toLowerCase())
       );
-      dispatch({ type: "SET_SEARCH_ENGINE", payload: result });
+      dispatch(setSearchEngine(result));
     }
   };
 
-  // Классы для стилизации контейнера поиска в зависимости от состояния меню
   const classesblock = cn({
     "search-field": true,
     show: rightMenu,
   });
 
-  // Классы для стилизации контейнера результатов поиска в зависимости от количества результатов
   const resultCn = cn({
     "search-result_container": true,
     "p-10": searchEngine.length >= 1 ? true : false,
@@ -120,21 +103,22 @@ const Menu = ({ children }) => {
     <div className={classesblock}>
       <div className="сontrol-panel_block">
         <div className="panel-block">
-          {/* Кнопка для закрытия меню */}
           <button
-            onClick={() => dispatch({ type: "SET_RIGHT_MENU", payload: false })}
+            onClick={() => {
+              dispatch(setRightMenu(false));
+            }}
             className="click-exit"
           >
             <span className="exit-line exit-first_line"></span>
             <span className="exit-line exit-second_line"></span>
           </button>
-          {/* Переключатель между единицами измерения */}
+
           <label className="switch">
             <input
               onClick={(e) =>
                 e.target.checked
-                  ? dispatch({ type: "SET_UNIT", payload: "imperial" })
-                  : dispatch({ type: "SET_UNIT", payload: "metric" })
+                  ? dispatch(setUnit("imperial"))
+                  : dispatch(setUnit("metric"))
               }
               type="checkbox"
             />
@@ -145,7 +129,6 @@ const Menu = ({ children }) => {
         </div>
       </div>
       <div className="form-container">
-        {/* Форма для поиска города */}
         <form onSubmit={formSubmit} className="form-search">
           <label className="sr-only" htmlFor="search"></label>
           <input
@@ -158,7 +141,6 @@ const Menu = ({ children }) => {
             placeholder="Поиск"
             autoComplete="off"
           />
-          {/* Контейнер для результатов поиска */}
           <div className={resultCn}>
             <ul className="listSearch">{children}</ul>
           </div>
