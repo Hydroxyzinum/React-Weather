@@ -31,6 +31,10 @@ const showPosition = (fullLocation, unit, dispatch) => async (position) => {
 
     const { en } = local_names;
 
+    localStorage.setItem('city', en);
+
+    console.log(localStorage)
+
     // Проверяем, изменилось ли местоположение, и делаем запросы на сервер
     if (fullLocation !== en && en.length !== 0) {
       const request = await axios.get(

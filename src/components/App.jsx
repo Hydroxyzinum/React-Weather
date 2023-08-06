@@ -1,12 +1,13 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { batch } from "react-redux";
+import { YMaps } from "@pbe/react-yandex-maps";
 import axios from "axios";
 import { setTheme, setStateInterval } from "../store/uiSlice";
 import { setData, setFutureData, setTime } from "../store/weatherDataSlice";
 import { apiKeys, currentWeatherUrl, currentTimeUrl } from "../helpers/url";
 import { setBackground } from "../helpers/bgColors";
-import { YMaps } from "@pbe/react-yandex-maps";
+import { setSity } from "../helpers/setCity";
 // Импорт компонентов
 import Menu from "./Menu";
 import RenderSearchItem from "./RenderSearchItem";
@@ -53,7 +54,8 @@ const App = () => {
       // Определение местоположения запроса (текущее или по умолчанию)
       const requestLocation =
         currentLocation.length === 0 ? defaultCity : currentLocation;
-
+      const currLoc = setSity(defaultCity, currentLocation, localStorage.getItem('city'));
+      console.log(currLoc)
       try {
         // Запрос данных о текущей погоде и прогнозе на будущее
         const request = await axios.get(

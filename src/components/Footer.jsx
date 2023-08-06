@@ -25,7 +25,7 @@ const Footer = ({ children }) => {
         </a>
       </p>
       <p className="footer-geo">
-        Ваши геоданные на карте (примерные): <br />{" "}
+        Геоданные на карте (примерные): <br />{" "}
         <a target="_blank" rel="noreferrer" href={googleMapsUrl}>
           {lat}, {lon}
         </a>

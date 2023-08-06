@@ -1,3 +1,5 @@
+import "../styles/iconAnimation.css";
+
 export const SuperMoon = () => {
   return (
     <div icon="supermoon">

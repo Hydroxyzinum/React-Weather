@@ -8,7 +8,7 @@ const YandexMap = () => {
   return (
     <YMaps>
       <div className="yamap">
-        <Map defaultState={{ center: [lat, lon], zoom: 9 }}>
+        <Map state={{ center: [lat, lon], zoom: 9 }}>
           <Placemark geometry={[lat, lon]} />
         </Map>
       </div>

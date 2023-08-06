@@ -64,7 +64,7 @@ const Menu = ({ children }) => {
           });
           break;
         default:
-          return dispatch(setLocation("Интернет отсутсвует"));
+          return dispatch(setLocation("Неизвестная ошибка :("));
       }
     }
   };
