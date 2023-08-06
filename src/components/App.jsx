@@ -24,6 +24,7 @@ import Forecast from "./Forecast";
 import DescContainer from "./DescContainer";
 import Desc from "./Desc";
 import Footer from "./Footer";
+import Settings from "./Settings";
 import YandexMap from "./YandexMap";
 
 // Импорт необходимых action creators для обновления состояния
@@ -46,6 +47,10 @@ const App = () => {
     dispatch(setTheme(theme));
   };
 
+  const currentUnit = localStorage.getItem("unit")
+    ? localStorage.getItem("unit")
+    : unit;
+
   // useEffect для обработки запросов при загрузке компонента
   useEffect(() => {
     // Функция для отправки запросов на получение данных о погоде и времени
@@ -54,15 +59,19 @@ const App = () => {
       // Определение местоположения запроса (текущее или по умолчанию)
       const requestLocation =
         currentLocation.length === 0 ? defaultCity : currentLocation;
-      const currLoc = setSity(defaultCity, currentLocation, localStorage.getItem('city'));
-      console.log(currLoc)
+      const currLoc = setSity(
+        defaultCity,
+        currentLocation,
+        localStorage.getItem("city")
+      );
+
       try {
         // Запрос данных о текущей погоде и прогнозе на будущее
         const request = await axios.get(
-          currentWeatherUrl("weather", requestLocation, apiKey, unit)
+          currentWeatherUrl("weather", requestLocation, apiKey, currentUnit)
         );
         const future = await axios.get(
-          currentWeatherUrl("forecast", requestLocation, apiKey, unit)
+          currentWeatherUrl("forecast", requestLocation, apiKey, currentUnit)
         );
 
         // Используем batch для оптимизации диспатча нескольких экшенов
@@ -75,10 +84,20 @@ const App = () => {
         if (e.message === "Request failed with status code 429") {
           // Обработка ошибки 429 (слишком много запросов)
           const requestReserve = await axios.get(
-            currentWeatherUrl("weather", requestLocation, reserveApiKey, unit)
+            currentWeatherUrl(
+              "weather",
+              requestLocation,
+              reserveApiKey,
+              currentUnit
+            )
           );
           const futureReserve = await axios.get(
-            currentWeatherUrl("forecast", requestLocation, reserveApiKey, unit)
+            currentWeatherUrl(
+              "forecast",
+              requestLocation,
+              reserveApiKey,
+              currentUnit
+            )
           );
 
           // Используем batch для оптимизации диспатча нескольких экшенов
@@ -102,7 +121,7 @@ const App = () => {
 
     // Очистка интервала при размонтировании компонента
     return () => clearInterval(intervalFunc);
-  }, [unit, forecastTime, fullLocation, stateInterval]);
+  }, [currentUnit, forecastTime, fullLocation, stateInterval]);
 
   // useEffect для получения данных о времени
   useEffect(() => {
@@ -154,6 +173,7 @@ const App = () => {
       <Menu>
         <RenderSearchItem />
       </Menu>
+      <Settings />
       <Header />
       <Temperature>
         <Icons />

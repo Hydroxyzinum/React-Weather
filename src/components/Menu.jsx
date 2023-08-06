@@ -112,20 +112,6 @@ const Menu = ({ children }) => {
             <span className="exit-line exit-first_line"></span>
             <span className="exit-line exit-second_line"></span>
           </button>
-
-          <label className="switch">
-            <input
-              onClick={(e) =>
-                e.target.checked
-                  ? dispatch(setUnit("imperial"))
-                  : dispatch(setUnit("metric"))
-              }
-              type="checkbox"
-            />
-            <span className="slider round"></span>
-            <span className="farenheit">F°</span>
-            <span className="celsium">C°</span>
-          </label>
         </div>
       </div>
       <div className="form-container">

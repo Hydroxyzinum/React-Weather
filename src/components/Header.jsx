@@ -1,7 +1,7 @@
 import React from "react";
 import { getLocation } from "../helpers/showPosition";
 import { useSelector, useDispatch } from "react-redux";
-import { setRightMenu } from "../store/uiSlice";
+import { setRightMenu, setSettingsMenu } from "../store/uiSlice";
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -27,6 +27,7 @@ const Header = () => {
         </p>
       </div>
       <div className="search-container">
+        <button onClick={() => dispatch(setSettingsMenu(true))} className="click-settings">НАСТРОЙКИ</button>
         <button
           onClick={() => dispatch(setRightMenu(true))}
           className="click-field"

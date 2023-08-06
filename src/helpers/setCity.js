@@ -1,8 +1,12 @@
-export const setSity = (defaultLocation, currentLocation, localStorageLocation) => {
+export const setSity = (
+  defaultLocation,
+  currentLocation,
+  localStorageLocation
+) => {
   switch (true) {
     case currentLocation:
-      return `${currentLocation} ${"КУРРЕНТ ЛОКЕЙШН"}`;
-    case `${localStorageLocation} ${"ЛОКАЛ СТОРАГЕ ЛОКАТИОН"}`:
+      return currentLocation;
+    case localStorageLocation:
       return localStorageLocation;
     default:
       return defaultLocation;
