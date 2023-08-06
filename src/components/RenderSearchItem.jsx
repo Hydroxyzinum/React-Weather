@@ -27,7 +27,7 @@ const RenderSearchItem = () => {
         );
       });
     } else {
-      return <div className="p-10">Ожидание запроса...</div>;
+      return null;
     }
   }, [searchEngine, dispatch]);
 
