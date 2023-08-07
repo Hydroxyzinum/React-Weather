@@ -202,7 +202,7 @@ const Settings = () => {
       </div>
       <div className="set-container">
         <button onClick={() => localStorage.clear()} className="clear-cache">
-          Очистить кеш
+          Очистить кэш
         </button>
       </div>
     </div>

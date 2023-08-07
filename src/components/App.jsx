@@ -7,8 +7,8 @@ import { setTheme, setStateInterval } from "../store/uiSlice";
 import { setData, setFutureData, setTime } from "../store/weatherDataSlice";
 import { apiKeys, currentWeatherUrl, currentTimeUrl } from "../helpers/url";
 import { backgroundColor, setBackground } from "../helpers/bgColors";
-import { setSity } from "../helpers/setCity";
-// Импорт компонентов
+import { setFullLocation } from "../store/locationSlice";
+
 import Menu from "./Menu";
 import RenderSearchItem from "./RenderSearchItem";
 import Parent from "./Parent";
@@ -27,9 +27,6 @@ import Footer from "./Footer";
 import Settings from "./Settings";
 import YandexMap from "./YandexMap";
 
-// Импорт необходимых action creators для обновления состояния
-import { setFullLocation } from "../store/locationSlice";
-
 const App = () => {
   // Инициализация useDispatch для дальнейшего диспатча экшенов
   const dispatch = useDispatch();
@@ -42,12 +39,7 @@ const App = () => {
   );
   const { fullLocation } = useSelector((state) => state.location);
 
-  const { theme } = useSelector((state) => state.ui);
-
   // Обработчик изменения темы
-  const handleSetTheme = (theme) => {
-    dispatch(setTheme(theme));
-  };
 
   const currentUnit = localStorage.getItem("unit")
     ? localStorage.getItem("unit")
@@ -59,14 +51,7 @@ const App = () => {
     const getRequest = async (defaultCity, currentLocation) => {
       const { apiKey, reserveApiKey } = apiKeys;
       // Определение местоположения запроса (текущее или по умолчанию)
-      const requestLocation =
-        currentLocation.length === 0 ? defaultCity : currentLocation;
-
-      const currLoc = setSity(
-        defaultCity,
-        currentLocation,
-        localStorage.getItem("city")
-      );
+      const requestLocation = !currentLocation ? defaultCity : currentLocation;
 
       try {
         // Запрос данных о текущей погоде и прогнозе на будущее
@@ -112,22 +97,32 @@ const App = () => {
         }
       }
     };
-
     // Вызов функции для получения данных о погоде при монтировании компонента
-    getRequest("Казань", fullLocation);
+    getRequest(
+      "Казань",
+      fullLocation ? fullLocation : localStorage.getItem("default")
+    );
 
     // Установка интервала для периодического обновления данных о погоде
     const intervalFunc = setInterval(() => {
-      getRequest("Казань", fullLocation);
+      getRequest(
+        "Казань",
+        fullLocation ? fullLocation : localStorage.getItem("default")
+      );
       dispatch(setStateInterval()); // Увеличение значения stateInterval
     }, 60000); // Интервал обновления - каждую минуту
 
     // Очистка интервала при размонтировании компонента
     return () => clearInterval(intervalFunc);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUnit, forecastTime, fullLocation, stateInterval]);
 
   // useEffect для получения данных о времени
   useEffect(() => {
+    const handleSetTheme = (theme) => {
+      dispatch(setTheme(theme));
+    };
+
     const getTimeData = async () => {
       const { timeApiKey, reserveTimeApiKey } = apiKeys;
 
@@ -173,7 +168,6 @@ const App = () => {
                 case "night":
                   return dispatch(setTheme(backgroundColor.night));
                 case "default":
-                  console.log("asda");
                   return setBackground(getTime.data, handleSetTheme);
                 default:
                   return setBackground(getTime.data, handleSetTheme);
@@ -194,6 +188,7 @@ const App = () => {
 
     // Очистка таймаута при размонтировании компонента
     return () => clearTimeout(timeout);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data.coord, data.length]);
 
   return (

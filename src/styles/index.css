@@ -1081,12 +1081,17 @@ ymaps {
 }
 
 .clear-cache {
-  background-color: transparent;
-  border: 1px solid rgba(0, 0, 0, 0.23);
+  background-color: rgba(0, 0, 0, 0.23);
   padding: 10px;
   border-radius: 55px;
   color: white;
   border: none;
+  transition: .5s all;
+}
+
+.clear-cache:hover {
+  background-color: rgba(0, 0, 0, 0.5);
+  color: red;
 }
 
 .set-text {
