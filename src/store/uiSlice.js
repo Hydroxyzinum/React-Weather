@@ -7,6 +7,7 @@ const initialState = {
   rightMenu: false,
   settingsMenu: false,
   unitCheckbox: false,
+  settingsTheme: "default",
   forecastTime: 9,
   unit: "metric",
 };
@@ -33,6 +34,9 @@ const uiSlice = createSlice({
     setUnitCheckBox: (state, action) => {
       state.unitCheckbox = action.payload;
     },
+    setSettingsTheme: (state, action) => {
+      state.settingsTheme = action.payload;
+    },
     setForecastTime: (state, action) => {
       state.forecastTime = action.payload;
     },
@@ -49,6 +53,7 @@ export const {
   setRightMenu,
   setSettingsMenu,
   setUnitCheckBox,
+  setSettingsTheme,
   setForecastTime,
   setUnit,
 } = uiSlice.actions;

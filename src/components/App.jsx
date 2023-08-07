@@ -6,7 +6,7 @@ import axios from "axios";
 import { setTheme, setStateInterval } from "../store/uiSlice";
 import { setData, setFutureData, setTime } from "../store/weatherDataSlice";
 import { apiKeys, currentWeatherUrl, currentTimeUrl } from "../helpers/url";
-import { setBackground } from "../helpers/bgColors";
+import { backgroundColor, setBackground } from "../helpers/bgColors";
 import { setSity } from "../helpers/setCity";
 // Импорт компонентов
 import Menu from "./Menu";
@@ -42,6 +42,8 @@ const App = () => {
   );
   const { fullLocation } = useSelector((state) => state.location);
 
+  const { theme } = useSelector((state) => state.ui);
+
   // Обработчик изменения темы
   const handleSetTheme = (theme) => {
     dispatch(setTheme(theme));
@@ -59,6 +61,7 @@ const App = () => {
       // Определение местоположения запроса (текущее или по умолчанию)
       const requestLocation =
         currentLocation.length === 0 ? defaultCity : currentLocation;
+
       const currLoc = setSity(
         defaultCity,
         currentLocation,
@@ -130,6 +133,7 @@ const App = () => {
 
       if (data.length !== 0) {
         const { lat, lon } = data.coord;
+
         try {
           // Запрос данных о текущем времени
           const getTime = await axios.get(currentTimeUrl(timeApiKey, lat, lon));
@@ -137,7 +141,19 @@ const App = () => {
           // Используем batch для оптимизации диспатча нескольких экшенов
           batch(() => {
             dispatch(setTime(getTime.data)); // Обновление данных о текущем времени
-            setBackground(getTime.data, handleSetTheme); // Установка фона в зависимости от времени
+            switch (localStorage.getItem("theme")) {
+              case "day":
+                return dispatch(setTheme(backgroundColor.day));
+              case "evening":
+                return dispatch(setTheme(backgroundColor.evening));
+              case "night":
+                return dispatch(setTheme(backgroundColor.night));
+              case "default":
+                return setBackground(getTime.data, handleSetTheme);
+              default:
+                return setBackground(getTime.data, handleSetTheme);
+            }
+            // Установка фона в зависимости от времени
           });
         } catch (e) {
           if (e.message === "Request failed with status code 429") {
@@ -148,8 +164,20 @@ const App = () => {
 
             // Используем batch для оптимизации диспатча нескольких экшенов
             batch(() => {
-              dispatch(setTime(getTime.data)); // Обновление данных о текущем времени (резервные данные)
-              setBackground(getTime.data, handleSetTheme); // Установка фона в зависимости от времени (резервные данные)
+              dispatch(setTime(getTime.data)); // Обновление данных о текущем времени
+              switch (localStorage.getItem("theme")) {
+                case "day":
+                  return dispatch(setTheme(backgroundColor.day));
+                case "evening":
+                  return dispatch(setTheme(backgroundColor.evening));
+                case "night":
+                  return dispatch(setTheme(backgroundColor.night));
+                case "default":
+                  console.log("asda");
+                  return setBackground(getTime.data, handleSetTheme);
+                default:
+                  return setBackground(getTime.data, handleSetTheme);
+              } // Установка фона в зависимости от времени (резервные данные)
             });
           }
         }

@@ -9,7 +9,7 @@ const Header = () => {
   const { data, time } = useSelector((state) => state.weatherData);
 
   const { unit, fullLocation } = useSelector((state) => state.ui);
-  
+
   return (
     <div className="header">
       <div className="geo-container">
@@ -27,15 +27,14 @@ const Header = () => {
         </p>
       </div>
       <div className="search-container">
-        <button onClick={() => dispatch(setSettingsMenu(true))} className="click-settings">НАСТРОЙКИ</button>
+        <button
+          onClick={() => dispatch(setSettingsMenu(true))}
+          className="click-settings"
+        ></button>
         <button
           onClick={() => dispatch(setRightMenu(true))}
           className="click-field"
-        >
-          <span className="burger-line burger-first_line"></span>
-          <span className="burger-line burger-second_line"></span>
-          <span className="burger-line burger-third_line"></span>
-        </button>
+        ></button>
       </div>
     </div>
   );
