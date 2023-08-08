@@ -620,7 +620,7 @@ body {
   transform-style: preserve-3d;
   -webkit-transition: all 600ms;
   transition: all 600ms;
-  z-index: 20;
+  z-index: 100000;
 }
 
 .forecast-data_img {
@@ -635,7 +635,7 @@ body {
   cursor: pointer;
   background-color: transparent;
   position: relative;
-  z-index: 10000;
+  z-index: 100000;
 }
 
 .check_card {
