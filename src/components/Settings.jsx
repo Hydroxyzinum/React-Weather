@@ -17,7 +17,7 @@ import RenderSettingsItem from "./RenderSettingsItem";
 const Settings = () => {
   const dispatch = useDispatch();
 
-  const { theme, settingsMenu, unitCheckbox, settingsTheme } = useSelector(
+  const { settingsMenu, unitCheckbox, settingsTheme } = useSelector(
     (state) => state.ui
   );
 
