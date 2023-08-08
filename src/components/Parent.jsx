@@ -1,30 +1,23 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import cn from "classnames";
-import { Cloudy } from "../helpers/animationsBlocks";
 
 const Parent = ({ children }) => {
-  const { data } = useSelector((state) => state.weatherData);
-
-  const { theme, rightMenu } = useSelector((state) => state.ui);
+  const { theme, rightMenu, settingsMenu } = useSelector((state) => state.ui);
 
   const display = cn({
     container: true,
-    "container-overflow": !rightMenu,
-    "container-overflow_hidden": rightMenu,
+    "container-overflow": !rightMenu || !settingsMenu,
+    "container-overflow_hidden": rightMenu || settingsMenu,
   });
 
-  if (data.length !== 0) {
-    return (
-      <div className="App">
-        <div style={theme} className={display}>
-          {children}
-        </div>
+  return (
+    <div className="App">
+      <div style={theme} className={display}>
+        {children}
       </div>
-    );
-  } else {
-    return <Cloudy />;
-  }
+    </div>
+  );
 };
 
 export default Parent;

@@ -8,7 +8,7 @@ import { setData, setFutureData, setTime } from "../store/weatherDataSlice";
 import { apiKeys, currentWeatherUrl, currentTimeUrl } from "../helpers/url";
 import { backgroundColor, setBackground } from "../helpers/bgColors";
 import { setFullLocation } from "../store/locationSlice";
-
+import { Cloudy } from "../helpers/animationsBlocks";
 import Menu from "./Menu";
 import RenderSearchItem from "./RenderSearchItem";
 import Parent from "./Parent";
@@ -37,10 +37,11 @@ const App = () => {
   const { unit, forecastTime, stateInterval } = useSelector(
     (state) => state.ui
   );
+
   const { fullLocation } = useSelector((state) => state.location);
 
   // Обработчик изменения темы
-
+    console.log(localStorage)
   const currentUnit = localStorage.getItem("unit")
     ? localStorage.getItem("unit")
     : unit;
@@ -58,6 +59,7 @@ const App = () => {
         const request = await axios.get(
           currentWeatherUrl("weather", requestLocation, apiKey, currentUnit)
         );
+
         const future = await axios.get(
           currentWeatherUrl("forecast", requestLocation, apiKey, currentUnit)
         );
@@ -79,6 +81,7 @@ const App = () => {
               currentUnit
             )
           );
+
           const futureReserve = await axios.get(
             currentWeatherUrl(
               "forecast",
@@ -177,48 +180,51 @@ const App = () => {
         }
       }
     };
-
     // Вызов функции для получения данных о времени
     getTimeData();
 
     // Установка таймаута для периодического обновления данных о времени
     const timeout = setTimeout(() => {
       getTimeData();
-    }, 60000); // Задержка обновления - 400 мс
+    }, 60000); // Задержка обновления - 60000 мс
 
     // Очистка таймаута при размонтировании компонента
     return () => clearTimeout(timeout);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data.coord, data.length]);
 
-  return (
-    <Parent>
-      <Menu>
-        <RenderSearchItem />
-      </Menu>
-      <Settings />
-      <Header />
-      <Temperature>
-        <Icons />
-      </Temperature>
-      <Main />
-      <TodayTemp />
-      <ForecastContainer>
-        <ForecastListContainer>
-          <Forecast />
-        </ForecastListContainer>
-      </ForecastContainer>
-      <DescContainer>
-        <Desc />
-      </DescContainer>
-      <Sunrise />
-      <Footer>
-        <YMaps>
-          <YandexMap />
-        </YMaps>
-      </Footer>
-    </Parent>
-  );
+  if (data.length !== 0) {
+    return (
+      <Parent>
+        <Menu>
+          <RenderSearchItem />
+        </Menu>
+        <Settings />
+        <Header />
+        <Temperature>
+          <Icons />
+        </Temperature>
+        <Main />
+        <TodayTemp />
+        <ForecastContainer>
+          <ForecastListContainer>
+            <Forecast />
+          </ForecastListContainer>
+        </ForecastContainer>
+        <DescContainer>
+          <Desc />
+        </DescContainer>
+        <Sunrise />
+        <Footer>
+          <YMaps>
+            <YandexMap />
+          </YMaps>
+        </Footer>
+      </Parent>
+    );
+  } else {
+    return <Cloudy />;
+  }
 };
 
 export default App;

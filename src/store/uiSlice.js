@@ -7,7 +7,7 @@ const initialState = {
   rightMenu: false,
   settingsMenu: false,
   unitCheckbox: false,
-  settingsTheme: "default",
+  settingsTheme: "",
   forecastTime: 9,
   unit: "metric",
 };

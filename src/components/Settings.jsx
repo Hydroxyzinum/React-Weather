@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector, useDispatch, batch } from "react-redux";
-import { backgroundColor, setBackground } from "../helpers/bgColors";
+import { backgroundColor } from "../helpers/bgColors";
 import { setLocation } from "../store/locationSlice";
 import { setSearchEngine } from "../store/searchEngineSlice";
 import {

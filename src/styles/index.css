@@ -62,7 +62,7 @@ body {
 }
 
 .container::-webkit-scrollbar {
-  width: 5px;
+  width: 0px;
 }
 
 .container::-webkit-scrollbar-track {
@@ -334,7 +334,7 @@ body {
   align-items: center;
   justify-content: center;
   padding: 10px;
-
+  transition: .5s all;
   /* border: 1px solid black; */
   border-radius: 16px;
 }
@@ -368,6 +368,7 @@ body {
   align-items: center;
   justify-content: center;
   border-radius: 15px;
+  transition: .3s all;
 }
 
 .data-container:hover {
@@ -434,6 +435,7 @@ body {
   color: white;
   position: relative;
   z-index: 0;
+  transition: .3s all;
 }
 
 .time-container:hover {
@@ -518,6 +520,7 @@ body {
   border-radius: 20px;
   margin-top: 20px;
   box-shadow: 0px 0px 5px -1px rgba(0, 0, 0, 1);
+  transition: .3s all;
 }
 
 .desc-card:hover {
@@ -575,8 +578,8 @@ body {
 }
 
 .select-time {
-  text-align: center;
-  width: 90px;
+  text-align: end;
+  width: 60px;
   background-color: transparent;
   border: none;
   font-size: 20px;
@@ -586,11 +589,11 @@ body {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-  padding: 5px;
+  padding: 0 5px;
   cursor: pointer;
-  -webkit-box-shadow: 0px 0px 5px -1px rgba(0, 0, 0, 0.5);
+  /* -webkit-box-shadow: 0px 0px 5px -1px rgba(0, 0, 0, 0.5);
   -moz-box-shadow: 0px 0px 5px -1px rgba(0, 0, 0, 0.5);
-  box-shadow: 0px 0px 5px -1px rgba(0, 0, 0, 0.5);
+  box-shadow: 0px 0px 5px -1px rgba(0, 0, 0, 0.5); */
 }
 
 .select-time:hover {
@@ -672,6 +675,7 @@ body {
   -moz-box-shadow: 0px 0px 2px 1px rgba(53, 167, 255, 1);
   box-shadow: 0px 0px 2px 1px rgba(53, 167, 255, 1);
   transition: 1s ease-in-out;
+  z-index: 10000;
 }
 
 .back-time_container {
@@ -1158,11 +1162,14 @@ ymaps {
   transition: 0.3s all;
   width: 45px;
   height: 45px;
+  left: 132px;
   border-radius: 50%;
   position: absolute;
   -webkit-box-shadow: 0px 0px 5px -1px rgba(0, 0, 0, 1);
   -moz-box-shadow: 0px 0px 5px -1px rgba(0, 0, 0, 1);
   box-shadow: 0px 0px 5px -1px rgba(0, 0, 0, 1);
+  background: linear-gradient(140deg, #47bbe1 0%, #023553 50%, #0b42ab 100%);
+  opacity: 0.8;
   z-index: 10000;
 }
 
