@@ -44,12 +44,14 @@
 
 ## Зависимости
 
-- React.js: библиотека для разработки интерфейса.
-- Bootstrap 5: стилизация интерфейса.
-- React-Redux, Redux-Toolkit: управление состоянием.
-- React-Yandex-Maps: интеграция интерактивных карт.
-- Axios: библиотека для выполнения HTTP-запросов.
-- Lodash, classNames: утилиты для работы с данными и стилями.
+- [React.js](https://reactjs.org/)
+- [Bootstrap 5](https://getbootstrap.com/)
+- [React-Redux](https://react-redux.js.org/)
+- [Redux-Toolkit](https://redux-toolkit.js.org/)
+- [React-Yandex-Maps](https://github.com/gribnoysup/react-yandex-maps)
+- [Axios](https://axios-http.com/)
+- [Lodash](https://lodash.com/)
+- [classNames](https://github.com/JedWatson/classnames)
 
 ## Автор
 
