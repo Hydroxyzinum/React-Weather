@@ -4,7 +4,11 @@ import { batch } from "react-redux";
 import { YMaps } from "@pbe/react-yandex-maps";
 import axios from "axios";
 import { setTheme, setStateInterval } from "./store/slices/uiSlice";
-import { setData, setFutureData, setTime } from "./store/slices/weatherDataSlice";
+import {
+  setData,
+  setFutureData,
+  setTime,
+} from "./store/slices/weatherDataSlice";
 import { apiKeys, currentWeatherUrl, currentTimeUrl } from "./helpers/url";
 import { backgroundColor, setBackground } from "./helpers/bgColors";
 import { setFullLocation } from "./store/slices/locationSlice";

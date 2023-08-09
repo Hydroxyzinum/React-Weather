@@ -5,10 +5,13 @@ import { useSelector, useDispatch } from "react-redux";
 const ForecastContainer = ({ children }) => {
   const dispatch = useDispatch();
 
+  // Получение выбранного времени прогноза из состояния Redux
   const { forecastTime } = useSelector((state) => state.ui);
 
+  // Обработчик изменения выбранного времени прогноза
   const submitForm = (e) => {
     e.preventDefault();
+    // Диспатч экшена для установки нового времени прогноза
     dispatch(setForecastTime(e.target.value));
   };
 
@@ -25,6 +28,7 @@ const ForecastContainer = ({ children }) => {
             onChange={submitForm}
             name="time"
           >
+            {/* Опции для выбора времени прогноза */}
             <option className="option-style" value={9}>
               09:00
             </option>
@@ -49,3 +53,4 @@ const ForecastContainer = ({ children }) => {
 };
 
 export default ForecastContainer;
+

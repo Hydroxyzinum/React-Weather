@@ -4,12 +4,16 @@ import "./tempertature.css";
 
 // Компонент для отображения текущей температуры и описания погоды
 const Temperature = React.memo(({ children }) => {
+  // Получение данных о погоде из состояния Redux
   const { data } = useSelector((state) => state.weatherData);
 
+  // Извлечение имени местоположения из объекта data
   const { name } = data;
 
+  // Извлечение данных о температуре из объекта data.main
   const { temp, temp_max, temp_min, feels_like } = data.main;
 
+  // Извлечение описания погоды из объекта data.weather
   const { description } = data.weather[0];
 
   // Нормализуем описание погоды, чтобы первая буква была заглавной
@@ -30,13 +34,18 @@ const Temperature = React.memo(({ children }) => {
 
   return (
     <div className="weather-image_container">
+      {/* Контейнер для дочерних компонентов, которые могут быть переданы */}
       <div className="image-container">{children}</div>
+      {/* Отображение имени местоположения */}
       <h1 className="choose_city">{name ? name : null}</h1>
+      {/* Отображение текущей температуры */}
       <h2 className="temperature">
         {temp ? temperature : null}
         <span className="gradus">°</span>
       </h2>
+      {/* Отображение описания погоды */}
       <p className="description">{normalizeDesc ? normalizeDesc : null}</p>
+      {/* Отображение минимальной и максимальной температуры */}
       <div className="min-max_temperature">
         <p className="max-temp">
           Макс.: {temp_max ? temperatureMax : null}
@@ -47,6 +56,7 @@ const Temperature = React.memo(({ children }) => {
           <span className="gradus">°</span>
         </p>
       </div>
+      {/* Отображение "ощущается как" температуры */}
       <div className="feels-like_container">
         <p className="feels-like">
           Ощущается как: {feels_like ? feelsLike : null}

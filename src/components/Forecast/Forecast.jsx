@@ -4,12 +4,19 @@ import cn from "classnames";
 import _ from "lodash";
 
 const Forecast = () => {
+  // Получение данных о прогнозе погоды из состояния Redux
   const { futureData } = useSelector((state) => state.weatherData);
+
+  // Получение данных о времени прогноза, выбранной единицы измерения и темы из состояния Redux
   const { forecastTime, unit, theme } = useSelector((state) => state.ui);
+
+  // Состояние для открытой карточки прогноза
   const [openCardIndex, setOpenCardIndex] = useState(null);
 
+  // Извлечение списка прогнозов из данных о будущей погоде
   const { list } = futureData;
 
+  // Обработчик клика по карточке прогноза
   const handleCardClick = useCallback(
     (index) => {
       if (openCardIndex === index) {
@@ -21,8 +28,10 @@ const Forecast = () => {
     [openCardIndex]
   );
 
+  // Создание мемоизированного массива компонентов прогноза погоды
   const forecastMemo = useMemo(() => {
     return list.map((item, index) => {
+      // Извлечение данных о погоде из элемента списка прогноза
       const { dt_txt, clouds, main } = item;
       const { all } = clouds;
       const { temp_max, temp_min, humidity } = main;
@@ -30,6 +39,7 @@ const Forecast = () => {
       const normalizeTempMax = Math.ceil(temp_max);
       const normalizeTempMin = Math.floor(temp_min);
 
+      // Проверка, что время прогноза соответствует выбранному времени
       if (averageTempAtNoon.getHours() === Number(forecastTime)) {
         const { icon, description } = item.weather[0];
         const normalizeDesc = `${description[0].toUpperCase()}${description.slice(
@@ -40,6 +50,7 @@ const Forecast = () => {
         const dayWeek = ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"];
         const currentDay = dayWeek[currDate.getDay()];
 
+        // Создание классов для прогресс-бара в зависимости от единиц измерения
         const progressCn =
           unit === "metric"
             ? cn({
@@ -61,15 +72,20 @@ const Forecast = () => {
                 "bg-danger": normalizeTempMax >= 86,
               });
 
+        // Преобразование температуры из Фаренгейта в Цельсии
         const fahrenheitToCelsius = ((normalizeTempMax - 32) * 5) / 9;
+
+        // Вычисление стилей для прогресс-бара
         const progressStyles =
           unit === "metric" ? normalizeTempMax * 3 : fahrenheitToCelsius * 3;
 
+        // Создание классов для карточки в зависимости от состояния открытия
         const cardClasses = cn({
           "forecast-card": true,
           flipped: openCardIndex === index,
         });
 
+        // Возвращение компонента прогноза погоды
         return (
           <div
             key={_.uniqueId("forecast-")}
@@ -115,10 +131,10 @@ const Forecast = () => {
                 </div>
                 <div className="back-info">
                   <span className="back-clouds">
-                    Облачность.: {all ? all : 0}%
+                    Облачность: {all ? all : 0}%
                   </span>
                   <span className="back-humidity">
-                    Влажность.: {humidity ? humidity : 0}%
+                    Влажность: {humidity ? humidity : 0}%
                   </span>
                 </div>
               </div>
@@ -130,6 +146,8 @@ const Forecast = () => {
       }
     });
   }, [forecastTime, list, openCardIndex, theme, unit, handleCardClick]);
+
+  // Возвращение мемоизированного массива компонентов прогноза погоды
   return forecastMemo;
 };
 
