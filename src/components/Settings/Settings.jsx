@@ -1,18 +1,19 @@
 import React from "react";
 import { useSelector, useDispatch, batch } from "react-redux";
-import { backgroundColor } from "../helpers/bgColors";
-import { setLocation } from "../store/locationSlice";
-import { setSearchEngine } from "../store/searchEngineSlice";
+import { backgroundColor } from "../../helpers/bgColors";
+import { setLocation } from "../../store/slices/locationSlice";
+import { setSearchEngine } from "../../store/slices/searchEngineSlice";
 import {
   setUnit,
   setTheme,
   setSettingsMenu,
   setUnitCheckBox,
   setSettingsTheme,
-} from "../store/uiSlice";
-import { russia } from "../helpers/russia";
+} from "../../store/slices/uiSlice";
+import { russia } from "../../helpers/russia";
 import cn from "classnames";
 import RenderSettingsItem from "./RenderSettingsItem";
+import '../Settings/settings.css';
 
 const Settings = () => {
   const dispatch = useDispatch();

@@ -3,29 +3,29 @@ import { useSelector, useDispatch } from "react-redux";
 import { batch } from "react-redux";
 import { YMaps } from "@pbe/react-yandex-maps";
 import axios from "axios";
-import { setTheme, setStateInterval } from "../store/uiSlice";
-import { setData, setFutureData, setTime } from "../store/weatherDataSlice";
-import { apiKeys, currentWeatherUrl, currentTimeUrl } from "../helpers/url";
-import { backgroundColor, setBackground } from "../helpers/bgColors";
-import { setFullLocation } from "../store/locationSlice";
-import { Cloudy } from "../helpers/animationsBlocks";
-import Menu from "./Menu";
-import RenderSearchItem from "./RenderSearchItem";
-import Parent from "./Parent";
-import Header from "./Header";
-import Temperature from "./Temperature";
-import Icons from "./Icons";
-import Sunrise from "./Sunrise";
-import Main from "./Main";
-import TodayTemp from "./TodayTemp";
-import ForecastContainer from "./ForecastContainer";
-import ForecastListContainer from "./ForecastListContainer";
-import Forecast from "./Forecast";
-import DescContainer from "./DescContainer";
-import Desc from "./Desc";
-import Footer from "./Footer";
-import Settings from "./Settings";
-import YandexMap from "./YandexMap";
+import { setTheme, setStateInterval } from "./store/slices/uiSlice";
+import { setData, setFutureData, setTime } from "./store/slices/weatherDataSlice";
+import { apiKeys, currentWeatherUrl, currentTimeUrl } from "./helpers/url";
+import { backgroundColor, setBackground } from "./helpers/bgColors";
+import { setFullLocation } from "./store/slices/locationSlice";
+import { Cloudy } from "./helpers/animationsBlocks";
+import Menu from "./components/Menu/Menu";
+import RenderSearchItem from "./components/Menu/RenderSearchItem";
+import Parent from "./components/Parent/Parent";
+import Header from "./components/Header/Header";
+import Temperature from "./components/Temperature/Temperature";
+import Icons from "./components/Temperature/Icons";
+import Sunrise from "./components/Sunrise/Sunrise";
+import Main from "./components/Main/Main";
+import TodayTemp from "./components/TodayTemp/TodayTemp";
+import ForecastContainer from "./components/Forecast/ForecastContainer";
+import ForecastListContainer from "./components/Forecast/ForecastListContainer";
+import Forecast from "./components/Forecast/Forecast";
+import DescContainer from "./components/Desc/DescContainer";
+import Desc from "./components/Desc/Desc";
+import Footer from "./components/Footer/Footer";
+import Settings from "./components/Settings/Settings";
+import YandexMap from "./components/Footer/YandexMap";
 
 const App = () => {
   // Инициализация useDispatch для дальнейшего диспатча экшенов
@@ -41,7 +41,6 @@ const App = () => {
   const { fullLocation } = useSelector((state) => state.location);
 
   // Обработчик изменения темы
-    console.log(localStorage)
   const currentUnit = localStorage.getItem("unit")
     ? localStorage.getItem("unit")
     : unit;

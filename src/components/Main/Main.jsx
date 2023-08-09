@@ -1,5 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
+import '../Main/main.css';
 
 const Main = () => {
   const { data } = useSelector((state) => state.weatherData);

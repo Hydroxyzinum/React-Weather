@@ -9,7 +9,7 @@ import {
   Stormy,
   Thunderstorm,
   Mists,
-} from "../helpers/animationsBlocks";
+} from "../../helpers/animationsBlocks";
 
 const Icons = React.memo(() => {
   const { data } = useSelector((state) => state.weatherData);

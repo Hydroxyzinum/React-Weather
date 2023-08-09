@@ -1,8 +1,8 @@
 import React from "react";
-import { getLocation } from "../helpers/showPosition";
+import { getLocation } from "../../helpers/showPosition";
 import { useSelector, useDispatch } from "react-redux";
-import { setRightMenu, setSettingsMenu } from "../store/uiSlice";
-
+import { setRightMenu, setSettingsMenu } from "../../store/slices/uiSlice";
+import '../Header/header.css';
 const Header = () => {
   const dispatch = useDispatch();
 

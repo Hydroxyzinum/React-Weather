@@ -1,6 +1,6 @@
 import axios from "axios";
-import { setData, setFutureData } from "../store/weatherDataSlice";
-import { setFullLocation } from "../store/locationSlice";
+import { setData, setFutureData } from "../store/slices/weatherDataSlice";
+import { setFullLocation } from "../store/slices/locationSlice";
 import { apiKeys, currentWeatherUrl, geo } from "../helpers/url";
 import { batch } from "react-redux";
 

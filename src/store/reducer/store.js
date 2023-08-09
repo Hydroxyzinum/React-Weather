@@ -1,8 +1,8 @@
 import { configureStore } from "@reduxjs/toolkit";
-import locationSlice from "./locationSlice";
-import searchEngineSlice from "./searchEngineSlice";
-import uiSlice from "./uiSlice";
-import weatherDataSlice from "./weatherDataSlice";
+import locationSlice from "../slices/locationSlice";
+import searchEngineSlice from "../slices/searchEngineSlice";
+import uiSlice from "../slices/uiSlice";
+import weatherDataSlice from "../slices/weatherDataSlice";
 
 const store = configureStore({
   reducer: {

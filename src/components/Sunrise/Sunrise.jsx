@@ -1,5 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
+import './sunrise.css'
 
 const Sunrise = () => {
   const { data } = useSelector((state) => state.weatherData);

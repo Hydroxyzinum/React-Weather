@@ -1,7 +1,8 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { Cloudy } from "../helpers/animationsBlocks";
+import { Cloudy } from "../../helpers/animationsBlocks";
 import _ from "lodash";
+import "./todayTemp.css";
 
 const TodayTemp = () => {
   const { futureData } = useSelector((state) => state.weatherData);

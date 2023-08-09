@@ -1,4 +1,4 @@
-import "../styles/iconAnimation.css";
+import "../components/Temperature/iconAnimation.css";
 
 export const SuperMoon = () => {
   return (

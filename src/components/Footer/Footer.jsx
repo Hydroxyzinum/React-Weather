@@ -1,5 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
+import "../Footer/footer.css";
 
 const Footer = ({ children }) => {
   const { data } = useSelector((state) => state.weatherData);

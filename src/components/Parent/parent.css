@@ -1,0 +1,64 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  width: 430px;
+  height: 860px;
+  padding: 40px;
+  -webkit-box-shadow: 7px 14px 17px 5px rgba(34, 60, 80, 0.1);
+  -moz-box-shadow: 7px 14px 17px 5px rgba(34, 60, 80, 0.1);
+  box-shadow: 7px 14px 17px 5px rgba(34, 60, 80, 0.1);
+  z-index: 0;
+  position: relative;
+  color: white;
+  animation: gradient 10s ease infinite;
+  overflow-x: hidden;
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.container-overflow {
+  overflow-y: scroll;
+}
+
+.container-overflow_hidden {
+  overflow: hidden;
+}
+
+.container::-webkit-scrollbar {
+  width: 0px;
+}
+
+.container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.container::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.4);
+  border: none;
+}
+
+@media (max-height: 860px) {
+  .container {
+    height: 100vh;
+  }
+}
+
+@media (max-width: 500px) {
+  .container {
+    padding: 20px;
+  }
+}

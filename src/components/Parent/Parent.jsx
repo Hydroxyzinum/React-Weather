@@ -1,6 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import cn from "classnames";
+import './parent.css';
 
 const Parent = ({ children }) => {
   const { theme, rightMenu, settingsMenu } = useSelector((state) => state.ui);

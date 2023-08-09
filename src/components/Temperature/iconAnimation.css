@@ -17,16 +17,12 @@
   height: 1em;
   margin: 0;
   border-radius: 100%;
-  box-shadow: 0 0 0 0.05em var(--ring) inset, 0 0 0.3em -0.03em var(--shadow);
-  background: linear-gradient(to var(--blend-dir),
-      var(--blend1) var(--blend-from),
-      var(--blend2) var(--blend-to));
-  /* filter: saturate(0.05); */
+  box-shadow:
+    0 0 0 0.05em var(--ring) inset,
+    0 0 0.3em -0.03em var(--shadow);
+  background: linear-gradient(to var(--blend-dir), var(--blend1) var(--blend-from), var(--blend2) var(--blend-to));
 }
 
-/* [icon]:hover {
-  filter: saturate(1);
-} */
 [icon]::after {
   content: attr(data-label);
   position: absolute;
@@ -101,7 +97,9 @@
   height: 40%;
   border-radius: 100%;
   background: #ffeb3b;
-  box-shadow: 0 0 0 0.02em var(--ring) inset, 0 0 0.3em -0.03em var(--shadow);
+  box-shadow:
+    0 0 0 0.02em var(--ring) inset,
+    0 0 0.3em -0.03em var(--shadow);
   transform-origin: 0.1em 0.1em;
 }
 
@@ -116,7 +114,8 @@
   height: 0.1em;
   border-radius: 100%;
   background: rgba(255, 255, 255, 0.1);
-  box-shadow: 0 0 0.1em 0 rgba(255, 255, 255, 0.3) inset,
+  box-shadow:
+    0 0 0.1em 0 rgba(255, 255, 255, 0.3) inset,
     -0.1em -0.1em 0 0.2em rgba(255, 255, 255, 0.1);
   animation: flare 12000ms infinite alternate linear;
 }
@@ -131,12 +130,13 @@
   height: 0.13em;
   border-radius: 0.1em;
   background-color: #fff;
-  box-shadow: 0 0 0.1em 0.02em var(--ring) inset,
+  box-shadow:
+    0 0 0.1em 0.02em var(--ring) inset,
     0 0 0.3em -0.03em var(--shadow);
   animation: move 3000ms infinite ease-in-out;
 }
 
-.cloud+.cloud {
+.cloud + .cloud {
   top: 25%;
   left: 40%;
   animation: move 3700ms infinite linear;
@@ -294,7 +294,9 @@
   font-size: 1.3em;
   left: 50%;
   will-change: background-color, transform, opacity;
-  animation: flash 2300ms infinite linear, move 3700ms infinite linear;
+  animation:
+    flash 2300ms infinite linear,
+    move 3700ms infinite linear;
 }
 
 [icon="stormy"] ul {
@@ -392,7 +394,9 @@
   font-size: 1.3em;
   left: 50%;
   will-change: background-color, transform, opacity;
-  animation: flash 2300ms infinite linear, move 3700ms infinite linear;
+  animation:
+    flash 2300ms infinite linear,
+    move 3700ms infinite linear;
 }
 
 [icon="thunderstorm"] ul {
@@ -591,7 +595,9 @@
   font-size: 1.3em;
   left: 50%;
   will-change: background-color, transform, opacity;
-  animation: flash 2300ms infinite linear, move 3700ms infinite linear;
+  animation:
+    flash 2300ms infinite linear,
+    move 3700ms infinite linear;
 }
 
 [icon="mists"] ul {
@@ -697,7 +703,9 @@
   height: 40%;
   border-radius: 100%;
   background: radial-gradient(circle at bottom left, var(--ring), #fef07e);
-  box-shadow: 0 0 0 0.02em var(--ring) inset, 0 0 0.3em -0.03em var(--blend2);
+  box-shadow:
+    0 0 0 0.02em var(--ring) inset,
+    0 0 0.3em -0.03em var(--blend2);
   /* background-repeat: repeat;
   will-change: transform;
   animation: revolve 1s linear infinite; */

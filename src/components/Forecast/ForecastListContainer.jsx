@@ -1,3 +1,5 @@
+import "../Forecast/forecast.css";
+
 const ForecastListContainer = ({ children }) => {
   return <div className="forecast-list_container">{children}</div>;
 };

@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { setLocation } from "../store/locationSlice";
+import { setLocation } from "../../store/slices/locationSlice";
 import _ from "lodash";
 
 const RenderSearchItem = () => {

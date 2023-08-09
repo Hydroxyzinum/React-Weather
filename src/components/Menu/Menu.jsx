@@ -1,14 +1,15 @@
 import React from "react";
 import { batch } from "react-redux";
 import { useSelector, useDispatch } from "react-redux";
-import { setData, setFutureData } from "../store/weatherDataSlice";
-import { setRightMenu, setUnit } from "../store/uiSlice";
-import { setSearchEngine } from "../store/searchEngineSlice";
-import { setFullLocation, setLocation } from "../store/locationSlice";
+import { setData, setFutureData } from "../../store/slices/weatherDataSlice";
+import { setRightMenu, setUnit } from "../../store/slices/uiSlice";
+import { setSearchEngine } from "../../store/slices/searchEngineSlice";
+import { setFullLocation, setLocation } from "../../store/slices/locationSlice";
 import axios from "axios";
 import cn from "classnames";
-import { russia } from "../helpers/russia";
-import { apiKeys, currentWeatherUrl } from "../helpers/url";
+import { russia } from "../../helpers/russia";
+import { apiKeys, currentWeatherUrl } from "../../helpers/url";
+import '../Menu/menu.css';
 
 const Menu = ({ children }) => {
   const dispatch = useDispatch();

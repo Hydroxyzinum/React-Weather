@@ -1,5 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
+import "./tempertature.css";
 
 // Компонент для отображения текущей температуры и описания погоды
 const Temperature = React.memo(({ children }) => {

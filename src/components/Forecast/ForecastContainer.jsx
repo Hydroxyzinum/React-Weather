@@ -1,5 +1,5 @@
 import React from "react";
-import { setForecastTime } from "../store/uiSlice";
+import { setForecastTime } from "../../store/slices/uiSlice";
 import { useSelector, useDispatch } from "react-redux";
 
 const ForecastContainer = ({ children }) => {

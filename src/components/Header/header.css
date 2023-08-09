@@ -1,0 +1,91 @@
+.header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+}
+
+.geo-container {
+  display: flex;
+  align-items: center;
+}
+
+.geoInfo {
+  color: white;
+  font-size: 16px;
+  padding: 0;
+  margin: 0;
+  margin-left: 5px;
+}
+
+.geoTime {
+  font-size: 14px;
+  margin: 0;
+}
+
+.geolocation {
+  width: 35px;
+  height: 35px;
+  padding: 0;
+  text-align: center;
+  background-image: url("/src/styles/assets/geo.png");
+  background-size: 35px;
+  background-repeat: no-repeat;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  transition: 1s;
+  border-radius: 50%;
+}
+
+.geolocation:hover {
+  transform: scale(1.05);
+  background-color: green;
+}
+
+.search-container {
+  display: flex;
+  align-items: center;
+}
+
+.click-field {
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  margin: 0;
+  background-image: url("/src/styles/assets/search.png");
+  background-color: transparent;
+  background-size: 30px;
+  background-repeat: no-repeat;
+  border: none;
+  transition: 0.5s all;
+}
+
+.click-settings {
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  margin: 0;
+  margin-right: 10px;
+  background-image: url("/src/styles/assets/settings.png");
+  background-color: transparent;
+  background-size: 30px;
+  border: none;
+  transition: 1.5s all;
+  border-radius: 50%;
+}
+
+.click-field:hover {
+  transform: rotate(25deg) scale(1.2);
+}
+
+.click-settings:hover {
+  transform: rotate(180deg) scale(1.2);
+}
+
+@media (max-width: 500px) {
+  .header {
+    padding: 20px;
+  }
+}

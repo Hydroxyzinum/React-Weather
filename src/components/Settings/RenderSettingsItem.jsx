@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import _ from "lodash";
-import { setSearchEngine } from "../store/searchEngineSlice";
+import { setSearchEngine } from "../../store/slices/searchEngineSlice";
 
 const RenderSettingsItem = () => {
   const dispatch = useDispatch();
