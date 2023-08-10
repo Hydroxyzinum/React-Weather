@@ -1,21 +1,15 @@
 import React from "react";
 import { batch } from "react-redux";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  setData,
-  setFutureData,
-} from "../../store/slices/weatherDataSlice"; // Импорт экшенов из среза weatherDataSlice
+import { setData, setFutureData } from "../../store/slices/weatherDataSlice"; // Импорт экшенов из среза weatherDataSlice
 import { setRightMenu, setUnit } from "../../store/slices/uiSlice"; // Импорт экшенов из среза uiSlice
 import { setSearchEngine } from "../../store/slices/searchEngineSlice"; // Импорт экшенов из среза searchEngineSlice
-import {
-  setFullLocation,
-  setLocation,
-} from "../../store/slices/locationSlice"; // Импорт экшенов из среза locationSlice
+import { setFullLocation, setLocation } from "../../store/slices/locationSlice"; // Импорт экшенов из среза locationSlice
 import axios from "axios"; // Импорт библиотеки для работы с HTTP запросами
 import cn from "classnames"; // Импорт библиотеки для работы с классами CSS
 import { russia } from "../../helpers/russia"; // Импорт данных о российских городах
 import { apiKeys, currentWeatherUrl } from "../../helpers/url"; // Импорт данных о API ключах и URL
-import '../Menu/menu.css'; // Импорт стилей для компонента
+import "../Menu/menu.css"; // Импорт стилей для компонента
 
 const Menu = ({ children }) => {
   const dispatch = useDispatch();
@@ -106,16 +100,15 @@ const Menu = ({ children }) => {
     "p-10": searchEngine.length >= 1 ? true : false, // Условное добавление класса для отображения результатов поиска
   });
 
+  const clickExit = () => {
+    dispatch(setRightMenu(false));
+  };
+
   return (
     <div className={classesblock}>
       <div className="сontrol-panel_block">
         <div className="panel-block">
-          <button
-            onClick={() => {
-              dispatch(setRightMenu(false)); // Закрытие меню при клике на кнопку
-            }}
-            className="click-exit"
-          >
+          <button onClick={clickExit} className="click-exit">
             <span className="exit-line exit-first_line"></span>
             <span className="exit-line exit-second_line"></span>
           </button>

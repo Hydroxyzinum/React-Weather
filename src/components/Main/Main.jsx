@@ -8,7 +8,9 @@ const Main = () => {
   const { main, clouds, wind } = data;
 
   const { humidity } = main; // Влажность
+
   const { all } = clouds; // Облачность
+  
   const { speed } = wind; // Скорость ветра
 
   return (

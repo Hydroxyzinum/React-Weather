@@ -13,7 +13,6 @@ const Footer = ({ children }) => {
   const openWeatherMapUrl = "https://openweathermap.org/";
   const ipGeoLocationUrl = "https://app.ipgeolocation.io/";
   const googleMapsUrl = `https://www.google.com/maps/@${lat},${lon},12z?hl=ru-RU&entry=ttu`;
-
   // Отображение информации о погоде и геоданных
   return (
     <div className="footer-info"> {/* Контейнер для всей информации в футере */}

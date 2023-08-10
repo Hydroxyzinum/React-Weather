@@ -13,7 +13,7 @@ import {
 import { russia } from "../../helpers/russia";
 import cn from "classnames";
 import RenderSettingsItem from "./RenderSettingsItem";
-import '../Settings/settings.css';
+import "../Settings/settings.css";
 
 const Settings = () => {
   const dispatch = useDispatch();
@@ -23,6 +23,24 @@ const Settings = () => {
   );
 
   const { location } = useSelector((state) => state.location);
+
+  const settingsClassname = cn({
+    "settings-container": true,
+    "settings-show": settingsMenu,
+  });
+
+  const sliderClasses = cn({
+    "slider-themes": true,
+    day: localStorage.getItem("theme") === "day" || settingsTheme === "day",
+    evening:
+      localStorage.getItem("theme") === "evening" ||
+      settingsTheme === "evening",
+    night:
+      localStorage.getItem("theme") === "night" || settingsTheme === "night",
+    default:
+      localStorage.getItem("theme") === "default" ||
+      settingsTheme === "default",
+  });
 
   const searchChange = (e) => {
     e.preventDefault();
@@ -44,39 +62,40 @@ const Settings = () => {
     }
   };
 
-  const settingsClassname = cn({
-    "settings-container": true,
-    "settings-show": settingsMenu,
-  });
+  const clickReset = () => {
+    batch(() => {
+      dispatch(setSearchEngine([]));
+      dispatch(setLocation(""));
+    });
+  };
 
-  const sliderClasses = cn({
-    "slider-themes": true,
-    day: localStorage.getItem("theme") === "day" || settingsTheme === "day",
-    evening:
-      localStorage.getItem("theme") === "evening" ||
-      settingsTheme === "evening",
-    night:
-      localStorage.getItem("theme") === "night" || settingsTheme === "night",
-    default:
-      localStorage.getItem("theme") === "default" ||
-      settingsTheme === "default",
-  });
+  const clickExit = () => {
+    dispatch(setSettingsMenu(false));
+  };
+
+  const checkboxUnit = (e) => {
+    e.target.checked
+      ? dispatch(setUnit("imperial")) &&
+        localStorage.setItem("unit", "imperial")
+      : dispatch(setUnit("metric")) && localStorage.setItem("unit", "metric");
+  };
+
+  const onChangeCheckbox = () => {
+    dispatch(setUnitCheckBox(!unitCheckbox));
+  };
+
+  const currentThemeClick = (timeOfDay, color) => {
+    batch(() => {
+      dispatch(setSettingsTheme(timeOfDay));
+      dispatch(setTheme(color));
+    });
+    localStorage.setItem("theme", timeOfDay);
+  };
 
   return (
-    <div
-      onClick={() => {
-        batch(() => {
-          dispatch(setSearchEngine([]));
-          dispatch(setLocation(""));
-        });
-      }}
-      className={settingsClassname}
-    >
+    <div onClick={clickReset} className={settingsClassname}>
       <div className="settings-exit-btn">
-        <button
-          onClick={() => dispatch(setSettingsMenu(false))}
-          className="click-exit"
-        >
+        <button onClick={clickExit} className="click-exit">
           <span className="exit-line exit-first_line"></span>
           <span className="exit-line exit-second_line"></span>
         </button>
@@ -86,14 +105,8 @@ const Settings = () => {
         <label className="switch">
           <input
             type="checkbox"
-            onClick={(e) =>
-              e.target.checked
-                ? dispatch(setUnit("imperial")) &&
-                  localStorage.setItem("unit", "imperial")
-                : dispatch(setUnit("metric")) &&
-                  localStorage.setItem("unit", "metric")
-            }
-            onChange={() => dispatch(setUnitCheckBox(!unitCheckbox))}
+            onClick={(e) => checkboxUnit(e)}
+            onChange={onChangeCheckbox}
             checked={localStorage.getItem("unit") === "imperial" ? true : false}
           />
           <span className="slider round"></span>
@@ -106,27 +119,15 @@ const Settings = () => {
         <div className="select-theme">
           <div className={sliderClasses}></div>
           <div
-            onClick={() => {
-              batch(() => {
-                dispatch(setSettingsTheme("day"));
-                dispatch(setTheme(backgroundColor.day));
-              });
-
-              localStorage.setItem("theme", "day");
-            }}
+            onClick={() => currentThemeClick("day", backgroundColor.day)}
             className="select-theme_item"
           >
             <img className="settings-img" src={"./weather/day.png"} alt="day" />
           </div>
           <div
-            onClick={() => {
-              batch(() => {
-                dispatch(setSettingsTheme("evening"));
-                dispatch(setTheme(backgroundColor.evening));
-              });
-
-              localStorage.setItem("theme", "evening");
-            }}
+            onClick={() =>
+              currentThemeClick("evening", backgroundColor.evening)
+            }
             className="select-theme_item"
           >
             <img
@@ -136,13 +137,7 @@ const Settings = () => {
             />
           </div>
           <div
-            onClick={() => {
-              batch(() => {
-                dispatch(setSettingsTheme("night"));
-                dispatch(setTheme(backgroundColor.night));
-              });
-              localStorage.setItem("theme", "night");
-            }}
+            onClick={() => currentThemeClick("night", backgroundColor.night)}
             className="select-theme_item"
           >
             <img

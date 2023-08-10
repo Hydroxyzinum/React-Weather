@@ -31,3 +31,24 @@ export const setBackground = (time, setTheme) => {
     }
   }
 };
+
+export const staticBackground = (
+  dispatch,
+  setTheme,
+  setBackground,
+  getTime,
+  handleSetTheme
+) => {
+  switch (localStorage.getItem("theme")) {
+    case "day":
+      return dispatch(setTheme(backgroundColor.day));
+    case "evening":
+      return dispatch(setTheme(backgroundColor.evening));
+    case "night":
+      return dispatch(setTheme(backgroundColor.night));
+    case "default":
+      return setBackground(getTime.data, handleSetTheme);
+    default:
+      return setBackground(getTime.data, handleSetTheme);
+  }
+};

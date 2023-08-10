@@ -13,6 +13,14 @@ const Header = () => {
   // Получение данных о выбранных настройках из состояния Redux
   const { unit, fullLocation } = useSelector((state) => state.ui);
 
+  const clickSettings = () => {
+    dispatch(setSettingsMenu(true))
+  }
+
+  const clickField = () => {
+    dispatch(setRightMenu(true))
+  }
+
   return (
     <div className="header">
       <div className="geo-container">
@@ -34,12 +42,12 @@ const Header = () => {
       <div className="search-container">
         {/* Кнопка для открытия меню настроек */}
         <button
-          onClick={() => dispatch(setSettingsMenu(true))}
+          onClick={clickSettings}
           className="click-settings"
         ></button>
         {/* Кнопка для открытия бокового меню */}
         <button
-          onClick={() => dispatch(setRightMenu(true))}
+          onClick={clickField}
           className="click-field"
         ></button>
       </div>

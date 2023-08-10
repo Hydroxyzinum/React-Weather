@@ -33,8 +33,11 @@ const Forecast = () => {
     return list.map((item, index) => {
       // Извлечение данных о погоде из элемента списка прогноза
       const { dt_txt, clouds, main } = item;
+
       const { all } = clouds;
+
       const { temp_max, temp_min, humidity } = main;
+
       const averageTempAtNoon = new Date(dt_txt);
       const normalizeTempMax = Math.ceil(temp_max);
       const normalizeTempMin = Math.floor(temp_min);
@@ -42,12 +45,17 @@ const Forecast = () => {
       // Проверка, что время прогноза соответствует выбранному времени
       if (averageTempAtNoon.getHours() === Number(forecastTime)) {
         const { icon, description } = item.weather[0];
+        
         const normalizeDesc = `${description[0].toUpperCase()}${description.slice(
           1
         )}`;
+
         const normalizeImgSrc = `${"weather/"}${icon}.png`;
+
         const currDate = new Date(item.dt_txt);
+
         const dayWeek = ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"];
+
         const currentDay = dayWeek[currDate.getDay()];
 
         // Создание классов для прогресс-бара в зависимости от единиц измерения

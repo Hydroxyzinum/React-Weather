@@ -10,9 +10,10 @@ import {
   setTime,
 } from "./store/slices/weatherDataSlice";
 import { apiKeys, currentWeatherUrl, currentTimeUrl } from "./helpers/url";
-import { backgroundColor, setBackground } from "./helpers/bgColors";
+import { setBackground, staticBackground } from "./helpers/bgColors";
 import { setFullLocation } from "./store/slices/locationSlice";
 import { Cloudy } from "./helpers/animationsBlocks";
+
 import Menu from "./components/Menu/Menu";
 import RenderSearchItem from "./components/Menu/RenderSearchItem";
 import Parent from "./components/Parent/Parent";
@@ -142,18 +143,13 @@ const App = () => {
           // Используем batch для оптимизации диспатча нескольких экшенов
           batch(() => {
             dispatch(setTime(getTime.data)); // Обновление данных о текущем времени
-            switch (localStorage.getItem("theme")) {
-              case "day":
-                return dispatch(setTheme(backgroundColor.day));
-              case "evening":
-                return dispatch(setTheme(backgroundColor.evening));
-              case "night":
-                return dispatch(setTheme(backgroundColor.night));
-              case "default":
-                return setBackground(getTime.data, handleSetTheme);
-              default:
-                return setBackground(getTime.data, handleSetTheme);
-            }
+            staticBackground(
+              dispatch,
+              setTheme,
+              setBackground,
+              getTime,
+              handleSetTheme
+            );
             // Установка фона в зависимости от времени
           });
         } catch (e) {
@@ -162,22 +158,16 @@ const App = () => {
             const getTime = await axios.get(
               currentTimeUrl(reserveTimeApiKey, lat, lon)
             );
-
             // Используем batch для оптимизации диспатча нескольких экшенов
             batch(() => {
               dispatch(setTime(getTime.data)); // Обновление данных о текущем времени
-              switch (localStorage.getItem("theme")) {
-                case "day":
-                  return dispatch(setTheme(backgroundColor.day));
-                case "evening":
-                  return dispatch(setTheme(backgroundColor.evening));
-                case "night":
-                  return dispatch(setTheme(backgroundColor.night));
-                case "default":
-                  return setBackground(getTime.data, handleSetTheme);
-                default:
-                  return setBackground(getTime.data, handleSetTheme);
-              } // Установка фона в зависимости от времени (резервные данные)
+              staticBackground(
+                dispatch,
+                setTheme,
+                setBackground,
+                getTime,
+                handleSetTheme
+              ); // Установка фона в зависимости от времени (резервные данные)
             });
           }
         }
